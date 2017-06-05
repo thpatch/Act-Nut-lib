@@ -2,6 +2,7 @@
 # define SQOBJECT_HPP_
 
 # include <iostream>
+# include <string>
 # include <vector>
 # include "utils.hpp"
 
