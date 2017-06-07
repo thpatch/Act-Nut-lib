@@ -9,25 +9,28 @@ std::vector<Act::Entry*>	readAct(Buffer& buf)
 
   std::vector<Act::Entry*>	entries;
 
-  Act::Entry* mainEntry = new Act::Entry("Main Entry", Act::Entry::HAVE_NUT);
-  if (!mainEntry->readValue(buf))
+  // Main entry
+  Act::Entry* mainEntry = Act::Entry::read(buf, Act::Entry::HAVE_NUT);
+  if (!mainEntry)
     std::cerr << "Reading main entry failed." << std::endl;
   entries.push_back(mainEntry);
 
+  // Sprites
   uint32_t nbScripts = buf.readInt();
   for (uint32_t i = 0; i < nbScripts; i++)
     {
-      Act::Entry* entry = new Act::Entry("Script", Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT);
-      if (!entry->readValue(buf))
-	std::cerr << "Reading script " << i + 1 << " failed." << std::endl;
+      Act::Entry* entry = Act::Entry::read(buf, Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT);
+      if (!entry)
+	std::cerr << "Reading sprite " << i + 1 << " failed." << std::endl;
       entries.push_back(entry);
     }
 
+  // Resources
   uint32_t nbResources = buf.readInt();
   for (uint32_t i = 0; i < nbResources; i++)
     {
-      Act::Entry* entry = new Act::Entry("Resource", 0);
-      if (!entry->readValue(buf))
+      Act::Entry* entry = Act::Entry::read(buf, 0);
+      if (!entry)
 	std::cerr << "Reading resource " << i + 1 << " failed." << std::endl;
       entries.push_back(entry);
     }
@@ -53,16 +56,15 @@ int	main(int argc, char** argv)
   f.close();
   Buffer buffer(buf, len, Buffer::STDERR);
 
+  Act::Entry::init_hashes();
   try
     {
-      /*
-	Act::Entry* entry = readAct(buf);
-	std::cout << *entry << std::endl;
-	delete entry;
-      */
+	// Act::Entry* entry = readAct(buf);
+	// std::cout << *entry << std::endl;
+	// delete entry;
       std::vector<Act::Entry*> entries = readAct(buffer);
-      //for (Act::Entry* it : entries)
-      //std::cout << *it << std::endl << std::endl;
+      for (Act::Entry* it : entries)
+      std::cout << *it << std::endl << std::endl;
       for (Act::Entry* it : entries)
 	delete it;
     }

@@ -1,8 +1,8 @@
 #include	"ActEntry.hpp"
 #include	"nut/utils.hpp"
 
-Act::Entry::Entry(const std::string& name, int flags)
-  : Object(0xFFFFFFFF, "entry", name), flags(flags), subEntry(nullptr), nut(nullptr)
+Act::Entry::Entry(const char* type_name, int flags)
+  : Object(0xFFFFFFFF, "entry", type_name), flags(flags), type_name(type_name), subEntry(nullptr), nut(nullptr)
 {}
 
 Act::Entry::~Entry()
@@ -17,10 +17,79 @@ Act::Entry::~Entry()
     delete this->nut;
 }
 
+const char* Act::Entry::type_names[] = {
+  ".?AVActFileResourceInfo@@",
+  ".?AVC2DLayout@@",
+  ".?AVCAct@@",
+  ".?AVCActKey@@",
+  ".?AVCActLayer@@",
+  "ActData",
+  "ActFileResource",
+  "ActLayout",
+  "ChipResource",
+  "IFSMeshLayout",
+  "IFSMeshResource",
+  "IFSResourceInfo",
+  "ImageResource",
+  "KeyFrame",
+  "Layer",
+  "Manbow::Render1",
+  "Map2DLayout",
+  "RenderTarget",
+  "ReservedLayout",
+  "Script",
+  "SpriteLayout",
+  "StringLayout",
+  "TimeLine",
+  nullptr
+};
+std::map<uint32_t, const char*>	Act::Entry::type_hashes;
+
+void	Act::Entry::init_hashes()
+{
+  for (int i = 0; type_names[i]; i++)
+    type_hashes[type_name_to_hash(type_names[i])] = type_names[i];
+}
+
+uint32_t	Act::Entry::type_name_to_hash(const char* name)
+{
+  uint32_t	hash;
+
+  hash = 0;
+  while (*name)
+    {
+      uint32_t	tmp = (hash >> 2) + (hash << 6);
+      tmp += *name + 0x9E3779B9;
+      hash ^= tmp;
+      name++;
+    }
+  return hash;
+}
+
+const char*	Act::Entry::type_hash_to_name(uint32_t hash)
+{
+  const auto&	it = type_hashes.find(hash);
+  if (it != type_hashes.end())
+    return it->second;
+  else
+    return "Unknown";
+}
+
+Act::Entry*	Act::Entry::read(Buffer& buf, int flags)
+{
+  uint32_t	type_hash = buf.readInt();
+  const char*	type = Act::Entry::type_hash_to_name(type_hash);
+  Act::Entry*	entry = new Act::Entry(type, flags);
+  if (!entry->readValue(buf))
+    {
+      delete entry;
+      return nullptr;
+    }
+  return entry;
+}
+
 bool	Act::Entry::readValue(Buffer& buf)
 {
-  this->id = buf.readInt();
-
   if (!this->readArray(buf, this->array))
     return false;
 
@@ -47,10 +116,10 @@ bool	Act::Entry::readValue(Buffer& buf)
 	}
 
       if (this->flags & HAVE_SUB_ENTRY_COUNT)
-	this->subEntry = new Act::Entry("SubEntry", HAVE_SUB_ENTRY);
+	this->subEntry = Act::Entry::read(buf, HAVE_SUB_ENTRY);
       else
-	this->subEntry = new Act::Entry("SubEntry", 0);
-      if (!this->subEntry->readValue(buf))
+	this->subEntry = Act::Entry::read(buf, 0);
+      if (!this->subEntry)
 	return false;
 
 
@@ -106,7 +175,7 @@ bool	Act::Entry::readArray(Buffer& buf, std::vector<Act::Object*>& array)
 
 void	Act::Entry::print(std::ostream& os) const
 {
-  os << "id: " << this->id << std::endl;
+  os << "hash: " << this->type_hash << " - " << this->type_name << std::endl;
 
   os << "array: [" << std::endl;
   for (Act::Object* it : this->array)
