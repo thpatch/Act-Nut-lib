@@ -21,7 +21,7 @@ namespace Act
 	HAVE_SUB_ENTRY_COUNT	= 0x04
       };
 
-  private:
+    //private:
     static const char*				type_names[];
     static std::map<uint32_t, const char*>	type_hashes;
     static uint32_t				type_name_to_hash(const char* name);
@@ -38,7 +38,10 @@ namespace Act
     std::vector<Act::Object*>	nutInfo;
     SQFunctionProto*		nut;
 
-    bool	readArray(Buffer& buf, std::vector<Act::Object*>& array);
+    Act::Object*		readObject(Buffer& buf);
+    virtual Act::Object*	createObjectFromType(uint32_t type, const std::string& name);
+    bool			readArray(Buffer& buf, std::vector<Act::Object*>& array);
+    bool			readNut(Buffer& buf, std::vector<Act::Object*>& nutInfo);
 
   public:
     static void		init_hashes();

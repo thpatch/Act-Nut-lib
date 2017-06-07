@@ -1,4 +1,7 @@
+#include	<sstream>
+#include	<string.h>
 #include	"ActEntry.hpp"
+#include	"ActEntries.hpp"
 #include	"nut/utils.hpp"
 
 Act::Entry::Entry(const char* type_name, int flags)
@@ -20,12 +23,27 @@ Act::Entry::~Entry()
 const char* Act::Entry::type_names[] = {
   ".?AVActFileResourceInfo@@",
   ".?AVC2DLayout@@",
+  ".?AVC2DMapLayout@@",
   ".?AVCAct@@",
+  ".?AVCActFileResource@@",
   ".?AVCActKey@@",
   ".?AVCActLayer@@",
+  ".?AVCActLayout@@",
+  ".?AVCActRenderTarget@@",
+  ".?AVCActResource2D@@",
+  ".?AVCActResourceChip@@",
+  ".?AVCActScript@@",
+  ".?AVCActTimeLine@@",
+  ".?AVCPhysics2DWorldResource@@",
+  ".?AVCReservedLayout@@",
+  ".?AVCStringLayout@@",
+  ".?AVIFSResourceInfo@@",
+  ".?AVTextureResourceInfo@@",
   "ActData",
   "ActFileResource",
+  "ActFileResourceInfo",
   "ActLayout",
+  "BitmapFontResource",
   "ChipResource",
   "IFSMeshLayout",
   "IFSMeshResource",
@@ -34,12 +52,15 @@ const char* Act::Entry::type_names[] = {
   "KeyFrame",
   "Layer",
   "Manbow::Render1",
+  "ManbowRenderLayout",
   "Map2DLayout",
+  "Physics2DWorldResource",
   "RenderTarget",
   "ReservedLayout",
   "Script",
   "SpriteLayout",
   "StringLayout",
+  "TextureResourceInfo",
   "TimeLine",
   nullptr
 };
@@ -68,6 +89,9 @@ uint32_t	Act::Entry::type_name_to_hash(const char* name)
 
 const char*	Act::Entry::type_hash_to_name(uint32_t hash)
 {
+  if (hash == 0)
+    return "Root";
+
   const auto&	it = type_hashes.find(hash);
   if (it != type_hashes.end())
     return it->second;
@@ -79,7 +103,39 @@ Act::Entry*	Act::Entry::read(Buffer& buf, int flags)
 {
   uint32_t	type_hash = buf.readInt();
   const char*	type = Act::Entry::type_hash_to_name(type_hash);
-  Act::Entry*	entry = new Act::Entry(type, flags);
+  Act::Entry*	entry;
+
+  // Root
+  if (strcmp(type, "Root") == 0)
+    entry = new Act::Root();
+
+  // Layer
+  else if (strcmp(type, "Layer") == 0)
+    entry = new Act::Layer();
+  else if (strcmp(type, "KeyFrame") == 0)
+    entry = new Act::KeyFrame();
+  else if (strcmp(type, "SpriteLayout") == 0)
+    entry = new Act::SpriteLayout();
+  else if (strcmp(type, "StringLayout") == 0)
+    entry = new Act::StringLayout();
+  else if (strcmp(type, "ReservedLayout") == 0)
+    entry = new Act::ReservedLayout();
+
+  // Resources
+  else if (strcmp(type, "BitmapFontResource") == 0)
+    entry = new Act::BitmapFontResource();
+  else if (strcmp(type, "ImageResource") == 0)
+    entry = new Act::ImageResource();
+  else if (strcmp(type, "RenderTarget") == 0)
+    entry = new Act::RenderTarget();
+
+  // Generic
+  else
+    {
+      std::cout << "Warning: unknown type " << type << " (hash=" << type_hash << "). Defaulting to the generic Act::Entry." << std::endl;
+      entry = new Act::Entry(type, flags);
+    }
+
   if (!entry->readValue(buf))
     {
       delete entry;
@@ -90,62 +146,38 @@ Act::Entry*	Act::Entry::read(Buffer& buf, int flags)
 
 bool	Act::Entry::readValue(Buffer& buf)
 {
-  if (!this->readArray(buf, this->array))
-    return false;
+  return this->readArray(buf, this->array);
+}
 
-  if (this->flags & HAVE_SUB_ENTRY)
+Act::Object*	Act::Entry::readObject(Buffer& buf)
+{
+  uint32_t	name_size = buf.readInt();
+  const char*	name_str = (const char*)buf.returnBytes(name_size);
+  if (!name_str)
+    return nullptr;
+  std::string	name(name_str, name_size);
+
+  uint32_t	type = buf.readInt();
+  return this->createObjectFromType(type, name);
+}
+
+Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const std::string& name)
+{
+  switch (type)
     {
-      uint32_t		nbOfSubEntries;
-      if (this->flags & HAVE_SUB_ENTRY_COUNT)
-	nbOfSubEntries = buf.readInt();
-      else
-	{
-	  uint8_t isSubEntry;
-	  buf.readBytes(&isSubEntry, 1);
-	  if (isSubEntry != 1)
-	    {
-	      std::cout << "IsSubEntry == " << isSubEntry << " - should be 1" << std::endl;
-	      return false;
-	    }
-	  nbOfSubEntries = 1;
-	}
-      if (nbOfSubEntries > 1)
-	{
-	  std::cout << "Only 0 and 1 sub entries are supported (got " << nbOfSubEntries << ")." << std::endl;
-	  return false;
-	}
-
-      if (this->flags & HAVE_SUB_ENTRY_COUNT)
-	this->subEntry = Act::Entry::read(buf, HAVE_SUB_ENTRY);
-      else
-	this->subEntry = Act::Entry::read(buf, 0);
-      if (!this->subEntry)
-	return false;
-
-
-      if (this->flags & HAVE_SUB_ENTRY_COUNT)
-	{
-	  uint32_t nbOfSubEntries2 = buf.readInt();
-	  if (nbOfSubEntries2 != 0)
-	    {
-	      std::cout << "SubEntries2 is not supported yet." << std::endl;
-	      return false;
-	    }
-	}
+    case 0:
+      return new Act::Integer(name);
+    case 1:
+      return new Act::Float(name);
+    case 2:
+      return new Act::Boolean(name);
+    case 3:
+      return new Act::String(name);
+    default:
+      std::ostringstream ss;
+      ss << "Unknown type " << type;
+      throw std::runtime_error(ss.str());
     }
-
-  if (this->flags & HAVE_NUT)
-    {
-      if (!this->readArray(buf, this->nutInfo))
-	return false;
-
-      uint32_t		nut_size = buf.readInt();
-      const uint8_t*	nut_buf = buf.returnBytes(nut_size);
-      (void)nut_buf;
-      // this->nut = loadnut(nut_buf);
-    }
-
-  return true;
 }
 
 bool	Act::Entry::readArray(Buffer& buf, std::vector<Act::Object*>& array)
@@ -162,7 +194,7 @@ bool	Act::Entry::readArray(Buffer& buf, std::vector<Act::Object*>& array)
   uint32_t	nb_elems = buf.readInt();
   for (unsigned int i = 0; i < nb_elems; i++)
     {
-      Act::Object*	obj = Act::Object::load(buf);
+      Act::Object*	obj = this->readObject(buf);
       if (!obj)
 	return false;
       array.push_back(obj);
@@ -170,6 +202,18 @@ bool	Act::Entry::readArray(Buffer& buf, std::vector<Act::Object*>& array)
   for (Act::Object* it : array)
     if (!it->readValue(buf))
       return false;
+  return true;
+}
+
+bool	Act::Entry::readNut(Buffer& buf, std::vector<Act::Object*>& nutInfo)
+{
+  if (!this->readArray(buf, nutInfo))
+    return false;
+
+  uint32_t		nut_size = buf.readInt();
+  const uint8_t*	nut_buf = buf.returnBytes(nut_size);
+  (void)nut_buf;
+  // this->nut = loadnut(nut_buf);
   return true;
 }
 

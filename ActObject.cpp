@@ -1,32 +1,6 @@
 #include	<sstream>
 #include	"ActObject.hpp"
 
-Act::Object*	Act::Object::load(Buffer& buf)
-{
-  uint32_t	name_size = buf.readInt();
-  const char*	name_str = (const char*)buf.returnBytes(name_size);
-  if (!name_str)
-    return nullptr;
-  std::string	name(name_str, name_size);
-  uint32_t	type = buf.readInt();
-
-  switch (type)
-    {
-    case 0:
-      return new Act::Integer(name);
-    case 1:
-      return new Act::Float(name);
-    case 2:
-      return new Act::Boolean(name);
-    case 3:
-      return new Act::String(name);
-    default:
-      std::ostringstream ss;
-      ss << "Unknown type " << type;
-      throw std::runtime_error(ss.str());
-    }
-}
-
 Act::Object::Object(uint32_t numType, const char* type, const std::string& name)
   : numType(numType), type(type), name(name)
 {}
@@ -56,4 +30,29 @@ bool	Act::String::readValue(Buffer& buf)
 void	Act::String::print(std::ostream& os) const
 {
   os << this->value;
+}
+
+bool	Act::Array::readValue(Buffer& buf)
+{
+  this->nbEntries = buf.readInt();
+  return true;
+}
+
+bool	Act::Array::readContent(Buffer& buf)
+{
+  for (uint32_t i = 0; i < this->nbEntries; i++)
+    this->entries.push_back(buf.readInt());
+  return true;
+}
+
+void	Act::Array::print(std::ostream& os) const
+{
+  os << "[";
+  for (auto it = this->entries.begin(); it != this->entries.end(); it++)
+    {
+      if (it != this->entries.begin())
+        os << ", ";
+      os << *it;
+    }
+  os << "]";
 }

@@ -2,7 +2,8 @@
 # define ACT_OBJECT_HPP_
 
 # include	<string>
-#include	"Buffer.hpp"
+# include	<vector>
+# include	"Buffer.hpp"
 
 namespace Act
 {
@@ -45,9 +46,10 @@ namespace Act
     { os << +this->n; }
   };
 
-  class	Integer	: public Number<int32_t> { public: Integer(const std::string& name) : Number(0, "int",   name) {}};
-  class	Float	: public Number<float>   { public: Float(const std::string& name)   : Number(1, "float", name) {}};
-  class	Boolean	: public Number<uint8_t> { public: Boolean(const std::string& name) : Number(2, "bool",  name) {}};
+  class	Integer	: public Number<int32_t> { public: Integer(const std::string& name)  : Number(0, "int",   name) {}};
+  class	Float	: public Number<float>   { public: Float(const std::string& name)    : Number(1, "float", name) {}};
+  class	Boolean	: public Number<uint8_t> { public: Boolean(const std::string& name)  : Number(2, "bool",  name) {}};
+  class	Integer5: public Number<int32_t> { public: Integer5(const std::string& name) : Number(5, "int",   name) {}};
 
   class	String : public Object
   {
@@ -59,6 +61,21 @@ namespace Act
       : Object(3, "string", name) {}
 
     bool	readValue(Buffer& buf);
+    void	print(std::ostream& os) const;
+  };
+
+  class	Array : public Object
+  {
+  private:
+    uint32_t			nbEntries;
+    std::vector<uint32_t>	entries;
+
+  public:
+    Array(const std::string& name)
+      : Object(5, "array", name) {}
+
+    bool	readValue(Buffer& buf);
+    bool	readContent(Buffer& buf);
     void	print(std::ostream& os) const;
   };
 }
