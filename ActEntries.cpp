@@ -1,7 +1,7 @@
 #include	"ActEntries.hpp"
 
-Act::Root::Root()
-  : Entry("Root", Act::Entry::HAVE_NUT)
+Act::Root::Root(const Object* parent)
+  : Entry(parent, "Root", Act::Entry::HAVE_NUT)
 {}
 
 bool	Act::Root::readValue(Buffer& buf)
@@ -15,8 +15,8 @@ bool	Act::Root::readValue(Buffer& buf)
 
 
 
-Act::Layer::Layer()
-  : Entry("Layer", Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT)
+Act::Layer::Layer(const Object* parent)
+  : Entry(parent, "Layer", Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT)
 {}
 
 bool	Act::Layer::readValue(Buffer& buf)
@@ -33,7 +33,7 @@ bool	Act::Layer::readValue(Buffer& buf)
 
   if (nbOfSubEntries)
     {
-      this->subEntry = Act::Entry::read(buf, HAVE_SUB_ENTRY);
+      this->subEntry = Act::Entry::read(buf, this, HAVE_SUB_ENTRY);
       if (!this->subEntry)
 	return false;
     }
@@ -51,8 +51,8 @@ bool	Act::Layer::readValue(Buffer& buf)
 
 
 
-Act::KeyFrame::KeyFrame()
-  : Entry("KeyFrame", Act::Entry::HAVE_SUB_ENTRY)
+Act::KeyFrame::KeyFrame(const Object* parent)
+  : Entry(parent, "KeyFrame", Act::Entry::HAVE_SUB_ENTRY)
 {}
 
 bool	Act::KeyFrame::readValue(Buffer& buf)
@@ -68,7 +68,7 @@ bool	Act::KeyFrame::readValue(Buffer& buf)
       return false;
     }
 
-  this->subEntry = Act::Entry::read(buf, 0);
+  this->subEntry = Act::Entry::read(buf, this, 0);
   if (!this->subEntry)
     return false;
   return true;
@@ -77,15 +77,15 @@ bool	Act::KeyFrame::readValue(Buffer& buf)
 
 
 
-Act::SpriteLayout::SpriteLayout()
-  : Entry("SpriteLayout", 0)
+Act::SpriteLayout::SpriteLayout(const Object* parent)
+  : Entry(parent, "SpriteLayout", 0)
 {}
 
 
 
 
-Act::StringLayout::StringLayout()
-  : Entry("StringLayout", 0)
+Act::StringLayout::StringLayout(const Object* parent)
+  : Entry(parent, "StringLayout", 0)
 {}
 
 bool	Act::StringLayout::readValue(Buffer& buf)
@@ -105,7 +105,7 @@ bool	Act::StringLayout::readValue(Buffer& buf)
 Act::Object*	Act::StringLayout::createObjectFromType(uint32_t type, const std::string& name)
 {
   if (type == 5)
-    return new Act::Array(name);
+    return new Act::Array(this, name);
   else
     return this->Act::Entry::createObjectFromType(type, name);
 }
@@ -113,15 +113,15 @@ Act::Object*	Act::StringLayout::createObjectFromType(uint32_t type, const std::s
 
 
 
-Act::ReservedLayout::ReservedLayout()
-  : Entry("ReservedLayout", 0)
+Act::ReservedLayout::ReservedLayout(const Object* parent)
+  : Entry(parent, "ReservedLayout", 0)
 {}
 
 
 
 
-Act::BitmapFontResource::BitmapFontResource()
-  : Entry("BitmapFontResource", 0), bitmapFontData(nullptr)
+Act::BitmapFontResource::BitmapFontResource(const Object* parent)
+  : Entry(parent, "BitmapFontResource", 0), bitmapFontData(nullptr)
 {}
 
 Act::BitmapFontResource::~BitmapFontResource()
@@ -154,7 +154,7 @@ bool	Act::BitmapFontResource::readValue(Buffer& buf)
 Act::Object*	Act::BitmapFontResource::createObjectFromType(uint32_t type, const std::string& name)
 {
   if (type == 5)
-    return new Act::Integer5(name);
+    return new Act::Integer5(this, name);
   else
     return this->Act::Entry::createObjectFromType(type, name);
 }
@@ -162,13 +162,13 @@ Act::Object*	Act::BitmapFontResource::createObjectFromType(uint32_t type, const 
 
 
 
-Act::ImageResource::ImageResource()
-  : Entry("ImageResource", 0)
+Act::ImageResource::ImageResource(const Object* parent)
+  : Entry(parent, "ImageResource", 0)
 {}
 
 
 
 
-Act::RenderTarget::RenderTarget()
-  : Entry("RenderTarget", 0)
+Act::RenderTarget::RenderTarget(const Object* parent)
+  : Entry(parent, "RenderTarget", 0)
 {}

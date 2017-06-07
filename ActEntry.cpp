@@ -4,8 +4,9 @@
 #include	"ActEntries.hpp"
 #include	"nut/utils.hpp"
 
-Act::Entry::Entry(const char* type_name, int flags)
-  : Object(0xFFFFFFFF, "entry", type_name), flags(flags), type_name(type_name), subEntry(nullptr), nut(nullptr)
+Act::Entry::Entry(const Act::Object* parent, const char* type_name, int flags)
+  : Object(parent, 0xFFFFFFFF, "entry", type_name), flags(flags),
+    array(this, "array"), subEntry(nullptr), nutInfo(this, "nutInfo"), nut(nullptr)
 {}
 
 Act::Entry::~Entry()
@@ -99,7 +100,7 @@ const char*	Act::Entry::type_hash_to_name(uint32_t hash)
     return "Unknown";
 }
 
-Act::Entry*	Act::Entry::read(Buffer& buf, int flags)
+Act::Entry*	Act::Entry::read(Buffer& buf, const Act::Object* parent, int flags)
 {
   uint32_t	type_hash = buf.readInt();
   const char*	type = Act::Entry::type_hash_to_name(type_hash);
@@ -107,33 +108,33 @@ Act::Entry*	Act::Entry::read(Buffer& buf, int flags)
 
   // Root
   if (strcmp(type, "Root") == 0)
-    entry = new Act::Root();
+    entry = new Act::Root(parent);
 
   // Layer
   else if (strcmp(type, "Layer") == 0)
-    entry = new Act::Layer();
+    entry = new Act::Layer(parent);
   else if (strcmp(type, "KeyFrame") == 0)
-    entry = new Act::KeyFrame();
+    entry = new Act::KeyFrame(parent);
   else if (strcmp(type, "SpriteLayout") == 0)
-    entry = new Act::SpriteLayout();
+    entry = new Act::SpriteLayout(parent);
   else if (strcmp(type, "StringLayout") == 0)
-    entry = new Act::StringLayout();
+    entry = new Act::StringLayout(parent);
   else if (strcmp(type, "ReservedLayout") == 0)
-    entry = new Act::ReservedLayout();
+    entry = new Act::ReservedLayout(parent);
 
   // Resources
   else if (strcmp(type, "BitmapFontResource") == 0)
-    entry = new Act::BitmapFontResource();
+    entry = new Act::BitmapFontResource(parent);
   else if (strcmp(type, "ImageResource") == 0)
-    entry = new Act::ImageResource();
+    entry = new Act::ImageResource(parent);
   else if (strcmp(type, "RenderTarget") == 0)
-    entry = new Act::RenderTarget();
+    entry = new Act::RenderTarget(parent);
 
   // Generic
   else
     {
       std::cout << "Warning: unknown type " << type << " (hash=" << type_hash << "). Defaulting to the generic Act::Entry." << std::endl;
-      entry = new Act::Entry(type, flags);
+      entry = new Act::Entry(parent, type, flags);
     }
 
   if (!entry->readValue(buf))
@@ -166,13 +167,13 @@ Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const std::string& 
   switch (type)
     {
     case 0:
-      return new Act::Integer(name);
+      return new Act::Integer(this, name);
     case 1:
-      return new Act::Float(name);
+      return new Act::Float(this, name);
     case 2:
-      return new Act::Boolean(name);
+      return new Act::Boolean(this, name);
     case 3:
-      return new Act::String(name);
+      return new Act::String(this, name);
     default:
       std::ostringstream ss;
       ss << "Unknown type " << type;
@@ -219,21 +220,13 @@ bool	Act::Entry::readNut(Buffer& buf, std::vector<Act::Object*>& nutInfo)
 
 void	Act::Entry::print(std::ostream& os) const
 {
-  os << "hash: " << this->type_hash << " - " << this->type_name << std::endl;
+  os << std::endl;
 
-  os << "array: [" << std::endl;
-  for (Act::Object* it : this->array)
-    os << *it << std::endl;
-  os << "]" << std::endl;
+  os << printIndent() << "  " << this->array;
 
   if (this->subEntry)
-    os << "subentry: " << *this->subEntry;
+    os << printIndent() << "  " << *this->subEntry;
 
   if (this->flags & HAVE_NUT)
-    {
-      os << "nutInfo: [" << std::endl;
-      for (Act::Object* it : this->nutInfo)
-	os << *it << std::endl;
-      os << "]" << std::endl;
-    }
+    os << printIndent() << "  " << this->nutInfo;
 }

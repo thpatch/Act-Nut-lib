@@ -10,7 +10,7 @@ std::vector<Act::Entry*>	readAct(Buffer& buf)
   std::vector<Act::Entry*>	entries;
 
   // Main entry
-  Act::Entry* mainEntry = Act::Entry::read(buf, Act::Entry::HAVE_NUT);
+  Act::Entry* mainEntry = Act::Entry::read(buf, nullptr, Act::Entry::HAVE_NUT);
   if (!mainEntry)
     std::cerr << "Reading main entry failed." << std::endl;
   entries.push_back(mainEntry);
@@ -19,7 +19,7 @@ std::vector<Act::Entry*>	readAct(Buffer& buf)
   uint32_t nbScripts = buf.readInt();
   for (uint32_t i = 0; i < nbScripts; i++)
     {
-      Act::Entry* entry = Act::Entry::read(buf, Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT);
+      Act::Entry* entry = Act::Entry::read(buf, nullptr, Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT);
       if (!entry)
 	std::cerr << "Reading sprite " << i + 1 << " failed." << std::endl;
       entries.push_back(entry);
@@ -29,7 +29,7 @@ std::vector<Act::Entry*>	readAct(Buffer& buf)
   uint32_t nbResources = buf.readInt();
   for (uint32_t i = 0; i < nbResources; i++)
     {
-      Act::Entry* entry = Act::Entry::read(buf, 0);
+      Act::Entry* entry = Act::Entry::read(buf, nullptr, 0);
       if (!entry)
 	std::cerr << "Reading resource " << i + 1 << " failed." << std::endl;
       entries.push_back(entry);

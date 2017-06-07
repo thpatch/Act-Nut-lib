@@ -27,16 +27,12 @@ namespace Act
     static uint32_t				type_name_to_hash(const char* name);
     static const char*				type_hash_to_name(uint32_t hash);
 
-    const int			flags;
+    const int		flags;
 
-    uint32_t			type_hash;
-    const char*			type_name;
-
-    std::vector<Act::Object*>	array;
-    Act::Entry*			subEntry;
-    Act::Entry*			subEntry2;
-    std::vector<Act::Object*>	nutInfo;
-    SQFunctionProto*		nut;
+    Act::vector		array;
+    Act::Entry*		subEntry;
+    Act::vector		nutInfo;
+    SQFunctionProto*	nut;
 
     Act::Object*		readObject(Buffer& buf);
     virtual Act::Object*	createObjectFromType(uint32_t type, const std::string& name);
@@ -45,9 +41,9 @@ namespace Act
 
   public:
     static void		init_hashes();
-    static Entry*	read(Buffer& buf, int flags = 0);
+    static Entry*	read(Buffer& buf, const Object* parent, int flags = 0);
 
-    Entry(const char* name, int flags = 0);
+    Entry(const Act::Object* parent, const char* name, int flags = 0);
     ~Entry();
 
     bool	readValue(Buffer& buf);
