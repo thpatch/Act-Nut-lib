@@ -2,7 +2,7 @@
 #include	<fstream>
 #include	"ActEntry.hpp"
 
-std::vector<Act::Entry*>	readAct(Buffer& buf)
+std::vector<Act::Entry*>	readAct(ActNut::Buffer& buf)
 {
   buf.checkTag('1TCA'); // ACT1
   buf.checkTag(1);
@@ -54,7 +54,8 @@ int	main(int argc, char** argv)
   uint8_t* buf = (uint8_t*)malloc(len);
   f.read((char*)buf, len);
   f.close();
-  Buffer buffer(buf, len, Buffer::STDERR);
+  ActNut::Buffer buffer(buf, len);
+  ActNut::Error::setErrorMode(ActNut::Error::STDERR);
 
   Act::Entry::init_hashes();
   try

@@ -10,7 +10,7 @@ SRCS	=	main.cpp \
 		nut/SQComplexObjects.cpp \
 		nut/SQInstruction.cpp \
 		nut/SQFunctionProto.cpp \
-		Buffer.cpp \
+		Utils.cpp \
 		nut/utils.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)

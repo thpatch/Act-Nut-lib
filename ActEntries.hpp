@@ -5,7 +5,9 @@
 
 namespace Act
 {
-  
+
+  using ActNut::Buffer;
+
   class	Root : public Entry
   {
   public:

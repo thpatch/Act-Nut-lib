@@ -6,10 +6,12 @@
 # include	<iostream>
 # include	"ActObject.hpp"
 # include	"nut/SQFunctionProto.hpp"
-# include	"Buffer.hpp"
+# include	"Utils.hpp"
 
 namespace Act
 {
+
+  using ActNut::Buffer;
 
   class	Entry : public Act::Object
   {

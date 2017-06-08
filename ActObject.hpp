@@ -3,10 +3,12 @@
 
 # include	<string>
 # include	<vector>
-# include	"Buffer.hpp"
+# include	"Utils.hpp"
 
 namespace Act
 {
+
+  using ActNut::Buffer;
 
   class	Object
   {
