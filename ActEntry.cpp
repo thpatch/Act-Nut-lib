@@ -176,7 +176,8 @@ Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const std::string& 
     default:
       std::ostringstream ss;
       ss << "Unknown type " << type;
-      throw std::runtime_error(ss.str());
+      Error::error(ss.str());
+      return nullptr;
     }
 }
 

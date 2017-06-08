@@ -12,6 +12,7 @@ namespace Act
 {
 
   using ActNut::Buffer;
+  using ActNut::Error;
 
   class	Entry : public Act::Object
   {
