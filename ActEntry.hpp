@@ -29,12 +29,12 @@ namespace Act
     static uint32_t				type_name_to_hash(const char* name);
     static const char*				type_hash_to_name(uint32_t hash);
 
-    const int		flags;
+    const int			flags;
 
-    Act::vector		array;
-    Act::Entry*		subEntry;
-    Act::vector		nutInfo;
-    SQFunctionProto*	nut;
+    Act::vector			array;
+    Act::Entry*			subEntry;
+    Act::vector			nutInfo;
+    Nut::SQFunctionProto*	nut;
 
     Act::Object*		readObject(Buffer& buf);
     virtual Act::Object*	createObjectFromType(uint32_t type, const std::string& name);

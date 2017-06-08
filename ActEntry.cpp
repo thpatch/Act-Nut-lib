@@ -2,7 +2,6 @@
 #include	<string.h>
 #include	"ActEntry.hpp"
 #include	"ActEntries.hpp"
-#include	"nut/utils.hpp"
 
 Act::Entry::Entry(const Act::Object* parent, const char* type_name, int flags)
   : Object(parent, 0xFFFFFFFF, "entry", type_name), flags(flags),
@@ -183,9 +182,7 @@ Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const std::string& 
 
 bool	Act::Entry::readArray(Buffer& buf, std::vector<Act::Object*>& array)
 {
-  uint8_t isArray;
-  if (!buf.readBytes(&isArray, 1))
-    return false;
+  uint8_t isArray = buf.readByte();
   if (isArray != 1)
     {
       std::cout << "Warning: not an array" << std::endl;

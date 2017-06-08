@@ -86,10 +86,10 @@ Nut::SQInstruction::SQInstruction(const SQFunctionProto& func, Buffer& buf, std:
   : SQObjectPtr("SQInstruction", name), func(func)
 {
   this->arg1 = new SQInteger(buf, "arg1");
-  buf.readBytes(&this->op, 1);
-  buf.readBytes(&this->arg0, 1);
-  buf.readBytes(&this->arg2, 1);
-  buf.readBytes(&this->arg3, 1);
+  this->op   = buf.readByte();
+  this->arg0 = buf.readByte();
+  this->arg2 = buf.readByte();
+  this->arg3 = buf.readByte();
 }
 
 Nut::SQInstruction::~SQInstruction()

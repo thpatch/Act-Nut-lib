@@ -1,6 +1,6 @@
 NAME	=	a.out
 
-CXXFLAGS =	-Wall -Wextra -Wno-multichar -g -Inut
+CXXFLAGS =	-Wall -Wextra -Wno-multichar -g -I. -Inut
 
 SRCS	=	main.cpp \
 		ActObject.cpp \
@@ -10,8 +10,7 @@ SRCS	=	main.cpp \
 		nut/SQComplexObjects.cpp \
 		nut/SQInstruction.cpp \
 		nut/SQFunctionProto.cpp \
-		Utils.cpp \
-		nut/utils.cpp
+		Utils.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 

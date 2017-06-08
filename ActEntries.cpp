@@ -60,8 +60,7 @@ bool	Act::KeyFrame::readValue(Buffer& buf)
   if (!this->readArray(buf, this->array))
     return false;
 
-  uint8_t isSubEntry;
-  buf.readBytes(&isSubEntry, 1);
+  uint8_t isSubEntry = buf.readByte();
   if (isSubEntry != 1)
     {
       std::cout << "[KeyFrame] IsSubEntry == " << isSubEntry << " - should be 1" << std::endl;
