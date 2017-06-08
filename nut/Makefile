@@ -1,13 +1,13 @@
 NAME	=	a.out
 
-CXXFLAGS =	-Wall -Wextra -Wno-multichar -g
+CXXFLAGS =	-Wall -Wextra -Wno-multichar -g -I..
 
 SRCS	=	main.cpp \
 		SQObject.cpp \
 		SQComplexObjects.cpp \
 		SQInstruction.cpp \
 		SQFunctionProto.cpp \
-		utils.cpp
+		../Utils.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 

@@ -2,13 +2,12 @@
 #include	<iomanip>
 #include	<string.h>
 #include	"SQObject.hpp"
-#include	"utils.hpp"
 
-int	SQObjectPtr::indentLevel = 0;
+int	Nut::SQObjectPtr::indentLevel = 0;
 
-SQObjectPtr*	SQObjectPtr::Load(const uint8_t*& buf, std::string name)
+Nut::SQObjectPtr*	Nut::SQObjectPtr::Load(Buffer& buf, std::string name)
 {
-  uint32_t	type = readInt(buf);
+  uint32_t	type = buf.readInt();
 
   switch (type)
     {
@@ -27,11 +26,12 @@ SQObjectPtr*	SQObjectPtr::Load(const uint8_t*& buf, std::string name)
       if (name.size() > 0)
 	ss << "Could not create object " << name << ". ";
       ss << "Unknown object type 0x" << std::setfill('0') << std::setw(8) << std::hex << type;
-      throw std::runtime_error(ss.str());
+      Error::error(ss.str());
+      return nullptr;
     }
 }
 
-std::string	SQObjectPtr::printIndent(bool printName) const
+std::string	Nut::SQObjectPtr::printIndent(bool printName) const
 {
   std::ostringstream ss;
   for (int i = 0; i < SQObjectPtr::indentLevel * 2 - 2; i++)
@@ -48,32 +48,32 @@ std::string	SQObjectPtr::printIndent(bool printName) const
   return ss.str();
 }
 
-std::ostream& operator<<(std::ostream& os, const SQObjectPtr& o)
+std::ostream& Nut::operator<<(std::ostream& os, const SQObjectPtr& o)
 {
   o.print(os);
   return os;
 }
 
-SQString::SQString(const uint8_t*& buf, std::string name)
+Nut::SQString::SQString(Buffer& buf, std::string name)
   : SQObjectPtr("SQString", name)
 {
-  this->len = readInt(buf);
-  this->s = (char*)malloc(this->len + 1);
-  readBytes(buf, (uint8_t*)this->s, this->len);
+  this->len = buf.readInt();
+  this->s = new char[this->len + 1];
+  buf.readBytes((uint8_t*)this->s, this->len);
   this->s[this->len] = '\0';
 }
 
-SQString::~SQString()
+Nut::SQString::~SQString()
 {
-  free(this->s);
+  delete this->s;
 }
 
-void	SQString::print(std::ostream& os) const
+void	Nut::SQString::print(std::ostream& os) const
 {
   os << printIndent() << this->s;
 }
 
-void	SQNull::print(std::ostream& os) const
+void	Nut::SQNull::print(std::ostream& os) const
 {
   os << printIndent();
 }

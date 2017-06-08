@@ -41,6 +41,14 @@ uint32_t	ActNut::Buffer::readInt()
   return n;
 }
 
+uint8_t	ActNut::Buffer::readByte()
+{
+  uint8_t	n;
+  if (!this->readBytes(&n, 1))
+    return 0;
+  return n;
+}
+
 bool	ActNut::Buffer::checkTag(uint32_t iTag)
 {
   if (this->readInt() != iTag)

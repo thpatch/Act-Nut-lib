@@ -19,6 +19,7 @@ namespace ActNut
 
     const uint8_t*	returnBytes(size_t n);
     bool		readBytes(uint8_t* out, size_t n);
+    uint8_t		readByte();
     uint32_t		readInt();
     bool		checkTag(uint32_t iTag);
   };

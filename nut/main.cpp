@@ -1,23 +1,22 @@
 #include	<fstream>
 #include	"SQFunctionProto.hpp"
-#include	"utils.hpp"
+#include	"Utils.hpp"
 
-SQFunctionProto*	readStream(const uint8_t* buf)
+Nut::SQFunctionProto*	readStream(ActNut::Buffer& buf)
 {
-  if (buf[0] != 0xFA || buf[1] != 0xFA)
+  if (buf.readByte() != 0xFA || buf.readByte() != 0xFA)
     throw std::runtime_error("Wrong stream magic - should be 0xFAFA. You probably don't have a NUT file");
-  buf += 2;
 
-  checkTag(buf, 'SQIR');
-  checkTag(buf, 1);
-  checkTag(buf, 4);
-  checkTag(buf, 4);
+  buf.checkTag('SQIR');
+  buf.checkTag(1);
+  buf.checkTag(4);
+  buf.checkTag(4);
 
-  SQFunctionProto *func = new SQFunctionProto(buf);
+  Nut::SQFunctionProto *func = new Nut::SQFunctionProto(buf);
   if (!func)
     return NULL;
 
-  checkTag(buf, 'TAIL');
+  buf.checkTag('TAIL');
   return func;
 }
 
@@ -37,10 +36,12 @@ int	main(int argc, char** argv)
   uint8_t* buf = (uint8_t*)malloc(len);
   f.read((char*)buf, len);
   f.close();
+  ActNut::Buffer buffer(buf, len);
+  ActNut::Error::setErrorMode(ActNut::Error::STDERR);
 
   try
     {
-      SQFunctionProto* func = readStream(buf);
+      Nut::SQFunctionProto* func = readStream(buffer);
       std::cout << *func << std::endl;
       delete func;
     }

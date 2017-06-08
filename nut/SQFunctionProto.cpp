@@ -1,15 +1,14 @@
 #include	"SQFunctionProto.hpp"
-#include	"utils.hpp"
 
-SQFunctionProto::SQFunctionProto(const uint8_t*& buf, std::string name)
+Nut::SQFunctionProto::SQFunctionProto(Buffer& buf, std::string name)
   : SQObjectPtr("SQFunctionProto", name)
 {
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
 
   this->sourcename = SQObjectPtr::Load(buf, "sourcename");
   this->name = SQObjectPtr::Load(buf, "name");
 
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
   this->nliterals	= new SQInteger(buf, "nliterals");
   this->nparameters	= new SQInteger(buf, "nparameters");
   this->noutervals	= new SQInteger(buf, "noutervals");
@@ -19,35 +18,35 @@ SQFunctionProto::SQFunctionProto(const uint8_t*& buf, std::string name)
   this->ninstructions	= new SQInteger(buf, "ninstructions");
   this->nfunctions	= new SQInteger(buf, "nfunctions");
 
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
   for (int i = 0; i < *this->nliterals; i++)
     this->literals.push_back(SQObjectPtr::Load(buf));
 
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
   for (int i = 0; i < *this->nparameters; i++)
     this->parameters.push_back(SQObjectPtr::Load(buf));
 
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
   for (int i = 0; i < *this->noutervals; i++)
     this->outerValues.push_back(new SQOuterVal(buf));
 
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
   for (int i = 0; i < *this->nlocalvarinfos; i++)
     this->localVarInfos.push_back(new SQLocalVarInfo(buf));
 
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
   for (int i = 0; i < *this->nlineinfos; i++)
     this->lineInfos.push_back(new SQLineInfo(buf));
 
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
   for (int i = 0; i < *this->ndefaultparams; i++)
     this->defaultParams.push_back(new SQInteger(buf));
 
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
   for (int i = 0; i < *this->ninstructions; i++)
     this->instructions.push_back(new SQInstruction(*this, buf));
 
-  checkTag(buf, 'PART');
+  buf.checkTag('PART');
   for (int i = 0; i < *this->nfunctions; i++)
     this->functions.push_back(new SQFunctionProto(buf));
 
@@ -56,13 +55,13 @@ SQFunctionProto::SQFunctionProto(const uint8_t*& buf, std::string name)
   this->varparams	= new SQInteger(buf, "varparams");
 }
 
-SQFunctionProto::~SQFunctionProto()
+Nut::SQFunctionProto::~SQFunctionProto()
 {
   delete this->sourcename;
   delete this->name;
 }
 
-void	SQFunctionProto::print(std::ostream& os) const
+void	Nut::SQFunctionProto::print(std::ostream& os) const
 {
   os << printIndent() << std::endl;
   SQObjectPtr::indentLevel += 1;
@@ -95,7 +94,7 @@ void	SQFunctionProto::print(std::ostream& os) const
 }
 
 
-const SQObjectPtr*	SQFunctionProto::getLiteral(int idx) const
+const Nut::SQObjectPtr*	Nut::SQFunctionProto::getLiteral(int idx) const
 {
   return this->literals[idx];
 }

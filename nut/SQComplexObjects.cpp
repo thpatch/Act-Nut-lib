@@ -1,12 +1,11 @@
 #include	"SQComplexObjects.hpp"
-#include	"utils.hpp"
 
-void	SQOuterType::print(std::ostream& os) const
+void	Nut::SQOuterType::print(std::ostream& os) const
 {
   os << printIndent() << "SQOuterType:" << (this->n ? "otOUTER" : "otLOCAL") << std::endl;
 }
 
-SQOuterVal::SQOuterVal(const uint8_t*& buf, std::string name)
+Nut::SQOuterVal::SQOuterVal(Buffer& buf, std::string name)
   : SQObjectPtr("SQOuterVal", name)
 {
   this->type = new SQOuterType(buf, "type");
@@ -14,14 +13,14 @@ SQOuterVal::SQOuterVal(const uint8_t*& buf, std::string name)
   this->name = SQObjectPtr::Load(buf, "name");
 }
 
-SQOuterVal::~SQOuterVal()
+Nut::SQOuterVal::~SQOuterVal()
 {
   delete this->type;
   delete this->object;
   delete this->name;
 }
 
-void	SQOuterVal::print(std::ostream& os) const
+void	Nut::SQOuterVal::print(std::ostream& os) const
 {
   os << printIndent() << std::endl;
   SQObjectPtr::indentLevel += 1;
@@ -35,7 +34,7 @@ void	SQOuterVal::print(std::ostream& os) const
 
 
 
-SQLocalVarInfo::SQLocalVarInfo(const uint8_t*& buf, std::string name)
+Nut::SQLocalVarInfo::SQLocalVarInfo(Buffer& buf, std::string name)
   : SQObjectPtr("SQLocalVarInfo", name)
 {
   this->name	= SQObjectPtr::Load(buf, "name");
@@ -44,7 +43,7 @@ SQLocalVarInfo::SQLocalVarInfo(const uint8_t*& buf, std::string name)
   this->end_op	= new SQUnsignedInteger(buf, "end_op");
 }
 
-SQLocalVarInfo::~SQLocalVarInfo()
+Nut::SQLocalVarInfo::~SQLocalVarInfo()
 {
   delete this->name;
   delete this->pos;
@@ -52,7 +51,7 @@ SQLocalVarInfo::~SQLocalVarInfo()
   delete this->end_op;
 }
 
-void	SQLocalVarInfo::print(std::ostream& os) const
+void	Nut::SQLocalVarInfo::print(std::ostream& os) const
 {
   os << printIndent() << std::endl;
   SQObjectPtr::indentLevel += 1;
@@ -67,20 +66,20 @@ void	SQLocalVarInfo::print(std::ostream& os) const
 
 
 
-SQLineInfo::SQLineInfo(const uint8_t*& buf, std::string name)
+Nut::SQLineInfo::SQLineInfo(Buffer& buf, std::string name)
   : SQObjectPtr("SQLineInfo", name)
 {
   this->line = new SQInteger(buf, "line");
   this->op = new SQInteger(buf, "op");
 }
 
-SQLineInfo::~SQLineInfo()
+Nut::SQLineInfo::~SQLineInfo()
 {
   delete this->line;
   delete this->op;
 }
 
-void	SQLineInfo::print(std::ostream& os) const
+void	Nut::SQLineInfo::print(std::ostream& os) const
 {
   os << printIndent() << std::endl;
   SQObjectPtr::indentLevel += 1;

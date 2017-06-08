@@ -82,22 +82,22 @@ static std::vector<OpcodeDescriptor>	opcodes = {
   { "close",		ARG_UNKNOWN,	ARG_UNKNOWN,	ARG_UNKNOWN,	ARG_UNKNOWN }
 };
 
-SQInstruction::SQInstruction(const SQFunctionProto& func, const uint8_t*& buf, std::string name)
+Nut::SQInstruction::SQInstruction(const SQFunctionProto& func, Buffer& buf, std::string name)
   : SQObjectPtr("SQInstruction", name), func(func)
 {
   this->arg1 = new SQInteger(buf, "arg1");
-  readBytes(buf, &this->op, 1);
-  readBytes(buf, &this->arg0, 1);
-  readBytes(buf, &this->arg2, 1);
-  readBytes(buf, &this->arg3, 1);
+  buf.readBytes(&this->op, 1);
+  buf.readBytes(&this->arg0, 1);
+  buf.readBytes(&this->arg2, 1);
+  buf.readBytes(&this->arg3, 1);
 }
 
-SQInstruction::~SQInstruction()
+Nut::SQInstruction::~SQInstruction()
 {
   delete this->arg1;
 }
 
-void	SQInstruction::print(std::ostream& os) const
+void	Nut::SQInstruction::print(std::ostream& os) const
 {
   OpcodeDescriptor& op = opcodes[this->op];
 
