@@ -4,6 +4,7 @@ CXXFLAGS =	-Wall -Wextra -Wno-multichar -g -I. -Inut
 
 SRCS	=	main.cpp \
 		ActObject.cpp \
+		File.cpp \
 		ActEntry.cpp \
 		ActEntries.cpp \
 		nut/SQObject.cpp \

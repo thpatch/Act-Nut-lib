@@ -5,12 +5,31 @@
 #include	<string.h>
 #include	"Utils.hpp"
 
+ActNut::Buffer::Buffer(uint8_t* buf, size_t buf_size, bool steal_buffer)
+{
+  if (steal_buffer == false)
+    {
+      this->buf = new uint8_t[buf_size];
+      memcpy(this->buf, buf, buf_size);
+    }
+  else
+    this->buf = buf;
+  this->begin = this->buf;
+  this->end = this->buf + buf_size;
+}
+
 ActNut::Buffer::Buffer(const uint8_t* buf, size_t buf_size)
-  : begin(buf), buf(buf), end(buf + buf_size)
-{}
+{
+  this->buf = new uint8_t[buf_size];
+  memcpy(this->buf, buf, buf_size);
+  this->begin = this->buf;
+  this->end = this->buf + buf_size;
+}
 
 ActNut::Buffer::~Buffer()
-{}
+{
+  delete[] this->begin;
+}
 
 const uint8_t*	ActNut::Buffer::returnBytes(size_t n)
 {

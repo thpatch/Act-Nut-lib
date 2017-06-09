@@ -7,6 +7,7 @@ SRCS	=	main.cpp \
 		SQComplexObjects.cpp \
 		SQInstruction.cpp \
 		SQFunctionProto.cpp \
+		Stream.cpp \
 		../Utils.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)

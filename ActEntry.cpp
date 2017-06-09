@@ -10,12 +10,8 @@ Act::Entry::Entry(const Act::Object* parent, const char* type_name, int flags)
 
 Act::Entry::~Entry()
 {
-  for (Act::Object* it : this->array)
-    delete it;
   if (this->subEntry)
     delete this->subEntry;
-  for (Act::Object* it : this->nutInfo)
-    delete it;
   if (this->nut)
     delete this->nut;
 }

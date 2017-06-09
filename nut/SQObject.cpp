@@ -65,7 +65,7 @@ Nut::SQString::SQString(Buffer& buf, std::string name)
 
 Nut::SQString::~SQString()
 {
-  delete this->s;
+  delete[] this->s;
 }
 
 void	Nut::SQString::print(std::ostream& os) const

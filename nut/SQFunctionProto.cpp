@@ -59,6 +59,28 @@ Nut::SQFunctionProto::~SQFunctionProto()
 {
   delete this->sourcename;
   delete this->name;
+
+  delete this->nliterals;
+  delete this->nparameters;
+  delete this->noutervals;
+  delete this->nlocalvarinfos;
+  delete this->nlineinfos;
+  delete this->ndefaultparams;
+  delete this->ninstructions;
+  delete this->nfunctions;
+
+  for (auto& it : this->literals)      delete it;
+  for (auto& it : this->parameters)    delete it;
+  for (auto& it : this->outerValues)   delete it;
+  for (auto& it : this->localVarInfos) delete it;
+  for (auto& it : this->lineInfos)     delete it;
+  for (auto& it : this->defaultParams) delete it;
+  for (auto& it : this->instructions)  delete it;
+  for (auto& it : this->functions)     delete it;
+
+  delete this->stacksize;
+  delete this->bgenerator;
+  delete this->varparams;
 }
 
 void	Nut::SQFunctionProto::print(std::ostream& os) const

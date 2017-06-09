@@ -9,11 +9,16 @@ namespace ActNut
 
   class	Buffer
   {
-    const uint8_t*	begin;
-    const uint8_t*	buf;
-    const uint8_t*	end;
+    uint8_t*	begin;
+    uint8_t*	buf;
+    uint8_t*	end;
 
   public:
+    // If steal_buffer is true, buf will be used directly instead of being copied.
+    // It must be allocated with the new operator, and must not be freed by the caller.
+    // This class will take care of freeing it.
+    Buffer(uint8_t* buf, size_t buf_size, bool steal_buffer);
+    // If we don't steal the buffer, it can be const.
     Buffer(const uint8_t* buf, size_t buf_size);
     ~Buffer();
 

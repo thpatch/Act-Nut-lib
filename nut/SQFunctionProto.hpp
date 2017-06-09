@@ -1,5 +1,5 @@
 #ifndef SQFUNCTIONPROTO_HPP_
-# define SQFUNCTIONPROTO_HPP
+# define SQFUNCTIONPROTO_HPP_
 
 # include	<vector>
 # include	"SQObject.hpp"

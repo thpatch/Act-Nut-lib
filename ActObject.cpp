@@ -76,6 +76,13 @@ void	Act::Array::print(std::ostream& os) const
   os << "]";
 }
 
+
+Act::vector::~vector()
+{
+  for (Act::Object* it : *this)
+    delete it;
+}
+
 bool	Act::vector::readValue(Buffer&)
 {
   throw std::logic_error("Calling readValue doesn't make sense on an Act::vector");

@@ -89,6 +89,7 @@ namespace Act
   public:
    vector(Object* parent, const std::string& name)
       : Object(parent, 0xFFFFFFFF, "std::vector", name) {}
+    ~vector();
 
     bool	readValue(Buffer& buf);
     void	print(std::ostream& os) const;
