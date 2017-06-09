@@ -1,10 +1,10 @@
-#ifndef FILE_HPP_
-# define FILE_HPP_
+#ifndef ACT_FILE_HPP_
+# define ACT_FILE_HPP_
 
 # include	<string>
-# include	"Object.hpp"
-# include	"ActEntry.hpp"
-# include	"Utils.hpp"
+# include	<Object.hpp>
+# include	<Utils.hpp>
+# include	<act/Entry.hpp>
 
 namespace Act
 {
@@ -34,4 +34,4 @@ namespace Act
 
 }
 
-#endif /* !FILE_HPP_ */
+#endif /* !ACT_FILE_HPP_ */

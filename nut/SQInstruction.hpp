@@ -1,7 +1,7 @@
-#ifndef SQINSTRUCTIONS_HPP_
-# define SQINSTRUCTIONS_HPP_
+#ifndef NUT_SQINSTRUCTIONS_HPP_
+# define NUT_SQINSTRUCTIONS_HPP_
 
-# include	"SQObject.hpp"
+# include	<nut/SQObject.hpp>
 
 namespace Nut
 {
@@ -28,4 +28,4 @@ namespace Nut
 
 }
 
-#endif /* !SQINSTRUCTIONS_HPP_ */
+#endif /* !NUT_SQINSTRUCTIONS_HPP_ */

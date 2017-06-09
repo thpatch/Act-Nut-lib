@@ -1,6 +1,6 @@
 #include	<sstream>
 #include	<fstream>
-#include	"File.hpp"
+#include	<act/File.hpp>
 
 Act::File::File(const Act::Object* parent, const std::string& name)
   : Object(parent, "File", name), sprites(this, "sprites"), resources(this, "resources")

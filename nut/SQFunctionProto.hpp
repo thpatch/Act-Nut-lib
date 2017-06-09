@@ -1,10 +1,10 @@
-#ifndef SQFUNCTIONPROTO_HPP_
-# define SQFUNCTIONPROTO_HPP_
+#ifndef NUT_SQFUNCTIONPROTO_HPP_
+# define NUT_SQFUNCTIONPROTO_HPP_
 
 # include	<vector>
-# include	"SQObject.hpp"
-# include	"SQComplexObjects.hpp"
-# include	"SQInstruction.hpp"
+# include	<nut/SQObject.hpp>
+# include	<nut/SQComplexObjects.hpp>
+# include	<nut/SQInstruction.hpp>
 
 namespace Nut
 {
@@ -51,4 +51,4 @@ namespace Nut
 
 }
 
-#endif /* !SQFUNCTIONPROTO_HPP_ */
+#endif /* !NUT_SQFUNCTIONPROTO_HPP_ */

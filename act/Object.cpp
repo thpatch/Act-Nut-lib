@@ -1,4 +1,4 @@
-#include	"ActObject.hpp"
+#include	<act/Object.hpp>
 
 bool	Act::String::readValue(Buffer& buf)
 {

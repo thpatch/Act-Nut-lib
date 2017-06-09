@@ -1,5 +1,5 @@
-#include	"SQInstruction.hpp"
-#include	"SQFunctionProto.hpp"
+#include	<nut/SQInstruction.hpp>
+#include	<nut/SQFunctionProto.hpp>
 
 enum	ArgType
   {

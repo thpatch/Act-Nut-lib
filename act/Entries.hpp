@@ -1,9 +1,9 @@
 #ifndef ACT_ENTRIES_HPP_
 # define ACT_ENTRIES_HPP_
 
-# include	"Object.hpp"
-# include	"ActObject.hpp"
-# include	"ActEntry.hpp"
+# include	<Object.hpp>
+# include	<act/Object.hpp>
+# include	<act/Entry.hpp>
 
 namespace Act
 {

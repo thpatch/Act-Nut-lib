@@ -1,12 +1,13 @@
 #include	<iostream>
-#include	<fstream>
-#include	"File.hpp"
+#include	<string.h>
+#include	<act/File.hpp>
+#include	<nut/Stream.hpp>
 
 int	main(int argc, char** argv)
 {
   if (argc != 2)
     {
-      std::cout << "Usage: " << argv[0] << " file.act" << std::endl;
+      std::cout << "Usage: " << argv[0] << " file.[act|nut]" << std::endl;
       return 0;
     }
 
@@ -14,15 +15,17 @@ int	main(int argc, char** argv)
   Act::Entry::init_hashes();
   try
     {
-	// Act::Entry* entry = readAct(buf);
-	// std::cout << *entry << std::endl;
-	// delete entry;
-      /*std::vector<Act::Entry*> entries = readAct(buffer);
-      for (Act::Entry* it : entries)
-	std::cout << *it << std::endl << std::endl;
-      for (Act::Entry* it : entries)
-      delete it;*/
-      Act::File*	file = Act::File::read(argv[1]);
+      ActNut::Object*	file;
+      const char* ext = strrchr(argv[1], '.');
+      if (ext && strcmp(ext, ".act") == 0)
+	file = Act::File::read(argv[1]);
+      else if (ext && strcmp(ext, ".nut") == 0)
+	file = nullptr;//Nut::readStream(argv[1]); SQFunctionProto->ActNut::Object is for the next commit
+      else
+	{
+	  std::cerr << "You must give a file with the act or nut extension." << std::endl;
+	  return 1;
+	}
       std::cout << *file << std::endl;
       delete file;
     }

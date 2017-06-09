@@ -1,18 +1,19 @@
 NAME	=	a.out
 
-CXXFLAGS =	-Wall -Wextra -Wno-multichar -g -I. -Inut
+CXXFLAGS =	-Wall -Wextra -Wno-multichar -g -I.
 
 SRCS	=	main.cpp \
 		Object.cpp \
-		ActObject.cpp \
-		File.cpp \
-		ActEntry.cpp \
-		ActEntries.cpp \
+		Utils.cpp \
+		act/Object.cpp \
+		act/File.cpp \
+		act/Entry.cpp \
+		act/Entries.cpp \
 		nut/SQObject.cpp \
 		nut/SQComplexObjects.cpp \
 		nut/SQInstruction.cpp \
 		nut/SQFunctionProto.cpp \
-		Utils.cpp
+		nut/Stream.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 

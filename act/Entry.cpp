@@ -1,8 +1,8 @@
 #include	<sstream>
 #include	<string.h>
-#include	"ActEntry.hpp"
-#include	"ActEntries.hpp"
-#include	"ActObject.hpp"
+#include	<act/Entry.hpp>
+#include	<act/Entries.hpp>
+#include	<act/Object.hpp>
 
 Act::Entry::Entry(const Object* parent, const char* type_name, int flags)
   : Object(parent, "entry", type_name), flags(flags),

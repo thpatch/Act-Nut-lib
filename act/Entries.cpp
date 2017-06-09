@@ -1,4 +1,4 @@
-#include	"ActEntries.hpp"
+#include	<act/Entries.hpp>
 
 Act::Root::Root(const Object* parent)
   : Entry(parent, "Root", Act::Entry::HAVE_NUT)

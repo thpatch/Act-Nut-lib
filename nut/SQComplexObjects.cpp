@@ -1,4 +1,4 @@
-#include	"SQComplexObjects.hpp"
+#include	<nut/SQComplexObjects.hpp>
 
 void	Nut::SQOuterType::print(std::ostream& os) const
 {

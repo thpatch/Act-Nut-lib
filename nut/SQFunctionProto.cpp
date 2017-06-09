@@ -1,4 +1,4 @@
-#include	"SQFunctionProto.hpp"
+#include	<nut/SQFunctionProto.hpp>
 
 Nut::SQFunctionProto::SQFunctionProto(Buffer& buf, std::string name)
   : SQObjectPtr("SQFunctionProto", name)

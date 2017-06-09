@@ -1,9 +1,9 @@
-#ifndef STREAM_HPP_
-# define STREAM_HPP_
+#ifndef NUT_STREAM_HPP_
+# define NUT_STREAM_HPP_
 
 # include	<string>
-# include	"SQFunctionProto.hpp"
-# include	"Utils.hpp"
+# include	<nut/SQFunctionProto.hpp>
+# include	<Utils.hpp>
 
 namespace Nut
 {
@@ -16,4 +16,4 @@ namespace Nut
 
 }
 
-#endif /* !STREAM_HPP_ */
+#endif /* !NUT_STREAM_HPP_ */

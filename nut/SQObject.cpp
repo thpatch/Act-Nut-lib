@@ -1,7 +1,7 @@
 #include	<sstream>
 #include	<iomanip>
 #include	<string.h>
-#include	"SQObject.hpp"
+#include	<nut/SQObject.hpp>
 
 int	Nut::SQObjectPtr::indentLevel = 0;
 

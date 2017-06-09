@@ -1,7 +1,7 @@
-#ifndef SQCOMPLEXOBJECTS_HPP_
-# define SQCOMPLEXOBJECTS_HPP_
+#ifndef NUT_SQCOMPLEXOBJECTS_HPP_
+# define NUT_SQCOMPLEXOBJECTS_HPP_
 
-# include	"SQObject.hpp"
+# include	<nut/SQObject.hpp>
 
 namespace Nut
 {
@@ -56,4 +56,4 @@ namespace Nut
 
 }
 
-#endif /* !SQCOMPLEXOBJECTS_HPP_ */
+#endif /* !NUT_SQCOMPLEXOBJECTS_HPP_ */

@@ -1,10 +1,10 @@
-#ifndef SQOBJECT_HPP_
-# define SQOBJECT_HPP_
+#ifndef NUT_SQOBJECT_HPP_
+# define NUT_SQOBJECT_HPP_
 
 # include <iostream>
 # include <string>
 # include <vector>
-# include "Utils.hpp"
+# include <Utils.hpp>
 
 # define OT_STRING	0x08000010
 # define OT_INTEGER	0x05000002
@@ -113,4 +113,4 @@ namespace Nut
 
 }
 
-#endif /* !SQOBJECT_HPP_ */
+#endif /* !NUT_SQOBJECT_HPP_ */

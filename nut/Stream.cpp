@@ -1,5 +1,5 @@
 #include	<fstream>
-#include	"Stream.hpp"
+#include	<nut/Stream.hpp>
 
 Nut::SQFunctionProto*	Nut::readStream(Buffer& buf)
 {
