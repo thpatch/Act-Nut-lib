@@ -2,24 +2,13 @@
 #include	<fstream>
 #include	"File.hpp"
 
-Act::File::File(const Act::Object* parent, const char* name)
-  : Object(parent, 0xFFFFFFFF, "File", name), sprites(this, "sprites"), resources(this, "resources")
+Act::File::File(const Act::Object* parent, const std::string& name)
+  : Object(parent, "File", name), sprites(this, "sprites"), resources(this, "resources")
 {}
 
 Act::File::~File()
 {
   delete this->mainEntry;
-}
-
-Act::File*	Act::File::read(Buffer& buf, const Object* parent)
-{
-  File*	obj = new File(parent, "File");
-  if (!obj->readValue(buf))
-    {
-      delete obj;
-      return nullptr;
-    }
-  return obj;
 }
 
 Act::File*	Act::File::read(const std::string& filename)
@@ -37,7 +26,7 @@ Act::File*	Act::File::read(const std::string& filename)
   f.close();
 
   Buffer	buf(byteBuf, len, true);
-  return Act::File::read(buf, nullptr);
+  return ActNut::Object::read<Act::File>(buf, nullptr, filename);
 }
 
 

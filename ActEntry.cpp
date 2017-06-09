@@ -2,9 +2,10 @@
 #include	<string.h>
 #include	"ActEntry.hpp"
 #include	"ActEntries.hpp"
+#include	"ActObject.hpp"
 
-Act::Entry::Entry(const Act::Object* parent, const char* type_name, int flags)
-  : Object(parent, 0xFFFFFFFF, "entry", type_name), flags(flags),
+Act::Entry::Entry(const Object* parent, const char* type_name, int flags)
+  : Object(parent, "entry", type_name), flags(flags),
     array(this, "array"), subEntry(nullptr), nutInfo(this, "nutInfo"), nut(nullptr)
 {}
 
@@ -95,11 +96,11 @@ const char*	Act::Entry::type_hash_to_name(uint32_t hash)
     return "Unknown";
 }
 
-Act::Entry*	Act::Entry::read(Buffer& buf, const Act::Object* parent, int flags)
+Act::Entry*	Act::Entry::read(Buffer& buf, const Object* parent, int flags)
 {
   uint32_t	type_hash = buf.readInt();
-  const char*	type = Act::Entry::type_hash_to_name(type_hash);
-  Act::Entry*	entry;
+  const char*	type = Entry::type_hash_to_name(type_hash);
+  Entry*	entry;
 
   // Root
   if (strcmp(type, "Root") == 0)
@@ -177,7 +178,7 @@ Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const std::string& 
     }
 }
 
-bool	Act::Entry::readArray(Buffer& buf, std::vector<Act::Object*>& array)
+bool	Act::Entry::readArray(Buffer& buf, vector& array)
 {
   uint8_t isArray = buf.readByte();
   if (isArray != 1)
@@ -200,7 +201,7 @@ bool	Act::Entry::readArray(Buffer& buf, std::vector<Act::Object*>& array)
   return true;
 }
 
-bool	Act::Entry::readNut(Buffer& buf, std::vector<Act::Object*>& nutInfo)
+bool	Act::Entry::readNut(Buffer& buf, vector& nutInfo)
 {
   if (!this->readArray(buf, nutInfo))
     return false;

@@ -1,11 +1,15 @@
 #ifndef ACT_ENTRIES_HPP_
 # define ACT_ENTRIES_HPP_
 
+# include	"Object.hpp"
+# include	"ActObject.hpp"
 # include	"ActEntry.hpp"
 
 namespace Act
 {
 
+  using ActNut::Object;
+  using ActNut::vector;
   using ActNut::Buffer;
 
   class	Root : public Entry
@@ -39,8 +43,8 @@ namespace Act
   {
   public:
     StringLayout(const Object* parent);
-    bool		readValue(Buffer& buf);
-    Act::Object*	createObjectFromType(uint32_t type, const std::string& name);
+    bool	readValue(Buffer& buf);
+    Object*	createObjectFromType(uint32_t type, const std::string& name);
   };
 
   class	ReservedLayout : public Entry
@@ -52,7 +56,7 @@ namespace Act
   class	BitmapFontResource : public Entry
   {
   private:
-    std::vector<Act::Object*>	subArray;
+    vector	subArray;
     uint32_t	width;
     uint32_t	height;
     uint8_t	**bitmapFontData;
@@ -60,8 +64,8 @@ namespace Act
   public:
     BitmapFontResource(const Object* parent);
     ~BitmapFontResource();
-    bool		readValue(Buffer& buf);
-    Act::Object*	createObjectFromType(uint32_t type, const std::string& name);
+    bool	readValue(Buffer& buf);
+    Object*	createObjectFromType(uint32_t type, const std::string& name);
   };
 
   class	ImageResource : public Entry

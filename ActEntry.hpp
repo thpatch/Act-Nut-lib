@@ -4,17 +4,19 @@
 # include	<vector>
 # include	<map>
 # include	<iostream>
-# include	"ActObject.hpp"
+# include	"Object.hpp"
 # include	"nut/SQFunctionProto.hpp"
 # include	"Utils.hpp"
 
 namespace Act
 {
 
+  using ActNut::Object;
+  using ActNut::vector;
   using ActNut::Buffer;
   using ActNut::Error;
 
-  class	Entry : public Act::Object
+  class	Entry : public Object
   {
   public:
     enum	Flags
@@ -32,21 +34,21 @@ namespace Act
 
     const int			flags;
 
-    Act::vector			array;
-    Act::Entry*			subEntry;
-    Act::vector			nutInfo;
+    vector			array;
+    Entry*			subEntry;
+    vector			nutInfo;
     Nut::SQFunctionProto*	nut;
 
-    Act::Object*		readObject(Buffer& buf);
-    virtual Act::Object*	createObjectFromType(uint32_t type, const std::string& name);
-    bool			readArray(Buffer& buf, std::vector<Act::Object*>& array);
-    bool			readNut(Buffer& buf, std::vector<Act::Object*>& nutInfo);
+    Object*		readObject(Buffer& buf);
+    virtual Object*	createObjectFromType(uint32_t type, const std::string& name);
+    bool		readArray(Buffer& buf, vector& array);
+    bool		readNut(Buffer& buf, vector& nutInfo);
 
   public:
     static void		init_hashes();
     static Entry*	read(Buffer& buf, const Object* parent, int flags = 0);
 
-    Entry(const Act::Object* parent, const char* name, int flags = 0);
+    Entry(const Object* parent, const char* name, int flags = 0);
     ~Entry();
 
     bool	readValue(Buffer& buf);

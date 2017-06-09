@@ -120,7 +120,7 @@ Act::ReservedLayout::ReservedLayout(const Object* parent)
 
 
 Act::BitmapFontResource::BitmapFontResource(const Object* parent)
-  : Entry(parent, "BitmapFontResource", 0), bitmapFontData(nullptr)
+  : Entry(parent, "BitmapFontResource", 0), subArray(this, "subArray"), bitmapFontData(nullptr)
 {}
 
 Act::BitmapFontResource::~BitmapFontResource()
