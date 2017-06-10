@@ -2,7 +2,7 @@
 
 void	Nut::SQOuterType::print(std::ostream& os) const
 {
-  os << (this->n ? "otOUTER" : "otLOCAL") << std::endl;
+  os << (this->n ? "otOUTER" : "otLOCAL");
 }
 
 Nut::SQOuterVal::SQOuterVal(const Object* parent, std::string name)
@@ -26,10 +26,7 @@ bool	Nut::SQOuterVal::readValue(Buffer& buf)
 
 void	Nut::SQOuterVal::print(std::ostream& os) const
 {
-  os << std::endl;
-  os << *this->type << std::endl;
-  os << *this->object << std::endl;
-  os << *this->name << std::endl;
+  os << *this->type << ", " << *this->object << ", " << *this->name;
 }
 
 
@@ -60,11 +57,7 @@ bool	Nut::SQLocalVarInfo::readValue(Buffer& buf)
 
 void	Nut::SQLocalVarInfo::print(std::ostream& os) const
 {
-  os << std::endl;
-  os << *this->name << std::endl;
-  os << *this->pos << std::endl;
-  os << *this->start_op << std::endl;
-  os << *this->end_op << std::endl;
+  os << *this->name << ", " << *this->pos << ", " << *this->start_op << ", " << *this->end_op;
 }
 
 
@@ -90,7 +83,5 @@ bool	Nut::SQLineInfo::readValue(Buffer& buf)
 
 void	Nut::SQLineInfo::print(std::ostream& os) const
 {
-  os << std::endl;
-  os << *this->line << std::endl;
-  os << *this->op << std::endl;
+  os << *this->line << ", " << *this->op;
 }

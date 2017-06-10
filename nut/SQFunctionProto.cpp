@@ -84,29 +84,29 @@ bool	Nut::SQFunctionProto::readValue(Buffer& buf)
 void	Nut::SQFunctionProto::print(std::ostream& os) const
 {
   os << *this->sourcename << std::endl;
-  os << *this->name << std::endl;
+  os << printIndent() << *this->name << std::endl;
 
-  os << *this->nliterals << std::endl;
-  os << *this->nparameters << std::endl;
-  os << *this->noutervals << std::endl;
-  os << *this->nlocalvarinfos << std::endl;
-  os << *this->nlineinfos << std::endl;
-  os << *this->ndefaultparams << std::endl;
-  os << *this->ninstructions << std::endl;
-  os << *this->nfunctions << std::endl;
+  os << printIndent() << *this->nliterals << std::endl;
+  os << printIndent() << *this->nparameters << std::endl;
+  os << printIndent() << *this->noutervals << std::endl;
+  os << printIndent() << *this->nlocalvarinfos << std::endl;
+  os << printIndent() << *this->nlineinfos << std::endl;
+  os << printIndent() << *this->ndefaultparams << std::endl;
+  os << printIndent() << *this->ninstructions << std::endl;
+  os << printIndent() << *this->nfunctions << std::endl;
 
-  os << this->literals;
-  os << this->parameters;
-  os << this->outerValues;
-  os << this->localVarInfos;
-  os << this->lineInfos;
-  os << this->defaultParams;
-  os << this->instructions;
-  os << this->functions;
+  os << printIndent() << this->literals;
+  os << printIndent() << this->parameters;
+  os << printIndent() << this->outerValues;
+  os << printIndent() << this->localVarInfos;
+  os << printIndent() << this->lineInfos;
+  os << printIndent() << this->defaultParams;
+  os << printIndent() << this->instructions;
+  os << printIndent() << this->functions;
 
-  os << *this->stacksize << std::endl;
-  os << *this->bgenerator << std::endl;
-  os << *this->varparams << std::endl;
+  os << printIndent() << *this->stacksize << std::endl;
+  os << printIndent() << *this->bgenerator << std::endl;
+  os << printIndent() << *this->varparams << std::endl;
 }
 
 

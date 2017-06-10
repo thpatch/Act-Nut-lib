@@ -52,8 +52,10 @@ bool	ActNut::vector::readValue(Buffer&)
 
 void	ActNut::vector::print(std::ostream& os) const
 {
-  os << "[" << std::endl;
+  os << "[";
+  if (this->size() != 0)
+    os << std::endl;
   for (Object* it : *this)
     os << printIndent() << *it << std::endl;
-  os << printIndent(this->getIndentLevel() - 1) << "  ]" << std::endl;
+  os << (this->size() != 0 ? printIndent(this->getIndentLevel() - 1) : "") << "  ]" << std::endl;
 }
