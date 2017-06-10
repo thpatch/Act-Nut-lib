@@ -21,8 +21,10 @@ namespace Nut
     uint8_t	arg3;
 
   public:
-    SQInstruction(const SQFunctionProto& func, Buffer& buf, std::string name = "");
+    SQInstruction(const Object* parent, std::string name = "");
     ~SQInstruction();
+    bool	readValue(Buffer& buf);
+    // TODO: ensure the display is nice
     void	print(std::ostream& os) const;
   };
 

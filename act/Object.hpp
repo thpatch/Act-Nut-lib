@@ -18,7 +18,7 @@ namespace Act
     T		n;
 
   public:
-    Number(Object* parent, const char* type, const std::string& name)
+    Number(const Object* parent, const char* type, const std::string& name)
       : Object(parent, type, name), n(0)
     { }
 
@@ -29,10 +29,10 @@ namespace Act
     { os << +this->n; }
   };
 
-  class	Integer	: public Number<int32_t> { public: Integer( Object* parent, const std::string& name) : Number(parent, "int",   name) {}};
-  class	Float	: public Number<float>   { public: Float(   Object* parent, const std::string& name) : Number(parent, "float", name) {}};
-  class	Boolean	: public Number<uint8_t> { public: Boolean( Object* parent, const std::string& name) : Number(parent, "bool",  name) {}};
-  class	Integer5: public Number<int32_t> { public: Integer5(Object* parent, const std::string& name) : Number(parent, "int",   name) {}};
+  class	Integer	: public Number<int32_t> { public: Integer( const Object* parent, const std::string& name) : Number(parent, "int",   name) {}};
+  class	Float	: public Number<float>   { public: Float(   const Object* parent, const std::string& name) : Number(parent, "float", name) {}};
+  class	Boolean	: public Number<uint8_t> { public: Boolean( const Object* parent, const std::string& name) : Number(parent, "bool",  name) {}};
+  class	Integer5: public Number<int32_t> { public: Integer5(const Object* parent, const std::string& name) : Number(parent, "int",   name) {}};
 
   class	String : public Object
   {
@@ -40,7 +40,7 @@ namespace Act
     std::string	value;
 
   public:
-    String(Object* parent, const std::string& name)
+    String(const Object* parent, const std::string& name)
       : Object(parent, "string", name) {}
 
     bool	readValue(Buffer& buf);
@@ -54,7 +54,7 @@ namespace Act
     std::vector<uint32_t>	entries;
 
   public:
-    Array(Object* parent, const std::string& name)
+    Array(const Object* parent, const std::string& name)
       : Object(parent, "array", name) {}
 
     bool	readValue(Buffer& buf);

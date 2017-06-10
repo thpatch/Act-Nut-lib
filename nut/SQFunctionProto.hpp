@@ -10,6 +10,7 @@ namespace Nut
 {
 
   using ActNut::Buffer;
+  using ActNut::vector;
 
   class	SQFunctionProto : public SQObjectPtr
   {
@@ -28,25 +29,26 @@ namespace Nut
     SQInteger*		nfunctions;
 
     // For this block, there is a PART before each variable.
-    std::vector<SQObjectPtr*>		literals;
-    std::vector<SQObjectPtr*>		parameters;
-    std::vector<SQOuterVal*>		outerValues;
-    std::vector<SQLocalVarInfo*>	localVarInfos;
-    std::vector<SQLineInfo*>		lineInfos;
-    std::vector<SQInteger*>		defaultParams;
-    std::vector<SQInstruction*>		instructions;
-    std::vector<SQFunctionProto*>	functions;
+    vector		literals;	// SQObjectPtr
+    vector		parameters;	// SQObjectPtr
+    vector		outerValues;	// SQOuterVar
+    vector		localVarInfos;	// SQLocalVarInfo
+    vector		lineInfos;	// SQLineInfo
+    vector		defaultParams;	// SQInteger
+    vector		instructions;	// SQInstruction
+    vector		functions;	// SQFunctionProto
 
     SQInteger*			stacksize;
     SQSingleByteBoolean*	bgenerator;
     SQInteger*			varparams;
 
   public:
-    SQFunctionProto(Buffer& buf, std::string name = "");
+    SQFunctionProto(const Object* parent, std::string name = "");
     ~SQFunctionProto();
+    bool	readValue(Buffer& buf);
     void	print(std::ostream& os) const;
 
-    const SQObjectPtr*	getLiteral(int idx) const;
+    const Object*	getLiteral(int idx) const;
   };
 
 }

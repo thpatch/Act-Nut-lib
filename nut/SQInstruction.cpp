@@ -82,14 +82,18 @@ static std::vector<OpcodeDescriptor>	opcodes = {
   { "close",		ARG_UNKNOWN,	ARG_UNKNOWN,	ARG_UNKNOWN,	ARG_UNKNOWN }
 };
 
-Nut::SQInstruction::SQInstruction(const SQFunctionProto& func, Buffer& buf, std::string name)
-  : SQObjectPtr("SQInstruction", name), func(func)
+Nut::SQInstruction::SQInstruction(const Object* parent, std::string name)
+  : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent))
+{}
+
+bool	Nut::SQInstruction::readValue(Buffer& buf)
 {
-  this->arg1 = new SQInteger(buf, "arg1");
+  this->arg1 = ActNut::Object::read<SQInteger>(this, buf, "arg1");
   this->op   = buf.readByte();
   this->arg0 = buf.readByte();
   this->arg2 = buf.readByte();
   this->arg3 = buf.readByte();
+  return true;
 }
 
 Nut::SQInstruction::~SQInstruction()
@@ -101,13 +105,10 @@ void	Nut::SQInstruction::print(std::ostream& os) const
 {
   OpcodeDescriptor& op = opcodes[this->op];
 
-  os << printIndent() << " " << op.name << "(";
+  os << " " << op.name << "(";
   // Remove the indent level for a nice result when displaying objects here.
-  int	indentLevel = SQObjectPtr::indentLevel;
-  SQObjectPtr::indentLevel = 0;
-  if (op.arg0 == ARG_LITERAL) os << *func.getLiteral(arg0) ; else os << (int)arg0 ; os << ", ";
-  if (op.arg1 == ARG_LITERAL) os << *func.getLiteral(*arg1); else os << (int)*arg1; os << ", ";
-  if (op.arg2 == ARG_LITERAL) os << *func.getLiteral(arg2) ; else os << (int)arg2 ; os << ", ";
-  if (op.arg3 == ARG_LITERAL) os << *func.getLiteral(arg3) ; else os << (int)arg3 ; os << ")";
-  SQObjectPtr::indentLevel = indentLevel;
+  if (op.arg0 == ARG_LITERAL) func.getLiteral(arg0)->print(os) ; else os << (int)arg0 ; os << ", ";
+  if (op.arg1 == ARG_LITERAL) func.getLiteral(*arg1)->print(os); else os << (int)*arg1; os << ", ";
+  if (op.arg2 == ARG_LITERAL) func.getLiteral(arg2)->print(os) ; else os << (int)arg2 ; os << ", ";
+  if (op.arg3 == ARG_LITERAL) func.getLiteral(arg3)->print(os) ; else os << (int)arg3 ; os << ")";
 }

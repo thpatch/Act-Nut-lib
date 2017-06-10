@@ -3,24 +3,22 @@
 #include	<string.h>
 #include	<nut/SQObject.hpp>
 
-int	Nut::SQObjectPtr::indentLevel = 0;
-
-Nut::SQObjectPtr*	Nut::SQObjectPtr::Load(Buffer& buf, std::string name)
+Nut::SQObjectPtr*	Nut::SQObjectPtr::Load(const Object* parent, Buffer& buf, std::string name)
 {
   uint32_t	type = buf.readInt();
 
   switch (type)
     {
     case OT_STRING:
-      return new SQString(buf, name);
+      return Object::read<SQString>( parent, buf, name);
     case OT_INTEGER:
-      return new SQInteger(buf, name);
+      return Object::read<SQInteger>(parent, buf, name);
     case OT_BOOL:
-      return new SQBoolean(buf, name);
+      return Object::read<SQBoolean>(parent, buf, name);
     case OT_FLOAT:
-      return new SQFloat(buf, name);
+      return Object::read<SQFloat>(  parent, buf, name);
     case OT_NULL:
-      return new SQNull(name);
+      return Object::read<SQNull>(   parent, buf, name);
     default:
       std::ostringstream ss;
       if (name.size() > 0)
@@ -31,49 +29,21 @@ Nut::SQObjectPtr*	Nut::SQObjectPtr::Load(Buffer& buf, std::string name)
     }
 }
 
-std::string	Nut::SQObjectPtr::printIndent(bool printName) const
-{
-  std::ostringstream ss;
-  for (int i = 0; i < SQObjectPtr::indentLevel * 2 - 2; i++)
-    ss << " ";
-  if (printName)
-    {
-      if (SQObjectPtr::indentLevel) ss << "- ";
-      ss << this->type << ":";
-      if (name.size() > 0)
-	ss << name << "=";
-    }
-  else
-    ss << "  ";
-  return ss.str();
-}
+Nut::SQString::SQString(const Object* parent, std::string name)
+  : SQObjectPtr(parent, "SQString", name)
+{}
 
-std::ostream& Nut::operator<<(std::ostream& os, const SQObjectPtr& o)
+bool	Nut::SQString::readValue(Buffer& buf)
 {
-  o.print(os);
-  return os;
-}
-
-Nut::SQString::SQString(Buffer& buf, std::string name)
-  : SQObjectPtr("SQString", name)
-{
-  this->len = buf.readInt();
-  this->s = new char[this->len + 1];
-  buf.readBytes((uint8_t*)this->s, this->len);
-  this->s[this->len] = '\0';
-}
-
-Nut::SQString::~SQString()
-{
-  delete[] this->s;
+  uint32_t	length = buf.readInt();
+  const char*	str = (const char*)buf.returnBytes(length);
+  if (!str)
+    return false;
+  this->value = std::string(str, length);
+  return true;
 }
 
 void	Nut::SQString::print(std::ostream& os) const
 {
-  os << printIndent() << this->s;
-}
-
-void	Nut::SQNull::print(std::ostream& os) const
-{
-  os << printIndent();
+  os << this->value;
 }

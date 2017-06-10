@@ -11,7 +11,7 @@ namespace Nut
   class	SQOuterType : public SQNumber<int>
   {
   public:
-    SQOuterType(Buffer& buf, std::string name = "") : SQNumber(buf, "SQOuterType", name) {}
+    SQOuterType(const Object* parent, std::string name = "") : SQNumber(parent, "SQOuterType", name) {}
     void	print(std::ostream& os) const;
   };
 
@@ -23,8 +23,9 @@ namespace Nut
     SQObjectPtr*	name;
 
   public:
-    SQOuterVal(Buffer& buf, std::string name = "");
+    SQOuterVal(const Object* parent, std::string name = "");
     ~SQOuterVal();
+    bool	readValue(Buffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -37,8 +38,9 @@ namespace Nut
     SQUnsignedInteger*	end_op;
 
   public:
-    SQLocalVarInfo(Buffer& buf, std::string name = "");
+    SQLocalVarInfo(const Object* parent, std::string name = "");
     ~SQLocalVarInfo();
+    bool	readValue(Buffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -49,8 +51,9 @@ namespace Nut
     SQInteger*	op;
 
   public:
-    SQLineInfo(Buffer& buf, std::string name = "");
+    SQLineInfo(const Object* parent, std::string name = "");
     ~SQLineInfo();
+    bool	readValue(Buffer& buf);
     void	print(std::ostream& os) const;
   };
 

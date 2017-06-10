@@ -20,13 +20,16 @@ int	main(int argc, char** argv)
       if (ext && strcmp(ext, ".act") == 0)
 	file = Act::File::read(argv[1]);
       else if (ext && strcmp(ext, ".nut") == 0)
-	file = nullptr;//Nut::readStream(argv[1]); SQFunctionProto->ActNut::Object is for the next commit
+	file = Nut::readStream(argv[1]);
       else
 	{
 	  std::cerr << "You must give a file with the act or nut extension." << std::endl;
 	  return 1;
 	}
-      std::cout << *file << std::endl;
+      if (file)
+	std::cout << *file << std::endl;
+      else
+	std::cerr << "File parsing failed." << std::endl;
       delete file;
     }
   catch (std::runtime_error e)

@@ -26,7 +26,7 @@ Act::File*	Act::File::read(const std::string& filename)
   f.close();
 
   Buffer	buf(byteBuf, len, true);
-  return ActNut::Object::read<Act::File>(buf, nullptr, filename);
+  return ActNut::Object::read<Act::File>(nullptr, buf, filename);
 }
 
 
@@ -37,7 +37,7 @@ bool	Act::File::readValue(Buffer& buf)
     return false;
 
   // Main entry
-  this->mainEntry = Act::Entry::read(buf, this, Act::Entry::HAVE_NUT);
+  this->mainEntry = Act::Entry::read(this, buf, Act::Entry::HAVE_NUT);
   if (!this->mainEntry)
     return Error::error("Reading main entry failed.");
 
@@ -45,7 +45,7 @@ bool	Act::File::readValue(Buffer& buf)
   uint32_t nbSprites = buf.readInt();
   for (uint32_t i = 0; i < nbSprites; i++)
     {
-      Act::Entry* entry = Act::Entry::read(buf, this, Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT);
+      Act::Entry* entry = Act::Entry::read(this, buf, Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT);
       if (!entry)
 	{
 	  std::ostringstream ss;
@@ -59,7 +59,7 @@ bool	Act::File::readValue(Buffer& buf)
   uint32_t nbResources = buf.readInt();
   for (uint32_t i = 0; i < nbResources; i++)
     {
-      Act::Entry* entry = Act::Entry::read(buf, this, 0);
+      Act::Entry* entry = Act::Entry::read(this, buf, 0);
       if (!entry)
 	{
 	  std::ostringstream ss;

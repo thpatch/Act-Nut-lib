@@ -46,7 +46,7 @@ namespace Act
 
   public:
     static void		init_hashes();
-    static Entry*	read(Buffer& buf, const Object* parent, int flags = 0);
+    static Entry*	read(const Object* parent, Buffer& buf, int flags = 0);
 
     Entry(const Object* parent, const char* name, int flags = 0);
     ~Entry();

@@ -20,7 +20,7 @@ namespace ActNut
     virtual ~Object() {}
 
     template<typename T>
-    static T*	read(Buffer& buf, const Object* parent, const std::string& name)
+    static T*	read(const Object* parent, Buffer& buf, const std::string& name = "")
     {
       T*	obj = new T(parent, name);
       if (!obj->readValue(buf))
@@ -44,7 +44,7 @@ namespace ActNut
   class	vector : public Object, public std::vector<Object*>
   {
   public:
-   vector(Object* parent, const std::string& name)
+   vector(const Object* parent, const std::string& name)
       : Object(parent, "std::vector", name) {}
     ~vector();
 

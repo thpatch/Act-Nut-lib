@@ -96,7 +96,7 @@ const char*	Act::Entry::type_hash_to_name(uint32_t hash)
     return "Unknown";
 }
 
-Act::Entry*	Act::Entry::read(Buffer& buf, const Object* parent, int flags)
+Act::Entry*	Act::Entry::read(const Object* parent, Buffer& buf, int flags)
 {
   uint32_t	type_hash = buf.readInt();
   const char*	type = Entry::type_hash_to_name(type_hash);

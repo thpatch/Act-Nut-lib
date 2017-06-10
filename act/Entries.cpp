@@ -33,7 +33,7 @@ bool	Act::Layer::readValue(Buffer& buf)
 
   if (nbOfSubEntries)
     {
-      this->subEntry = Act::Entry::read(buf, this, HAVE_SUB_ENTRY);
+      this->subEntry = Act::Entry::read(this, buf, HAVE_SUB_ENTRY);
       if (!this->subEntry)
 	return false;
     }
@@ -67,7 +67,7 @@ bool	Act::KeyFrame::readValue(Buffer& buf)
       return false;
     }
 
-  this->subEntry = Act::Entry::read(buf, this, 0);
+  this->subEntry = Act::Entry::read(this, buf, 0);
   if (!this->subEntry)
     return false;
   return true;

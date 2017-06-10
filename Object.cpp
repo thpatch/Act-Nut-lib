@@ -31,7 +31,8 @@ std::string	ActNut::Object::printIndent(int indentLevel) const
 
 std::ostream& ActNut::operator<<(std::ostream& os, const Object& o)
 {
-  os << o.getName() << ": ";
+  if (o.getName().empty() == false && o.getName()[0])
+    os << o.getName() << ": ";
   o.print(os);
   return os;
 }

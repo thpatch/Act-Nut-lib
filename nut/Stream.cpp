@@ -15,7 +15,7 @@ Nut::SQFunctionProto*	Nut::readStream(Buffer& buf)
       !buf.checkTag(4))
     return nullptr;
 
-  Nut::SQFunctionProto *func = new Nut::SQFunctionProto(buf);
+  SQFunctionProto *func = ActNut::Object::read<SQFunctionProto>(nullptr, buf);
   if (!func)
     return nullptr;
 

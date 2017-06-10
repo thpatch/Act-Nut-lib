@@ -2,16 +2,12 @@
 
 void	Nut::SQOuterType::print(std::ostream& os) const
 {
-  os << printIndent() << "SQOuterType:" << (this->n ? "otOUTER" : "otLOCAL") << std::endl;
+  os << (this->n ? "otOUTER" : "otLOCAL") << std::endl;
 }
 
-Nut::SQOuterVal::SQOuterVal(Buffer& buf, std::string name)
-  : SQObjectPtr("SQOuterVal", name)
-{
-  this->type = new SQOuterType(buf, "type");
-  this->object = SQObjectPtr::Load(buf, "object");
-  this->name = SQObjectPtr::Load(buf, "name");
-}
+Nut::SQOuterVal::SQOuterVal(const Object* parent, std::string name)
+  : SQObjectPtr(parent, "SQOuterVal", name)
+{}
 
 Nut::SQOuterVal::~SQOuterVal()
 {
@@ -20,27 +16,29 @@ Nut::SQOuterVal::~SQOuterVal()
   delete this->name;
 }
 
+bool	Nut::SQOuterVal::readValue(Buffer& buf)
+{
+  this->type   = ActNut::Object::read<SQOuterType>(this, buf, "type");
+  this->object = SQObjectPtr::Load(this, buf, "object");
+  this->name   = SQObjectPtr::Load(this, buf, "name");
+  return true;
+}
+
 void	Nut::SQOuterVal::print(std::ostream& os) const
 {
-  os << printIndent() << std::endl;
-  SQObjectPtr::indentLevel += 1;
+  os << std::endl;
   os << *this->type << std::endl;
   os << *this->object << std::endl;
-  os << *this->name;
-  SQObjectPtr::indentLevel -= 1;
+  os << *this->name << std::endl;
 }
 
 
 
 
 
-Nut::SQLocalVarInfo::SQLocalVarInfo(Buffer& buf, std::string name)
-  : SQObjectPtr("SQLocalVarInfo", name)
+Nut::SQLocalVarInfo::SQLocalVarInfo(const Object* parent, std::string name)
+  : SQObjectPtr(parent, "SQLocalVarInfo", name)
 {
-  this->name	= SQObjectPtr::Load(buf, "name");
-  this->pos	= new SQUnsignedInteger(buf, "pos");
-  this->start_op= new SQUnsignedInteger(buf, "start_op");
-  this->end_op	= new SQUnsignedInteger(buf, "end_op");
 }
 
 Nut::SQLocalVarInfo::~SQLocalVarInfo()
@@ -51,27 +49,31 @@ Nut::SQLocalVarInfo::~SQLocalVarInfo()
   delete this->end_op;
 }
 
+bool	Nut::SQLocalVarInfo::readValue(Buffer& buf)
+{
+  this->name	= SQObjectPtr::Load(this, buf, "name");
+  this->pos	= ActNut::Object::read<SQUnsignedInteger>(this, buf, "pos");
+  this->start_op= ActNut::Object::read<SQUnsignedInteger>(this, buf, "start_op");
+  this->end_op	= ActNut::Object::read<SQUnsignedInteger>(this, buf, "end_op");
+  return true;
+}
+
 void	Nut::SQLocalVarInfo::print(std::ostream& os) const
 {
-  os << printIndent() << std::endl;
-  SQObjectPtr::indentLevel += 1;
+  os << std::endl;
   os << *this->name << std::endl;
   os << *this->pos << std::endl;
   os << *this->start_op << std::endl;
-  os << *this->end_op;
-  SQObjectPtr::indentLevel -= 1;
+  os << *this->end_op << std::endl;
 }
 
 
 
 
 
-Nut::SQLineInfo::SQLineInfo(Buffer& buf, std::string name)
-  : SQObjectPtr("SQLineInfo", name)
-{
-  this->line = new SQInteger(buf, "line");
-  this->op = new SQInteger(buf, "op");
-}
+Nut::SQLineInfo::SQLineInfo(const Object* parent, std::string name)
+  : SQObjectPtr(parent, "SQLineInfo", name)
+{}
 
 Nut::SQLineInfo::~SQLineInfo()
 {
@@ -79,11 +81,16 @@ Nut::SQLineInfo::~SQLineInfo()
   delete this->op;
 }
 
+bool	Nut::SQLineInfo::readValue(Buffer& buf)
+{
+  this->line	= ActNut::Object::read<SQInteger>(this, buf, "line");
+  this->op	= ActNut::Object::read<SQInteger>(this, buf, "op");
+  return true;
+}
+
 void	Nut::SQLineInfo::print(std::ostream& os) const
 {
-  os << printIndent() << std::endl;
-  SQObjectPtr::indentLevel += 1;
+  os << std::endl;
   os << *this->line << std::endl;
-  os << *this->op;
-  SQObjectPtr::indentLevel -= 1;
+  os << *this->op << std::endl;
 }

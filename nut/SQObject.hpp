@@ -4,6 +4,7 @@
 # include <iostream>
 # include <string>
 # include <vector>
+# include <Object.hpp>
 # include <Utils.hpp>
 
 # define OT_STRING	0x08000010
@@ -17,43 +18,25 @@ namespace Nut
 
   using ActNut::Buffer;
   using ActNut::Error;
+  using ActNut::Object;
 
-  class	SQObjectPtr
+  class	SQObjectPtr : public ActNut::Object
   {
-  private:
-    std::string	type;
-    std::string	name;
-  protected:
-    std::string	printIndent(bool printName = true) const;
-
   public:
-    static int	indentLevel;
-
-    SQObjectPtr(std::string type, std::string name) : type(type), name(name) {}
+    SQObjectPtr(const Object* parent, const char* type, std::string name) : Object(parent, type, name) {}
     virtual ~SQObjectPtr() {}
-    static SQObjectPtr*	Load(Buffer& buf, std::string name = "");
 
-    virtual void	print(std::ostream& os) const = 0;
+    static SQObjectPtr*	Load(const Object* parent, Buffer& buf, std::string name = "");
   };
-  std::ostream& operator<<(std::ostream& os, const SQObjectPtr& o);
-  // Using SFINAE to make the template detection fail if the vector doesn't contain SQObjectPtr derivates.
-  template<typename T, int n = sizeof(T::indentLevel)>
-  std::ostream& operator<<(std::ostream& os, const std::vector<T*> v)
-  {
-    SQObjectPtr::indentLevel += 2;
-    for (SQObjectPtr* it : v)
-      os << *it << std::endl;
-    SQObjectPtr::indentLevel -= 2;
-    return os;
-  }
 
   class	SQString : public SQObjectPtr
   {
-    char*	s;
-    uint32_t	len;
+    std::string	value;
+
   public:
-    SQString(Buffer& buf, std::string name = "");
-    ~SQString();
+    SQString(const Object* parent, std::string name = "");
+
+    bool	readValue(Buffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -64,51 +47,28 @@ namespace Nut
     T		n;
 
   public:
-    SQNumber(Buffer& buf, std::string type, std::string name)
-      : SQObjectPtr(type, name)
-    { buf.readBytes((uint8_t*)&this->n, sizeof(this->n)); }
+    SQNumber(const Object* parent, const char* type, std::string name)
+      : SQObjectPtr(parent, type, name), n(0)
+    { }
+
+    bool	readValue(Buffer& buf)
+    { return buf.readBytes((uint8_t*)&this->n, sizeof(this->n)); }
 
     void	print(std::ostream& os) const
-    { os << printIndent() << +this->n; }
+    { os << +this->n; }
+
+    operator T() { return this->n; }
   };
 
-  class	SQInteger : public SQNumber<int>
-  {
-  public:
-    SQInteger(Buffer& buf, std::string name = "") : SQNumber(buf, "SQInteger", name) {}
-    operator int() { return this->n; }
-  };
-
-  class	SQUnsignedInteger : public SQNumber<uint32_t>
-  {
-  public:
-    SQUnsignedInteger(Buffer& buf, std::string name = "") : SQNumber(buf, "SQUnsignedInteger", name) {}
-  };
-
-  class	SQBoolean : public SQNumber<int>
-  {
-  public:
-    SQBoolean(Buffer& buf, std::string name = "") : SQNumber(buf, "SQBoolean", name) {}
-  };
-
+  class	SQInteger           : public SQNumber<int>      { public: SQInteger(          const Object* parent, std::string name = "") : SQNumber(parent,    "SQInteger",         name) {}  };
+  class	SQUnsignedInteger   : public SQNumber<uint32_t> { public: SQUnsignedInteger(  const Object* parent, std::string name = "") : SQNumber(parent,    "SQUnsignedInteger", name) {}  };
+  class	SQBoolean           : public SQNumber<int>      { public: SQBoolean(          const Object* parent, std::string name = "") : SQNumber(parent,    "SQBoolean",         name) {}  };
   // SQBoolean is stored on 4 bytes, we need a custom one to handle single-byte booleans.
-  class	SQSingleByteBoolean : public SQNumber<char>
-  {
-  public:
-    SQSingleByteBoolean(Buffer& buf, std::string name = "") : SQNumber(buf, "bool", name) {}
-  };
-
-  class	SQFloat : public SQNumber<float>
-  {
-  public:
-    SQFloat(Buffer& buf, std::string name = "") : SQNumber(buf, "SQFloat", name) {}
-  };
-
-  class	SQNull : public SQObjectPtr
-  {
-  public:
-    SQNull(std::string name = "") : SQObjectPtr("SQNull", name) {}
-    void	print(std::ostream& os) const;
+  class	SQSingleByteBoolean : public SQNumber<char>     { public: SQSingleByteBoolean(const Object* parent, std::string name = "") : SQNumber(parent,    "bool",              name) {}  };
+  class	SQFloat             : public SQNumber<float>    { public: SQFloat(            const Object* parent, std::string name = "") : SQNumber(parent,    "SQFloat",           name) {}  };
+  class	SQNull              : public SQObjectPtr        { public: SQNull(             const Object* parent, std::string name = "") : SQObjectPtr(parent, "SQNull",            name) {}
+    bool	readValue(Buffer&) { return true; }
+    void	print(std::ostream&) const {}
   };
 
 }
