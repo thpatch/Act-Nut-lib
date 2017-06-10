@@ -32,7 +32,7 @@ int	main(int argc, char** argv)
 	std::cerr << "File parsing failed." << std::endl;
       delete file;
     }
-  catch (std::runtime_error e)
+  catch (std::runtime_error& e)
     {
       std::cerr << "Error: " << e.what() << std::endl;
       return 1;
