@@ -20,14 +20,8 @@ namespace Nut
   using ActNut::Error;
   using ActNut::Object;
 
-  class	SQObjectPtr : public ActNut::Object
-  {
-  public:
-    SQObjectPtr(const Object* parent, const char* type, std::string name) : Object(parent, type, name) {}
-    virtual ~SQObjectPtr() {}
-
-    static SQObjectPtr*	Load(const Object* parent, Buffer& buf, std::string name = "");
-  };
+  typedef ActNut::Object SQObjectPtr;
+  SQObjectPtr*	loadObject(const Object* parent, Buffer& buf, std::string name = "");
 
   class	SQString : public SQObjectPtr
   {

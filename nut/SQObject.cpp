@@ -3,7 +3,7 @@
 #include	<string.h>
 #include	<nut/SQObject.hpp>
 
-Nut::SQObjectPtr*	Nut::SQObjectPtr::Load(const Object* parent, Buffer& buf, std::string name)
+Nut::SQObjectPtr*	Nut::loadObject(const Object* parent, Buffer& buf, std::string name)
 {
   uint32_t	type = buf.readInt();
 

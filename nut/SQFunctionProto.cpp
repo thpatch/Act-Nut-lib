@@ -29,8 +29,8 @@ bool	Nut::SQFunctionProto::readValue(Buffer& buf)
 {
   buf.checkTag('PART');
 
-  this->sourcename = SQObjectPtr::Load(this, buf, "sourcename");
-  this->name       = SQObjectPtr::Load(this, buf, "name");
+  this->sourcename = loadObject(this, buf, "sourcename");
+  this->name       = loadObject(this, buf, "name");
 
   buf.checkTag('PART');
   this->nliterals	= ActNut::Object::read<SQInteger>(this, buf, "nliterals");
@@ -44,11 +44,11 @@ bool	Nut::SQFunctionProto::readValue(Buffer& buf)
 
   buf.checkTag('PART');
   for (int i = 0; i < *this->nliterals; i++)
-    this->literals.push_back(SQObjectPtr::Load(this, buf));
+    this->literals.push_back(loadObject(this, buf));
 
   buf.checkTag('PART');
   for (int i = 0; i < *this->nparameters; i++)
-    this->parameters.push_back(SQObjectPtr::Load(this, buf));
+    this->parameters.push_back(loadObject(this, buf));
 
   buf.checkTag('PART');
   for (int i = 0; i < *this->noutervals; i++)
