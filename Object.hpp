@@ -2,6 +2,7 @@
 # define OBJECT_HPP_
 
 # include	<iostream>
+# include	<iomanip>
 # include	<vector>
 # include	"Utils.hpp"
 
@@ -39,6 +40,45 @@ namespace ActNut
     virtual void	print(std::ostream& os) const = 0;
   };
   std::ostream& operator<<(std::ostream& os, const Object& o);
+
+
+  template<typename T>
+  class	Number : public Object
+  {
+  protected:
+    enum class	DisplayType
+    {
+      NONE,
+      BOOLEAN,
+      FLOAT
+    };
+
+    T		n;
+    const DisplayType	displayType;
+
+  public:
+    Number(const Object* parent, const char* type, std::string name, DisplayType displayType = DisplayType::NONE)
+      : Object(parent, type, name), n(0), displayType(displayType)
+    { }
+
+    bool	readValue(Buffer& buf)
+    { return buf.readBytes((uint8_t*)&this->n, sizeof(this->n)); }
+
+    void	print(std::ostream& os) const
+    {
+      if (displayType == DisplayType::FLOAT)
+	os << std::setprecision(2) << std::fixed;
+      if (displayType == DisplayType::BOOLEAN)
+	os << std::boolalpha;
+      os << +this->n;
+      if (displayType == DisplayType::FLOAT)
+	os << std::defaultfloat;
+      if (displayType == DisplayType::BOOLEAN)
+	os << std::noboolalpha;
+    }
+
+    operator T() { return this->n; }
+  };
 
 
   class	vector : public Object, public std::vector<Object*>
