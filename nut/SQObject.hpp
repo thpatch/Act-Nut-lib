@@ -19,31 +19,20 @@ namespace Nut
   using ActNut::Buffer;
   using ActNut::Error;
   using ActNut::Object;
-  using ActNut::Number;
 
   typedef ActNut::Object SQObjectPtr;
   SQObjectPtr*	loadObject(const Object* parent, Buffer& buf, std::string name = "");
 
-  class	SQString : public SQObjectPtr
-  {
-    std::string	value;
-
-  public:
-    SQString(const Object* parent, std::string name = "");
-
-    bool	readValue(Buffer& buf);
-    void	print(std::ostream& os) const;
-  };
-
-  class	SQInteger           : public Number<int>      { public: SQInteger(          const Object* parent, std::string name = "") : Number(parent,      "SQInteger",         name) {}  };
-  class	SQUnsignedInteger   : public Number<uint32_t> { public: SQUnsignedInteger(  const Object* parent, std::string name = "") : Number(parent,      "SQUnsignedInteger", name) {}  };
-  class	SQBoolean           : public Number<int>      { public: SQBoolean(          const Object* parent, std::string name = "") : Number(parent,      "SQBoolean",         name, Number::DisplayType::BOOLEAN) {}  };
+  class	SQInteger           : public ActNut::Number<int>      { public: SQInteger(          const Object* parent, std::string name = ""); };
+  class	SQUnsignedInteger   : public ActNut::Number<uint32_t> { public: SQUnsignedInteger(  const Object* parent, std::string name = ""); };
+  class	SQBoolean           : public ActNut::Number<int>      { public: SQBoolean(          const Object* parent, std::string name = ""); };
   // SQBoolean is stored on 4 bytes, we need a custom one to handle single-byte booleans.
-  class	SQSingleByteBoolean : public Number<char>     { public: SQSingleByteBoolean(const Object* parent, std::string name = "") : Number(parent,      "bool",              name, Number::DisplayType::BOOLEAN) {}  };
-  class	SQFloat             : public Number<float>    { public: SQFloat(            const Object* parent, std::string name = "") : Number(parent,      "SQFloat",           name, Number::DisplayType::FLOAT) {}  };
-  class	SQNull              : public SQObjectPtr      { public: SQNull(             const Object* parent, std::string name = "") : SQObjectPtr(parent, "SQNull",            name) {}
-    bool	readValue(Buffer&) { return true; }
-    void	print(std::ostream&) const {}
+  class	SQSingleByteBoolean : public ActNut::Number<char>     { public: SQSingleByteBoolean(const Object* parent, std::string name = ""); };
+  class	SQFloat             : public ActNut::Number<float>    { public: SQFloat(            const Object* parent, std::string name = ""); };
+  class	SQString            : public ActNut::String           { public: SQString(           const Object* parent, std::string name = ""); };
+  class	SQNull              : public SQObjectPtr              { public: SQNull(             const Object* parent, std::string name = "");
+    bool	readValue(Buffer&);
+    void	print(std::ostream&) const;
   };
 
 }

@@ -8,10 +8,10 @@ namespace Nut
 
   using ActNut::Buffer;
 
-  class	SQOuterType : public Number<int>
+  class	SQOuterType : public ActNut::Number<int>
   {
   public:
-    SQOuterType(const Object* parent, std::string name = "") : Number(parent, "SQOuterType", name) {}
+    SQOuterType(const Object* parent, std::string name = "");
     void	print(std::ostream& os) const;
   };
 

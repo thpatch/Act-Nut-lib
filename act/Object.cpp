@@ -1,19 +1,10 @@
 #include	<act/Object.hpp>
 
-bool	Act::String::readValue(Buffer& buf)
-{
-  uint32_t	length = buf.readInt();
-  const char*	str = (const char*)buf.returnBytes(length);
-  if (!str)
-    return false;
-  this->value = std::string(str, length);
-  return true;
-}
-
-void	Act::String::print(std::ostream& os) const
-{
-  os << this->value;
-}
+Act::Integer::Integer(  const Object* parent, const std::string& name) : Number(        parent, "int",    name) {}
+Act::Float::Float(      const Object* parent, const std::string& name) : Number(        parent, "float",  name, DisplayType::FLOAT) {}
+Act::Boolean::Boolean(  const Object* parent, const std::string& name) : Number(        parent, "bool",   name, DisplayType::BOOLEAN) {}
+Act::Integer5::Integer5(const Object* parent, const std::string& name) : Number(        parent, "int",    name) {}
+Act::String::String(    const Object* parent, const std::string& name) : ActNut::String(parent, "string", name) {}
 
 bool	Act::Array::readValue(Buffer& buf)
 {

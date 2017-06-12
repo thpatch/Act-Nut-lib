@@ -29,21 +29,12 @@ Nut::SQObjectPtr*	Nut::loadObject(const Object* parent, Buffer& buf, std::string
     }
 }
 
-Nut::SQString::SQString(const Object* parent, std::string name)
-  : SQObjectPtr(parent, "SQString", name)
-{}
-
-bool	Nut::SQString::readValue(Buffer& buf)
-{
-  uint32_t	length = buf.readInt();
-  const char*	str = (const char*)buf.returnBytes(length);
-  if (!str)
-    return false;
-  this->value = std::string(str, length);
-  return true;
-}
-
-void	Nut::SQString::print(std::ostream& os) const
-{
-  os << this->value;
-}
+Nut::SQInteger::SQInteger(                    const Object* parent, std::string name) : Number(parent,      "SQInteger",         name) {}
+Nut::SQUnsignedInteger::SQUnsignedInteger(    const Object* parent, std::string name) : Number(parent,      "SQUnsignedInteger", name) {}
+Nut::SQBoolean::SQBoolean(                    const Object* parent, std::string name) : Number(parent,      "SQBoolean",         name, Number::DisplayType::BOOLEAN) {}
+Nut::SQSingleByteBoolean::SQSingleByteBoolean(const Object* parent, std::string name) : Number(parent,      "bool",              name, Number::DisplayType::BOOLEAN) {}
+Nut::SQFloat::SQFloat(                        const Object* parent, std::string name) : Number(parent,      "SQFloat",           name, Number::DisplayType::FLOAT) {}
+Nut::SQString::SQString(                      const Object* parent, std::string name) : String(parent,      "SQString",          name) {}
+Nut::SQNull::SQNull(                          const Object* parent, std::string name) : SQObjectPtr(parent, "SQNull",            name) {}
+bool	Nut::SQNull::readValue(Buffer&) { return true; }
+void	Nut::SQNull::print(std::ostream&) const {}

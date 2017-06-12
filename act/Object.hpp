@@ -10,25 +10,12 @@ namespace Act
 
   using ActNut::Buffer;
   using ActNut::Object;
-  using ActNut::Number;
 
-  class	Integer	: public Number<int32_t> { public: Integer( const Object* parent, const std::string& name) : Number(parent, "int",   name) {}};
-  class	Float	: public Number<float>   { public: Float(   const Object* parent, const std::string& name) : Number(parent, "float", name, Number::DisplayType::FLOAT) {}};
-  class	Boolean	: public Number<uint8_t> { public: Boolean( const Object* parent, const std::string& name) : Number(parent, "bool",  name, Number::DisplayType::BOOLEAN) {}};
-  class	Integer5: public Number<int32_t> { public: Integer5(const Object* parent, const std::string& name) : Number(parent, "int",   name) {}};
-
-  class	String : public Object
-  {
-  private:
-    std::string	value;
-
-  public:
-    String(const Object* parent, const std::string& name)
-      : Object(parent, "string", name) {}
-
-    bool	readValue(Buffer& buf);
-    void	print(std::ostream& os) const;
-  };
+  class	Integer	: public ActNut::Number<int32_t> { public: Integer( const Object* parent, const std::string& name); };
+  class	Float	: public ActNut::Number<float>   { public: Float(   const Object* parent, const std::string& name); };
+  class	Boolean	: public ActNut::Number<uint8_t> { public: Boolean( const Object* parent, const std::string& name); };
+  class	Integer5: public ActNut::Number<int32_t> { public: Integer5(const Object* parent, const std::string& name); };
+  class	String  : public ActNut::String          { public: String(  const Object* parent, const std::string& name); };
 
   class	Array : public Object
   {

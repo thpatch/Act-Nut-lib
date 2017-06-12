@@ -39,6 +39,27 @@ std::ostream& ActNut::operator<<(std::ostream& os, const Object& o)
 
 
 
+ActNut::String::String(const Object* parent, const char* type, const std::string& name)
+  : Object(parent, type, name)
+{}
+
+bool	ActNut::String::readValue(Buffer& buf)
+{
+  uint32_t	length = buf.readInt();
+  const char*	str = (const char*)buf.returnBytes(length);
+  if (!str)
+    return false;
+  this->value = std::string(str, length);
+  return true;
+}
+
+void	ActNut::String::print(std::ostream& os) const
+{
+  os << this->value;
+}
+
+
+
 ActNut::vector::~vector()
 {
   for (ActNut::Object* it : *this)

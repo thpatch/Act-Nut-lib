@@ -1,5 +1,9 @@
 #include	<nut/SQComplexObjects.hpp>
 
+Nut::SQOuterType::SQOuterType(const Object* parent, std::string name)
+  : Number(parent, "SQOuterType", name)
+{}
+
 void	Nut::SQOuterType::print(std::ostream& os) const
 {
   os << (this->n ? "otOUTER" : "otLOCAL");

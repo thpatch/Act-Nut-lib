@@ -4,7 +4,7 @@
 # include	<iostream>
 # include	<iomanip>
 # include	<vector>
-# include	"Utils.hpp"
+# include	<Utils.hpp>
 
 namespace ActNut
 {
@@ -57,7 +57,7 @@ namespace ActNut
     const DisplayType	displayType;
 
   public:
-    Number(const Object* parent, const char* type, std::string name, DisplayType displayType = DisplayType::NONE)
+    Number(const Object* parent, const char* type, const std::string& name, DisplayType displayType = DisplayType::NONE)
       : Object(parent, type, name), n(0), displayType(displayType)
     { }
 
@@ -80,6 +80,18 @@ namespace ActNut
     operator T() { return this->n; }
   };
 
+
+  class	String : public Object
+  {
+  private:
+    std::string	value;
+
+  public:
+    String(const Object* parent, const char* type, const std::string& name);
+
+    bool	readValue(Buffer& buf);
+    void	print(std::ostream& os) const;
+  };
 
   class	vector : public Object, public std::vector<Object*>
   {
