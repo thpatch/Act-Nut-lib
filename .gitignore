@@ -2,5 +2,7 @@
 a.out
 *.act
 *.nut
+print-act-nut
+*.so
 *.exe
 *.dll

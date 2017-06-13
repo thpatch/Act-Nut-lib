@@ -1,9 +1,9 @@
-NAME	=	a.out
+NAME	=	libactnut.so
+BIN_NAME=	print-act-nut
 
-CXXFLAGS =	-Wall -Wextra -Wno-multichar -g -I.
+CXXFLAGS=	-Wall -Wextra -Wno-multichar -g -I. -fPIC
 
-SRCS	=	main.cpp \
-		Object.cpp \
+SRCS	=	Object.cpp \
 		Utils.cpp \
 		act/Object.cpp \
 		act/File.cpp \
@@ -15,14 +15,20 @@ SRCS	=	main.cpp \
 		nut/SQFunctionProto.cpp \
 		nut/Stream.cpp
 
-OBJS	=	$(SRCS:.cpp=.o)
+BIN_SRCS=	main.cpp
 
-all: $(NAME)
+OBJS	=	$(SRCS:.cpp=.o)
+BIN_OBJS=	$(BIN_SRCS:.cpp=.o)
+
+all: $(NAME) $(BIN_NAME)
 
 $(NAME): $(OBJS)
-	$(CXX) $(OBJS) -o $(NAME) $(LDFLAGS)
+	$(CXX) $(OBJS) -o $(NAME) $(LDFLAGS) -shared
+
+$(BIN_NAME): $(NAME) $(BIN_OBJS)
+	$(CXX) $(BIN_OBJS) -o $(BIN_NAME) $(LDFLAGS) -L. -lactnut -Wl,-rpath=.
 
 clean:
-	rm -f $(OBJS) $(NAME)
+	rm -f $(OBJS) $(BIN_OBJS) $(NAME) $(BIN_NAME)
 
 re: clean all
