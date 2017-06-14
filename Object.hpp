@@ -105,7 +105,7 @@ namespace ActNut
     template<typename T>
     bool	add(T* (*readerFunc)(const Object* parent, Buffer& buf, const std::string& name), Buffer& buf)
     {
-      Object*	obj = readerFunc(this, buf, "");
+      Object*	obj = readerFunc(this, buf, std::to_string(this->size()));
       if (!obj)
 	return false;
       this->push_back(obj);
