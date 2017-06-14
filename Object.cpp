@@ -1,4 +1,5 @@
 #include	<sstream>
+#include	<string.h>
 #include	"Object.hpp"
 
 ActNut::Object::Object(const Object* parent, const char* type, const std::string& name)
@@ -61,6 +62,56 @@ const ActNut::Object*	ActNut::Object::operator[](const char* key) const
     if (it->getName() == key)
       return it;
   return nullptr;
+}
+
+ActNut::Object*	ActNut::Object::getChild(const char* _path)
+{
+  char*			path = strdup(_path);
+  char*			path_cur = path;
+  char*			path_next;
+  ActNut::Object*	obj;
+
+  obj = this;
+  while (path_cur)
+    {
+      path_next = strchr(path_cur, '/');
+      if (path_next)
+	{
+	  *path_next = '\0';
+	  path_next++;
+	}
+      obj = (*obj)[path_cur];
+      if (!obj)
+	break ;
+      path_cur = path_next;
+    }
+  free(path);
+  return obj;
+}
+
+const ActNut::Object*	ActNut::Object::getChild(const char* _path) const
+{
+  char*			path = strdup(_path);
+  char*			path_cur = path;
+  char*			path_next;
+  const ActNut::Object*	obj;
+
+  obj = this;
+  while (path_cur)
+    {
+      path_next = strchr(path_cur, '/');
+      if (path_next)
+	{
+	  *path_next = '\0';
+	  path_next++;
+	}
+      obj = (*obj)[path_cur];
+      if (!obj)
+	break ;
+      path_cur = path_next;
+    }
+  free(path);
+  return obj;
 }
 
 

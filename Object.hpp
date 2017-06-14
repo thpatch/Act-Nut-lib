@@ -45,6 +45,8 @@ namespace ActNut
 
     virtual Object*		operator[](const char* key);
     virtual const Object*	operator[](const char* key) const;
+    Object*			getChild(const char* path);
+    const Object*		getChild(const char* path) const;
   };
   std::ostream& operator<<(std::ostream& os, const Object& o);
 
