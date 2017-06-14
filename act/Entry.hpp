@@ -24,7 +24,7 @@ namespace Act
     static const char*				type_hash_to_name(uint32_t hash);
 
   protected:
-    vector			array;
+    vector		array;
 
     Object*		readObject(Buffer& buf);
     virtual Object*	createObjectFromType(uint32_t type, const std::string& name);
@@ -38,6 +38,9 @@ namespace Act
 
     bool	readValue(Buffer& buf);
     void	print(std::ostream& os) const;
+
+    virtual Object*		operator[](const char* key);
+    virtual const Object*	operator[](const char* key) const;
   };
 
 }

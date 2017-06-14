@@ -194,3 +194,29 @@ void	Act::Entry::print(std::ostream& os) const
   os << std::endl;
   os << printIndent() << "  " << this->array;
 }
+
+ActNut::Object*	Act::Entry::operator[](const char* key)
+{
+  Object*	obj = this->Object::operator[](key);
+  if (obj != nullptr)
+    return obj;
+
+  for (Object* it : this->array)
+    if (it->getName() == key)
+      return it;
+
+  return nullptr;
+}
+
+const ActNut::Object*	Act::Entry::operator[](const char* key) const
+{
+  const Object*	obj = this->Object::operator[](key);
+  if (obj != nullptr)
+    return obj;
+
+  for (Object* it : this->array)
+    if (it->getName() == key)
+      return it;
+
+  return nullptr;
+}

@@ -12,9 +12,12 @@ namespace ActNut
   class	Object
   {
   protected:
-    const Object*	parent;
-    const char*		type;
-    std::string		name;
+    const Object*		parent;
+    const char*			type;
+    std::string			name;
+
+    std::vector<Object*>	members;
+    void			addMember(Object* member);
 
   public:
     Object(const Object* parent, const char* type, const std::string& name);
@@ -32,13 +35,16 @@ namespace ActNut
       return obj;
     }
 
-    const Object*	getParent() const;
-    const std::string&	getName() const;
-    int			getIndentLevel() const;
-    std::string		printIndent(int indentLevel = -1) const;
+    const Object*		getParent() const;
+    const std::string&		getName() const;
+    int				getIndentLevel() const;
+    std::string			printIndent(int indentLevel = -1) const;
 
-    virtual bool	readValue(Buffer& buf) = 0;
-    virtual void	print(std::ostream& os) const = 0;
+    virtual bool		readValue(Buffer& buf) = 0;
+    virtual void		print(std::ostream& os) const = 0;
+
+    virtual Object*		operator[](const char* key);
+    virtual const Object*	operator[](const char* key) const;
   };
   std::ostream& operator<<(std::ostream& os, const Object& o);
 
@@ -111,7 +117,11 @@ namespace ActNut
       this->push_back(obj);
       return true;
     }
-    void	print(std::ostream& os) const;
+    void		print(std::ostream& os) const;
+    Object*		operator[](size_type n);
+    const Object*	operator[](size_type n) const;
+    Object*		operator[](const char* key);
+    const Object*	operator[](const char* key) const;
   };
 
 }

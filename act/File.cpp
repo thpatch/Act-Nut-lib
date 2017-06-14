@@ -3,7 +3,10 @@
 
 Act::File::File(const Act::Object* parent, const std::string& name)
   : Object(parent, "File", name), sprites(this, "sprites"), resources(this, "resources")
-{}
+{
+  addMember(&sprites);
+  addMember(&resources);
+}
 
 Act::File::~File()
 {
@@ -39,6 +42,7 @@ bool	Act::File::readValue(Buffer& buf)
   this->mainEntry = Act::Entry::read(this, buf, "root");
   if (!this->mainEntry)
     return Error::error("Reading main entry failed.");
+  addMember(this->mainEntry);
 
   // Sprites
   uint32_t nbSprites = buf.readInt();

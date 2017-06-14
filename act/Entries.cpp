@@ -20,8 +20,9 @@ bool	Act::NutStream::readValue(Buffer& buf)
   Buffer		nutBuf(nutBytes, nutSize);
   this->stream = Nut::readStream(nutBuf, this, "stream");
   if (!this->stream)
-    return false;
-  return true;
+    return false; 
+  addMember(stream);
+ return true;
 }
 
 void	Act::NutStream::print(std::ostream& os) const
@@ -51,6 +52,7 @@ bool	Act::Root::readValue(Buffer& buf)
   this->nutstream = Object::read<NutStream>(this, buf, "nutstream");
   if (!this->nutstream)
     return false;
+  addMember(nutstream);
   return true;
 }
 
@@ -106,13 +108,16 @@ bool	Act::Layer::readValue(Buffer& buf)
   if (!this->nutstream)
     return false;
 
+  addMember(keyframe);
+  addMember(nutstream);
   return true;
 }
 
 void	Act::Layer::print(std::ostream& os) const
 {
   this->Entry::print(os);
-  os << printIndent() << "  " << *this->keyframe;
+  if (this->keyframe)
+    os << printIndent() << "  " << *this->keyframe;
   os << printIndent() << "  " << *this->nutstream;
 }
 
@@ -144,6 +149,7 @@ bool	Act::KeyFrame::readValue(Buffer& buf)
   this->layout = Act::Entry::read(this, buf, "layout");
   if (!this->layout)
     return false;
+  addMember(layout);
   return true;
 }
 
@@ -201,7 +207,9 @@ Act::ReservedLayout::ReservedLayout(const Object* parent, const std::string& nam
 
 Act::BitmapFontResource::BitmapFontResource(const Object* parent, const std::string& name)
   : Entry(parent, "BitmapFontResource", name), bitmapInfo(this, "bitmapinfo"), bitmapFontData(nullptr)
-{}
+{
+  addMember(&bitmapInfo);
+}
 
 Act::BitmapFontResource::~BitmapFontResource()
 {
@@ -246,10 +254,10 @@ void	Act::BitmapFontResource::print(std::ostream& os) const
   os << printIndent() << "  bitmapFontData:" << std::endl;
   for (uint32_t i = 0; i < this->height; i++)
     {
-      os << printIndent() << "  [";
+      os << printIndent(getIndentLevel() + 1) << "  [";
       for (uint32_t j = 0; j < this->width; j++)
 	{
-	  os << this->bitmapFontData[i][j];
+	  os << (int)this->bitmapFontData[i][j];
 	  if (j != this->width - 1)
 	    os << ", ";
 	}
