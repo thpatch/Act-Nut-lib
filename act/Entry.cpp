@@ -4,18 +4,9 @@
 #include	<act/Entries.hpp>
 #include	<act/Object.hpp>
 
-Act::Entry::Entry(const Object* parent, const char* type_name, int flags)
-  : Object(parent, "entry", type_name), flags(flags),
-    array(this, "array"), subEntry(nullptr), nutInfo(this, "nutInfo"), nut(nullptr)
+Act::Entry::Entry(const Object* parent, const char* type, const std::string& name)
+  : Object(parent, type, name), array(this, "array")
 {}
-
-Act::Entry::~Entry()
-{
-  if (this->subEntry)
-    delete this->subEntry;
-  if (this->nut)
-    delete this->nut;
-}
 
 const char* Act::Entry::type_names[] = {
   ".?AVActFileResourceInfo@@",
@@ -96,7 +87,7 @@ const char*	Act::Entry::type_hash_to_name(uint32_t hash)
     return "Unknown";
 }
 
-Act::Entry*	Act::Entry::read(const Object* parent, Buffer& buf, int flags)
+Act::Entry*	Act::Entry::read(const Object* parent, Buffer& buf, const std::string& name)
 {
   uint32_t	type_hash = buf.readInt();
   const char*	type = Entry::type_hash_to_name(type_hash);
@@ -104,33 +95,33 @@ Act::Entry*	Act::Entry::read(const Object* parent, Buffer& buf, int flags)
 
   // Root
   if (strcmp(type, "Root") == 0)
-    entry = new Act::Root(parent);
+    entry = new Act::Root(parent, name);
 
   // Layer
   else if (strcmp(type, "Layer") == 0)
-    entry = new Act::Layer(parent);
+    entry = new Act::Layer(parent, name);
   else if (strcmp(type, "KeyFrame") == 0)
-    entry = new Act::KeyFrame(parent);
+    entry = new Act::KeyFrame(parent, name);
   else if (strcmp(type, "SpriteLayout") == 0)
-    entry = new Act::SpriteLayout(parent);
+    entry = new Act::SpriteLayout(parent, name);
   else if (strcmp(type, "StringLayout") == 0)
-    entry = new Act::StringLayout(parent);
+    entry = new Act::StringLayout(parent, name);
   else if (strcmp(type, "ReservedLayout") == 0)
-    entry = new Act::ReservedLayout(parent);
+    entry = new Act::ReservedLayout(parent, name);
 
   // Resources
   else if (strcmp(type, "BitmapFontResource") == 0)
-    entry = new Act::BitmapFontResource(parent);
+    entry = new Act::BitmapFontResource(parent, name);
   else if (strcmp(type, "ImageResource") == 0)
-    entry = new Act::ImageResource(parent);
+    entry = new Act::ImageResource(parent, name);
   else if (strcmp(type, "RenderTarget") == 0)
-    entry = new Act::RenderTarget(parent);
+    entry = new Act::RenderTarget(parent, name);
 
   // Generic
   else
     {
       std::cout << "Warning: unknown type " << type << " (hash=" << type_hash << "). Defaulting to the generic Act::Entry." << std::endl;
-      entry = new Act::Entry(parent, type, flags);
+      entry = new Act::Entry(parent, type, name);
     }
 
   if (!entry->readValue(buf))
@@ -201,27 +192,8 @@ bool	Act::Entry::readArray(Buffer& buf, vector& array)
   return true;
 }
 
-bool	Act::Entry::readNut(Buffer& buf, vector& nutInfo)
-{
-  if (!this->readArray(buf, nutInfo))
-    return false;
-
-  uint32_t		nut_size = buf.readInt();
-  const uint8_t*	nut_buf = buf.returnBytes(nut_size);
-  (void)nut_buf;
-  // this->nut = loadnut(nut_buf);
-  return true;
-}
-
 void	Act::Entry::print(std::ostream& os) const
 {
   os << std::endl;
-
   os << printIndent() << "  " << this->array;
-
-  if (this->subEntry)
-    os << printIndent() << "  " << *this->subEntry;
-
-  if (this->flags & HAVE_NUT)
-    os << printIndent() << "  " << this->nutInfo;
 }

@@ -21,7 +21,7 @@ namespace Nut
     uint8_t	arg3;
 
   public:
-    SQInstruction(const Object* parent, std::string name = "");
+    SQInstruction(const Object* parent, const std::string& name);
     ~SQInstruction();
     bool	readValue(Buffer& buf);
     // TODO: ensure the display is nice

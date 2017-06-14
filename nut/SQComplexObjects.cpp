@@ -1,6 +1,6 @@
 #include	<nut/SQComplexObjects.hpp>
 
-Nut::SQOuterType::SQOuterType(const Object* parent, std::string name)
+Nut::SQOuterType::SQOuterType(const Object* parent, const std::string& name)
   : Number(parent, "SQOuterType", name)
 {}
 
@@ -9,7 +9,7 @@ void	Nut::SQOuterType::print(std::ostream& os) const
   os << (this->n ? "otOUTER" : "otLOCAL");
 }
 
-Nut::SQOuterVal::SQOuterVal(const Object* parent, std::string name)
+Nut::SQOuterVal::SQOuterVal(const Object* parent, const std::string& name)
   : SQObjectPtr(parent, "SQOuterVal", name)
 {}
 
@@ -37,7 +37,7 @@ void	Nut::SQOuterVal::print(std::ostream& os) const
 
 
 
-Nut::SQLocalVarInfo::SQLocalVarInfo(const Object* parent, std::string name)
+Nut::SQLocalVarInfo::SQLocalVarInfo(const Object* parent, const std::string& name)
   : SQObjectPtr(parent, "SQLocalVarInfo", name)
 {
 }
@@ -68,7 +68,7 @@ void	Nut::SQLocalVarInfo::print(std::ostream& os) const
 
 
 
-Nut::SQLineInfo::SQLineInfo(const Object* parent, std::string name)
+Nut::SQLineInfo::SQLineInfo(const Object* parent, const std::string& name)
   : SQObjectPtr(parent, "SQLineInfo", name)
 {}
 

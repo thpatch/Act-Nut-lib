@@ -82,8 +82,8 @@ static std::vector<OpcodeDescriptor>	opcodes = {
   { "close",		ARG_UNKNOWN,	ARG_UNKNOWN,	ARG_UNKNOWN,	ARG_UNKNOWN }
 };
 
-Nut::SQInstruction::SQInstruction(const Object* parent, std::string name)
-  : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent))
+Nut::SQInstruction::SQInstruction(const Object* parent, const std::string& name)
+  : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent->getParent()))
 {}
 
 bool	Nut::SQInstruction::readValue(Buffer& buf)

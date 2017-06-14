@@ -1,7 +1,7 @@
 #include	<fstream>
 #include	<nut/Stream.hpp>
 
-Nut::SQFunctionProto*	Nut::readStream(Buffer& buf)
+Nut::SQFunctionProto*	Nut::readStream(Buffer& buf, const ActNut::Object* parent, const std::string& name)
 {
   if (buf.readByte() != 0xFA || buf.readByte() != 0xFA)
     {
@@ -15,7 +15,7 @@ Nut::SQFunctionProto*	Nut::readStream(Buffer& buf)
       !buf.checkTag(4))
     return nullptr;
 
-  SQFunctionProto *func = ActNut::Object::read<SQFunctionProto>(nullptr, buf);
+  SQFunctionProto *func = ActNut::Object::read<SQFunctionProto>(parent, buf, name);
   if (!func)
     return nullptr;
 

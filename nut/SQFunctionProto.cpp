@@ -1,6 +1,6 @@
 #include	<nut/SQFunctionProto.hpp>
 
-Nut::SQFunctionProto::SQFunctionProto(const Object* parent, std::string name)
+Nut::SQFunctionProto::SQFunctionProto(const Object* parent, const std::string& name)
   : SQObjectPtr(parent, "SQFunctionProto", name), literals(this, "Literals"), parameters(this, "Parameters"),
     outerValues(this, "Outer Values"), localVarInfos(this, "Local variables informations"), lineInfos(this, "Line Informations"),
     defaultParams(this, "Default Parameters"), instructions(this, "Instructions"), functions(this, "Functions")
@@ -42,37 +42,14 @@ bool	Nut::SQFunctionProto::readValue(Buffer& buf)
   this->ninstructions	= ActNut::Object::read<SQInteger>(this, buf, "ninstructions");
   this->nfunctions	= ActNut::Object::read<SQInteger>(this, buf, "nfunctions");
 
-  buf.checkTag('PART');
-  for (int i = 0; i < *this->nliterals; i++)
-    this->literals.push_back(loadObject(this, buf));
-
-  buf.checkTag('PART');
-  for (int i = 0; i < *this->nparameters; i++)
-    this->parameters.push_back(loadObject(this, buf));
-
-  buf.checkTag('PART');
-  for (int i = 0; i < *this->noutervals; i++)
-    this->outerValues.push_back(ActNut::Object::read<SQOuterVal>(this, buf));
-
-  buf.checkTag('PART');
-  for (int i = 0; i < *this->nlocalvarinfos; i++)
-    this->localVarInfos.push_back(ActNut::Object::read<SQLocalVarInfo>(this, buf));
-
-  buf.checkTag('PART');
-  for (int i = 0; i < *this->nlineinfos; i++)
-    this->lineInfos.push_back(ActNut::Object::read<SQLineInfo>(this, buf));
-
-  buf.checkTag('PART');
-  for (int i = 0; i < *this->ndefaultparams; i++)
-    this->defaultParams.push_back(ActNut::Object::read<SQInteger>(this, buf));
-
-  buf.checkTag('PART');
-  for (int i = 0; i < *this->ninstructions; i++)
-    this->instructions.push_back(ActNut::Object::read<SQInstruction>(this, buf));
-
-  buf.checkTag('PART');
-  for (int i = 0; i < *this->nfunctions; i++)
-    this->functions.push_back(ActNut::Object::read<SQFunctionProto>(this, buf));
+  this->readArray(Nut::loadObject,                       buf, this->literals,      this->nliterals);
+  this->readArray(Nut::loadObject,                       buf, this->parameters,    this->nparameters);
+  this->readArray(ActNut::Object::read<SQOuterVal>,      buf, this->outerValues,   this->noutervals);
+  this->readArray(ActNut::Object::read<SQLocalVarInfo>,  buf, this->localVarInfos, this->nlocalvarinfos);
+  this->readArray(ActNut::Object::read<SQLineInfo>,      buf, this->lineInfos,     this->nlineinfos);
+  this->readArray(ActNut::Object::read<SQInteger>,       buf, this->defaultParams, this->ndefaultparams);
+  this->readArray(ActNut::Object::read<SQInstruction>,   buf, this->instructions,  this->ninstructions);
+  this->readArray(ActNut::Object::read<SQFunctionProto>, buf, this->functions,     this->nfunctions);
 
   this->stacksize	= ActNut::Object::read<SQInteger>          (this, buf, "stacksize");
   this->bgenerator	= ActNut::Object::read<SQSingleByteBoolean>(this, buf, "bgenerator");
@@ -83,7 +60,7 @@ bool	Nut::SQFunctionProto::readValue(Buffer& buf)
 
 void	Nut::SQFunctionProto::print(std::ostream& os) const
 {
-  os << *this->sourcename << std::endl;
+  os << std::endl << printIndent() << *this->sourcename << std::endl;
   os << printIndent() << *this->name << std::endl;
 
   os << printIndent() << *this->nliterals << std::endl;

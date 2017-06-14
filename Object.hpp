@@ -21,7 +21,7 @@ namespace ActNut
     virtual ~Object() {}
 
     template<typename T>
-    static T*	read(const Object* parent, Buffer& buf, const std::string& name = "")
+    static T*	read(const Object* parent, Buffer& buf, const std::string& name)
     {
       T*	obj = new T(parent, name);
       if (!obj->readValue(buf))
@@ -32,6 +32,7 @@ namespace ActNut
       return obj;
     }
 
+    const Object*	getParent() const;
     const std::string&	getName() const;
     int			getIndentLevel() const;
     std::string		printIndent(int indentLevel = -1) const;
@@ -77,7 +78,7 @@ namespace ActNut
 	os << std::noboolalpha;
     }
 
-    operator T() { return this->n; }
+    operator T() const { return this->n; }
   };
 
 
@@ -101,6 +102,15 @@ namespace ActNut
     ~vector();
 
     bool	readValue(Buffer& buf);
+    template<typename T>
+    bool	add(T* (*readerFunc)(const Object* parent, Buffer& buf, const std::string& name), Buffer& buf)
+    {
+      Object*	obj = readerFunc(this, buf, "");
+      if (!obj)
+	return false;
+      this->push_back(obj);
+      return true;
+    }
     void	print(std::ostream& os) const;
   };
 

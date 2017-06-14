@@ -37,7 +37,7 @@ bool	Act::File::readValue(Buffer& buf)
     return false;
 
   // Main entry
-  this->mainEntry = Act::Entry::read(this, buf, Act::Entry::HAVE_NUT);
+  this->mainEntry = Act::Entry::read(this, buf, "root");
   if (!this->mainEntry)
     return Error::error("Reading main entry failed.");
 
@@ -45,28 +45,24 @@ bool	Act::File::readValue(Buffer& buf)
   uint32_t nbSprites = buf.readInt();
   for (uint32_t i = 0; i < nbSprites; i++)
     {
-      Act::Entry* entry = Act::Entry::read(this, buf, Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT);
-      if (!entry)
+      if (!this->sprites.add(Act::Entry::read, buf))
 	{
 	  std::ostringstream ss;
 	  ss << "Reading sprite " << i + 1 << " failed.";
 	  return Error::error(ss.str());
 	}
-      this->sprites.push_back(entry);
     }
 
   // Resources
   uint32_t nbResources = buf.readInt();
   for (uint32_t i = 0; i < nbResources; i++)
     {
-      Act::Entry* entry = Act::Entry::read(this, buf, 0);
-      if (!entry)
+      if (!this->resources.add(Act::Entry::read, buf))
 	{
 	  std::ostringstream ss;
 	  ss << "Reading resource " << i + 1 << " failed.";
 	  return Error::error(ss.str());
 	}
-      this->resources.push_back(entry);
     }
 
   return true;

@@ -42,8 +42,16 @@ namespace Nut
     SQSingleByteBoolean*	bgenerator;
     SQInteger*			varparams;
 
+    template<typename T>
+    void	readArray(T* (*readerFunc)(const Object* parent, Buffer& buf, const std::string& name), Buffer& buf, vector& array, const SQInteger* size)
+    {
+      buf.checkTag('PART');
+      for (int i = 0; i < *size; i++)
+	array.add(readerFunc, buf);
+    }
+
   public:
-    SQFunctionProto(const Object* parent, std::string name = "");
+    SQFunctionProto(const Object* parent, const std::string& name);
     ~SQFunctionProto();
     bool	readValue(Buffer& buf);
     void	print(std::ostream& os) const;

@@ -5,6 +5,11 @@ ActNut::Object::Object(const Object* parent, const char* type, const std::string
   : parent(parent), type(type), name(name)
 {}
 
+const ActNut::Object*	ActNut::Object::getParent() const
+{
+  return this->parent;
+}
+
 const std::string&	ActNut::Object::getName() const
 {
   return this->name;

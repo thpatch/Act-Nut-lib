@@ -1,95 +1,175 @@
 #include	<act/Entries.hpp>
 
-Act::Root::Root(const Object* parent)
-  : Entry(parent, "Root", Act::Entry::HAVE_NUT)
+Act::NutStream::NutStream(const Object* parent, const std::string& name)
+  : Entry(parent, "NutStream", name), stream(nullptr)
 {}
 
-bool	Act::Root::readValue(Buffer& buf)
+Act::NutStream::~NutStream()
 {
-  if (!this->readArray(buf, this->array))
-    return false;
-
-  return this->readNut(buf, this->nutInfo);
+  if (this->stream)
+    delete this->stream;
 }
 
-
-
-
-Act::Layer::Layer(const Object* parent)
-  : Entry(parent, "Layer", Act::Entry::HAVE_NUT | Act::Entry::HAVE_SUB_ENTRY | Act::Entry::HAVE_SUB_ENTRY_COUNT)
-{}
-
-bool	Act::Layer::readValue(Buffer& buf)
+bool	Act::NutStream::readValue(Buffer& buf)
 {
-  if (!this->readArray(buf, this->array))
+  if (!this->Entry::readValue(buf))
     return false;
 
-  uint32_t	nbOfSubEntries = buf.readInt();
-  if (nbOfSubEntries > 1)
-    {
-      std::cout << "[Layer] Only 0 and 1 sub entries are supported (got " << nbOfSubEntries << ")." << std::endl;
-      return false;
-    }
-
-  if (nbOfSubEntries)
-    {
-      this->subEntry = Act::Entry::read(this, buf, HAVE_SUB_ENTRY);
-      if (!this->subEntry)
-	return false;
-    }
-
-  uint32_t nbOfSubEntries2 = buf.readInt();
-  if (nbOfSubEntries2 != 0)
-    {
-      std::cout << "[Layer] SubEntries2 is not supported yet." << std::endl;
-      return false;
-    }
-
-  return this->readNut(buf, this->nutInfo);
-}
-
-
-
-
-Act::KeyFrame::KeyFrame(const Object* parent)
-  : Entry(parent, "KeyFrame", Act::Entry::HAVE_SUB_ENTRY)
-{}
-
-bool	Act::KeyFrame::readValue(Buffer& buf)
-{
-  if (!this->readArray(buf, this->array))
-    return false;
-
-  uint8_t isSubEntry = buf.readByte();
-  if (isSubEntry != 1)
-    {
-      std::cout << "[KeyFrame] IsSubEntry == " << isSubEntry << " - should be 1" << std::endl;
-      return false;
-    }
-
-  this->subEntry = Act::Entry::read(this, buf, 0);
-  if (!this->subEntry)
+  uint32_t		nutSize = buf.readInt();
+  const uint8_t*	nutBytes = buf.returnBytes(nutSize);
+  Buffer		nutBuf(nutBytes, nutSize);
+  this->stream = Nut::readStream(nutBuf, this, "stream");
+  if (!this->stream)
     return false;
   return true;
 }
 
+void	Act::NutStream::print(std::ostream& os) const
+{
+  this->Entry::print(os);
+  os << printIndent() << *stream;
+}
 
 
 
-Act::SpriteLayout::SpriteLayout(const Object* parent)
-  : Entry(parent, "SpriteLayout", 0)
+
+Act::Root::Root(const Object* parent, const std::string& name)
+  : Entry(parent, "Root", name), nutstream(nullptr)
+{}
+
+Act::Root::~Root()
+{
+  if (this->nutstream)
+    delete this->nutstream;
+}
+
+bool	Act::Root::readValue(Buffer& buf)
+{
+  if (!this->Entry::readValue(buf))
+    return false;
+
+  this->nutstream = Object::read<NutStream>(this, buf, "nutstream");
+  if (!this->nutstream)
+    return false;
+  return true;
+}
+
+void	Act::Root::print(std::ostream& os) const
+{
+  this->Entry::print(os);
+  os << printIndent() << *this->nutstream;
+}
+
+
+
+
+Act::Layer::Layer(const Object* parent, const std::string& name)
+  : Entry(parent, "Layer", name), keyframe(nullptr), nutstream(nullptr)
+{}
+
+Act::Layer::~Layer()
+{
+  if (this->keyframe)
+    delete this->keyframe;
+  if (this->nutstream)
+    delete this->nutstream;
+}
+
+bool	Act::Layer::readValue(Buffer& buf)
+{
+  if (!this->Entry::readValue(buf))
+    return false;
+
+  uint32_t	nbOfKeyframes = buf.readInt();
+  if (nbOfKeyframes > 1)
+    {
+      std::cout << "[Layer] Only 0 and 1 keyframes are supported (got " << nbOfKeyframes << ")." << std::endl;
+      return false;
+    }
+
+  if (nbOfKeyframes == 1)
+    {
+      this->keyframe = Act::Entry::read(this, buf, "keyframe");
+      if (!this->keyframe)
+	return false;
+    }
+
+  uint32_t nbOfSomething = buf.readInt();
+  if (nbOfSomething != 0)
+    {
+      std::cout << "[Layer] nbOfSomething must be 0 (because I don't know what this 'something' is)." << std::endl;
+      return false;
+    }
+
+
+  this->nutstream = Object::read<NutStream>(this, buf, "nutstream");
+  if (!this->nutstream)
+    return false;
+
+  return true;
+}
+
+void	Act::Layer::print(std::ostream& os) const
+{
+  this->Entry::print(os);
+  os << printIndent() << "  " << *this->keyframe;
+  os << printIndent() << "  " << *this->nutstream;
+}
+
+
+
+
+Act::KeyFrame::KeyFrame(const Object* parent, const std::string& name)
+  : Entry(parent, "KeyFrame", name), layout(nullptr)
+{}
+
+Act::KeyFrame::~KeyFrame()
+{
+  if (this->layout)
+    delete this->layout;
+}
+
+bool	Act::KeyFrame::readValue(Buffer& buf)
+{
+  if (!this->Entry::readValue(buf))
+    return false;
+
+  uint8_t hasLayout = buf.readByte();
+  if (hasLayout != 1)
+    {
+      std::cout << "[KeyFrame] HasLayout == " << hasLayout << " - should be 1" << std::endl;
+      return false;
+    }
+
+  this->layout = Act::Entry::read(this, buf, "layout");
+  if (!this->layout)
+    return false;
+  return true;
+}
+
+void	Act::KeyFrame::print(std::ostream& os) const
+{
+  this->Entry::print(os);
+  os << printIndent() << "  " << *this->layout;
+}
+
+
+
+
+Act::SpriteLayout::SpriteLayout(const Object* parent, const std::string& name)
+  : Entry(parent, "SpriteLayout", name)
 {}
 
 
 
 
-Act::StringLayout::StringLayout(const Object* parent)
-  : Entry(parent, "StringLayout", 0)
+Act::StringLayout::StringLayout(const Object* parent, const std::string& name)
+  : Entry(parent, "StringLayout", name)
 {}
 
 bool	Act::StringLayout::readValue(Buffer& buf)
 {
-  if (!this->readArray(buf, this->array))
+  if (!this->Entry::readValue(buf))
     return false;
 
   for (Act::Object* it : this->array)
@@ -112,15 +192,15 @@ Act::Object*	Act::StringLayout::createObjectFromType(uint32_t type, const std::s
 
 
 
-Act::ReservedLayout::ReservedLayout(const Object* parent)
-  : Entry(parent, "ReservedLayout", 0)
+Act::ReservedLayout::ReservedLayout(const Object* parent, const std::string& name)
+  : Entry(parent, "ReservedLayout", name)
 {}
 
 
 
 
-Act::BitmapFontResource::BitmapFontResource(const Object* parent)
-  : Entry(parent, "BitmapFontResource", 0), subArray(this, "subArray"), bitmapFontData(nullptr)
+Act::BitmapFontResource::BitmapFontResource(const Object* parent, const std::string& name)
+  : Entry(parent, "BitmapFontResource", name), bitmapInfo(this, "bitmapinfo"), bitmapFontData(nullptr)
 {}
 
 Act::BitmapFontResource::~BitmapFontResource()
@@ -135,7 +215,7 @@ Act::BitmapFontResource::~BitmapFontResource()
 
 bool	Act::BitmapFontResource::readValue(Buffer& buf)
 {
-  if (!this->readArray(buf, this->array) || !this->readArray(buf, this->subArray))
+  if (!this->Entry::readValue(buf) || !this->readArray(buf, this->bitmapInfo))
     return false;
 
   this->width = buf.readInt();
@@ -158,16 +238,38 @@ Act::Object*	Act::BitmapFontResource::createObjectFromType(uint32_t type, const 
     return this->Act::Entry::createObjectFromType(type, name);
 }
 
+void	Act::BitmapFontResource::print(std::ostream& os) const
+{
+  this->Entry::print(os);
+  os << printIndent() << "  " << this->bitmapInfo;
+
+  os << printIndent() << "  bitmapFontData:" << std::endl;
+  for (uint32_t i = 0; i < this->height; i++)
+    {
+      os << printIndent() << "  [";
+      for (uint32_t j = 0; j < this->width; j++)
+	{
+	  os << this->bitmapFontData[i][j];
+	  if (j != this->width - 1)
+	    os << ", ";
+	}
+      os << "]";
+      if (i != this->height - 1)
+	os << ",";
+      os << std::endl;
+    }
+}
 
 
 
-Act::ImageResource::ImageResource(const Object* parent)
-  : Entry(parent, "ImageResource", 0)
+
+Act::ImageResource::ImageResource(const Object* parent, const std::string& name)
+  : Entry(parent, "ImageResource", name)
 {}
 
 
 
 
-Act::RenderTarget::RenderTarget(const Object* parent)
-  : Entry(parent, "RenderTarget", 0)
+Act::RenderTarget::RenderTarget(const Object* parent, const std::string& name)
+  : Entry(parent, "RenderTarget", name)
 {}
