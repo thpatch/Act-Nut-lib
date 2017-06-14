@@ -1,4 +1,3 @@
-#include	<sstream>
 #include	<string.h>
 #include	<act/Entry.hpp>
 #include	<act/Entries.hpp>
@@ -162,9 +161,7 @@ Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const std::string& 
     case 3:
       return new Act::String(this, name);
     default:
-      std::ostringstream ss;
-      ss << "Unknown type " << type;
-      Error::error(ss.str());
+      Error::error(std::string("Unknown type ") + std::to_string(type));
       return nullptr;
     }
 }

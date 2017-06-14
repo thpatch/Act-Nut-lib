@@ -1,4 +1,3 @@
-#include	<sstream>
 #include	<fstream>
 #include	<act/File.hpp>
 
@@ -44,26 +43,14 @@ bool	Act::File::readValue(Buffer& buf)
   // Sprites
   uint32_t nbSprites = buf.readInt();
   for (uint32_t i = 0; i < nbSprites; i++)
-    {
-      if (!this->sprites.add(Act::Entry::read, buf))
-	{
-	  std::ostringstream ss;
-	  ss << "Reading sprite " << i + 1 << " failed.";
-	  return Error::error(ss.str());
-	}
-    }
+    if (!this->sprites.add(Act::Entry::read, buf))
+      return Error::error(std::string("Reading sprite ") + std::to_string(i + 1) + " failed.");
 
   // Resources
   uint32_t nbResources = buf.readInt();
   for (uint32_t i = 0; i < nbResources; i++)
-    {
-      if (!this->resources.add(Act::Entry::read, buf))
-	{
-	  std::ostringstream ss;
-	  ss << "Reading resource " << i + 1 << " failed.";
-	  return Error::error(ss.str());
-	}
-    }
+    if (!this->resources.add(Act::Entry::read, buf))
+      return Error::error(std::string("Reading resource ") + std::to_string(i + 1) + " failed.");
 
   return true;
 }
