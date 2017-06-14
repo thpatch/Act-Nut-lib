@@ -4,7 +4,16 @@ Nut::SQFunctionProto::SQFunctionProto(const Object* parent, const std::string& n
   : SQObjectPtr(parent, "SQFunctionProto", name), literals(this, "Literals"), parameters(this, "Parameters"),
     outerValues(this, "Outer Values"), localVarInfos(this, "Local variables informations"), lineInfos(this, "Line Informations"),
     defaultParams(this, "Default Parameters"), instructions(this, "Instructions"), functions(this, "Functions")
-{}
+{
+  addMember(&literals);
+  addMember(&parameters);
+  addMember(&outerValues);
+  addMember(&localVarInfos);
+  addMember(&lineInfos);
+  addMember(&defaultParams);
+  addMember(&instructions);
+  addMember(&functions);
+}
 
 Nut::SQFunctionProto::~SQFunctionProto()
 {
@@ -31,6 +40,8 @@ bool	Nut::SQFunctionProto::readValue(Buffer& buf)
 
   this->sourcename = loadObject(this, buf, "sourcename");
   this->name       = loadObject(this, buf, "name");
+  addMember(sourcename);
+  addMember(name);
 
   buf.checkTag('PART');
   this->nliterals	= ActNut::Object::read<SQInteger>(this, buf, "nliterals");
@@ -54,6 +65,9 @@ bool	Nut::SQFunctionProto::readValue(Buffer& buf)
   this->stacksize	= ActNut::Object::read<SQInteger>          (this, buf, "stacksize");
   this->bgenerator	= ActNut::Object::read<SQSingleByteBoolean>(this, buf, "bgenerator");
   this->varparams	= ActNut::Object::read<SQInteger>          (this, buf, "varparams");
+  addMember(stacksize);
+  addMember(bgenerator);
+  addMember(varparams);
 
   return true;
 }
