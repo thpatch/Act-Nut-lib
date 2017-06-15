@@ -2,6 +2,13 @@
 #include	<string.h>
 #include	"Object.hpp"
 
+bool	ActNut::Object::_printFullNames = false;
+
+void	ActNut::Object::printFullNames(bool value)
+{
+  _printFullNames = value;
+}
+
 ActNut::Object::Object(const Object* parent, const char* type, const std::string& name)
   : parent(parent), type(type), name(name)
 {}
@@ -19,6 +26,14 @@ const ActNut::Object*	ActNut::Object::getParent() const
 const std::string&	ActNut::Object::getName() const
 {
   return this->name;
+}
+
+std::string	ActNut::Object::getFullName() const
+{
+  if (this->parent)
+    return this->parent->getFullName() + "/" + this->name;
+  else
+    return "";
 }
 
 int	ActNut::Object::getIndentLevel() const
@@ -42,8 +57,13 @@ std::string	ActNut::Object::printIndent(int indentLevel) const
 
 std::ostream& ActNut::operator<<(std::ostream& os, const Object& o)
 {
-  if (o.getName().empty() == false && o.getName()[0])
-    os << o.getName() << ": ";
+  if (ActNut::Object::_printFullNames == false)
+    {
+      if (o.getName().empty() == false && o.getName()[0])
+	os << o.getName() << ": ";
+    }
+  else
+    os << o.getFullName() << ": ";
   o.print(os);
   return os;
 }

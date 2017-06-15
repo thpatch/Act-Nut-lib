@@ -20,6 +20,9 @@ namespace ActNut
     void			addMember(Object* member);
 
   public:
+    static bool			_printFullNames;
+    static void	printFullNames(bool value);
+
     Object(const Object* parent, const char* type, const std::string& name);
     virtual ~Object() {}
 
@@ -37,6 +40,7 @@ namespace ActNut
 
     const Object*		getParent() const;
     const std::string&		getName() const;
+    std::string			getFullName() const;
     int				getIndentLevel() const;
     std::string			printIndent(int indentLevel = -1) const;
 

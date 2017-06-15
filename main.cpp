@@ -12,6 +12,7 @@ int	main(int argc, char** argv)
     }
 
   ActNut::Error::setErrorMode(ActNut::Error::STDERR);
+  ActNut::Object::printFullNames(true);
   Act::Entry::init_hashes();
   try
     {
