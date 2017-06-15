@@ -19,7 +19,7 @@ bool	Act::NutStream::readValue(IBuffer& buf)
   uint8_t*		nutBytes = new uint8_t[nutSize];
   buf.readBytes(nutBytes, nutSize);
   ActNut::MemoryBuffer	nutBuf(nutBytes, nutSize, true);
-  this->stream = Nut::readStream(nutBuf, this, "stream");
+  this->stream = Object::read<Nut::Stream>(this, nutBuf, "stream");
   if (!this->stream)
     return false; 
   addMember(stream);

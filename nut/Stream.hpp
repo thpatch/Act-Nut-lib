@@ -11,7 +11,13 @@ namespace Nut
   using ActNut::IBuffer;
   using ActNut::Error;
 
-  SQFunctionProto*	readStream(IBuffer& buf, const ActNut::Object* parent = nullptr, const std::string& name = "");
+  class	Stream : public SQFunctionProto
+  {
+  public:
+    Stream(const Object* parent, const std::string& name);
+    bool	readValue(IBuffer& buf);
+  };
+
   SQFunctionProto*	readStream(const std::string& filename);
 
 }
