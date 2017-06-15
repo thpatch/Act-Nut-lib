@@ -52,3 +52,28 @@ void	Act::File::print(std::ostream& os) const
   os << printIndent() << this->sprites;
   os << printIndent() << this->resources;
 }
+
+bool	Act::File::writeValue(IBuffer& buf) const
+{
+  if (!buf.writeInt('1TCA') || // ACT1
+      !buf.writeInt(1))
+    return false;
+
+  // Main entry
+  if (!this->mainEntry->writeValue(buf))
+    return Error::error("Writing main entry failed.");
+
+  // Sprites
+  buf.writeInt(this->sprites.size());
+  for (Object* it : this->sprites)
+    if (!it->writeValue(buf))
+      return Error::error("Writing sprite failed.");
+
+  // Resources
+  buf.writeInt(this->resources.size());
+  for (Object* it : this->resources)
+    if (!it->writeValue(buf))
+      return Error::error("Writing resource failed.");
+
+  return true;
+}

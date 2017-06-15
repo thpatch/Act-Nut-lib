@@ -18,11 +18,14 @@ namespace Act
   {
   private:
     Nut::SQFunctionProto*	stream;
+  protected:
+    bool	writeHash(IBuffer& buf) const;
   public:
     NutStream(const Object* parent, const std::string& name);
     ~NutStream();
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
 
@@ -31,11 +34,14 @@ namespace Act
   {
   private:
     NutStream*	nutstream;
+  protected:
+    bool	writeHash(IBuffer& buf) const;
   public:
     Root(const Object* parent, const std::string& name);
     ~Root();
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
   class	Layer : public Entry
@@ -48,6 +54,7 @@ namespace Act
     ~Layer();
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
   class	KeyFrame : public Entry
@@ -59,6 +66,7 @@ namespace Act
     ~KeyFrame();
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
   class	SpriteLayout : public Entry
@@ -73,6 +81,7 @@ namespace Act
     StringLayout(const Object* parent, const std::string& name);
     bool	readValue(IBuffer& buf);
     Object*	createObjectFromType(uint32_t type, const std::string& name);
+    bool	writeValue(IBuffer& buf) const;
   };
 
   class	ReservedLayout : public Entry
@@ -95,6 +104,7 @@ namespace Act
     bool	readValue(IBuffer& buf);
     Object*	createObjectFromType(uint32_t type, const std::string& name);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
   class	ImageResource : public Entry

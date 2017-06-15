@@ -27,6 +27,7 @@ namespace Nut
     ~SQOuterVal();
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
   class	SQLocalVarInfo : public SQObjectPtr
@@ -42,6 +43,7 @@ namespace Nut
     ~SQLocalVarInfo();
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
   class	SQLineInfo : public SQObjectPtr
@@ -55,6 +57,7 @@ namespace Nut
     ~SQLineInfo();
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
 }

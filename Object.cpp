@@ -28,6 +28,11 @@ const std::string&	ActNut::Object::getName() const
   return this->name;
 }
 
+uint32_t	ActNut::Object::getNumType() const
+{
+  return 0xFFFFFFFF;
+}
+
 std::string	ActNut::Object::getFullName() const
 {
   if (this->parent)
@@ -53,6 +58,12 @@ std::string	ActNut::Object::printIndent(int indentLevel) const
   for (int i = 0; i < indentLevel; i++)
     ss << "    ";
   return ss.str();
+}
+
+bool	ActNut::Object::writeToFile(const std::string& filename) const
+{
+  FileBuffer	buf(filename, std::ios_base::out);
+  return this->writeValue(buf);
 }
 
 std::ostream& ActNut::operator<<(std::ostream& os, const Object& o)
@@ -155,6 +166,12 @@ void	ActNut::String::print(std::ostream& os) const
   os << this->value;
 }
 
+bool	ActNut::String::writeValue(IBuffer& buf) const
+{
+  buf.writeInt(this->value.length());
+  return buf.writeBytes((const uint8_t*)this->value.c_str(), this->value.length());
+}
+
 
 
 ActNut::vector::~vector()
@@ -166,6 +183,11 @@ ActNut::vector::~vector()
 bool	ActNut::vector::readValue(IBuffer&)
 {
   throw std::logic_error("Calling readValue doesn't make sense on an Act::vector");
+}
+
+bool	ActNut::vector::writeValue(IBuffer&) const
+{
+  throw std::logic_error("Calling writedValue doesn't make sense on an Act::vector");
 }
 
 void	ActNut::vector::print(std::ostream& os) const

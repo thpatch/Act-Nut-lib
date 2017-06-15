@@ -24,8 +24,8 @@ namespace Nut
     SQInstruction(const Object* parent, const std::string& name);
     ~SQInstruction();
     bool	readValue(IBuffer& buf);
-    // TODO: ensure the display is nice
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
 }

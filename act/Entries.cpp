@@ -32,6 +32,23 @@ void	Act::NutStream::print(std::ostream& os) const
   os << printIndent() << *stream;
 }
 
+bool	Act::NutStream::writeValue(IBuffer& buf) const
+{
+  if (!this->Entry::writeValue(buf))
+    return false;
+
+  ActNut::MemoryBuffer	nutBuf;
+  if (!this->stream->writeValue(nutBuf))
+    return false;
+  buf.writeInt(nutBuf.getSize());
+  return buf.writeBytes(nutBuf.getBuffer(), nutBuf.getSize());
+}
+
+bool	Act::NutStream::writeHash(IBuffer&) const
+{
+  return true;
+}
+
 
 
 
@@ -61,6 +78,18 @@ void	Act::Root::print(std::ostream& os) const
 {
   this->Entry::print(os);
   os << printIndent() << *this->nutstream;
+}
+
+bool	Act::Root::writeValue(IBuffer& buf) const
+{
+  if (!this->Entry::writeValue(buf))
+    return false;
+  return this->nutstream->writeValue(buf);
+}
+
+bool	Act::Root::writeHash(IBuffer& buf) const
+{
+  return buf.writeInt(0);
 }
 
 
@@ -122,6 +151,24 @@ void	Act::Layer::print(std::ostream& os) const
   os << printIndent() << "  " << *this->nutstream;
 }
 
+bool	Act::Layer::writeValue(IBuffer& buf) const
+{
+  if (!this->Entry::writeValue(buf))
+    return false;
+
+  if (this->keyframe)
+    {
+      buf.writeInt(1);
+      if (this->keyframe->writeValue(buf) == false)
+	return false;
+    }
+  else
+    buf.writeInt(0);
+
+  buf.writeInt(0);
+  return this->nutstream->writeValue(buf);
+}
+
 
 
 
@@ -160,6 +207,14 @@ void	Act::KeyFrame::print(std::ostream& os) const
   os << printIndent() << "  " << *this->layout;
 }
 
+bool	Act::KeyFrame::writeValue(IBuffer& buf) const
+{
+  if (!this->Entry::writeValue(buf))
+    return false;
+  buf.writeByte(1);
+  return this->layout->writeValue(buf);
+}
+
 
 
 
@@ -194,6 +249,21 @@ Act::Object*	Act::StringLayout::createObjectFromType(uint32_t type, const std::s
     return new Act::Array(this, name);
   else
     return this->Act::Entry::createObjectFromType(type, name);
+}
+
+bool	Act::StringLayout::writeValue(IBuffer& buf) const
+{
+  if (!this->Entry::writeValue(buf))
+    return false;
+
+  for (Act::Object* it : this->array)
+    {
+      Act::Array* array = dynamic_cast<Act::Array*>(it);
+      if (array)
+	if (array->writeContent(buf) == false)
+	  return false;
+    }
+  return true;
 }
 
 
@@ -267,6 +337,21 @@ void	Act::BitmapFontResource::print(std::ostream& os) const
 	os << ",";
       os << std::endl;
     }
+}
+
+bool	Act::BitmapFontResource::writeValue(IBuffer& buf) const
+{
+  if (!this->Entry::writeValue(buf) || !this->writeArray(buf, this->bitmapInfo))
+    return false;
+
+  buf.writeInt(this->width);
+  buf.writeInt(this->height);
+  for (uint32_t i = 0; i < this->height; i++)
+    {
+      if (!buf.writeBytes(this->bitmapFontData[i], this->width))
+	return false;
+    }
+  return true;
 }
 
 

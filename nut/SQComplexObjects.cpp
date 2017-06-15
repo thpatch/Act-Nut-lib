@@ -1,7 +1,7 @@
 #include	<nut/SQComplexObjects.hpp>
 
 Nut::SQOuterType::SQOuterType(const Object* parent, const std::string& name)
-  : Number(parent, "SQOuterType", name)
+  : Number(parent, "SQOuterType", name, 0xFFFFFFFF)
 {}
 
 void	Nut::SQOuterType::print(std::ostream& os) const
@@ -34,6 +34,14 @@ bool	Nut::SQOuterVal::readValue(IBuffer& buf)
 void	Nut::SQOuterVal::print(std::ostream& os) const
 {
   os << *this->type << ", " << *this->object << ", " << *this->name;
+}
+
+bool	Nut::SQOuterVal::writeValue(IBuffer& buf) const
+{
+  this->type->writeValue(buf);
+  writeObject(buf, this->object);
+  writeObject(buf, this->name);
+  return true;
 }
 
 
@@ -71,6 +79,14 @@ void	Nut::SQLocalVarInfo::print(std::ostream& os) const
   os << *this->name << ", " << *this->pos << ", " << *this->start_op << ", " << *this->end_op;
 }
 
+bool	Nut::SQLocalVarInfo::writeValue(IBuffer& buf) const
+{
+  writeObject(buf, this->name);
+  this->pos->writeValue(buf);
+  this->start_op->writeValue(buf);
+  this->end_op->writeValue(buf);
+  return true;
+}
 
 
 
@@ -97,4 +113,11 @@ bool	Nut::SQLineInfo::readValue(IBuffer& buf)
 void	Nut::SQLineInfo::print(std::ostream& os) const
 {
   os << *this->line << ", " << *this->op;
+}
+
+bool	Nut::SQLineInfo::writeValue(IBuffer& buf) const
+{
+  this->line->writeValue(buf);
+  this->op->writeValue(buf);
+  return true;
 }

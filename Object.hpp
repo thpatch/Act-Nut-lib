@@ -47,12 +47,15 @@ namespace ActNut
 
     const Object*		getParent() const;
     const std::string&		getName() const;
+    virtual uint32_t		getNumType() const;
     std::string			getFullName() const;
     int				getIndentLevel() const;
     std::string			printIndent(int indentLevel = -1) const;
 
     virtual bool		readValue(IBuffer& buf) = 0;
     virtual void		print(std::ostream& os) const = 0;
+    virtual bool		writeValue(IBuffer& buf) const = 0;
+    bool			writeToFile(const std::string& filename) const;
 
     virtual Object*		operator[](const char* key);
     virtual const Object*	operator[](const char* key) const;
@@ -73,16 +76,23 @@ namespace ActNut
       FLOAT
     };
 
-    T		n;
+    T			n;
+    const uint32_t	numType;
     const DisplayType	displayType;
 
   public:
-    Number(const Object* parent, const char* type, const std::string& name, DisplayType displayType = DisplayType::NONE)
-      : Object(parent, type, name), n(0), displayType(displayType)
+    Number(const Object* parent, const char* type, const std::string& name, uint32_t numType, DisplayType displayType = DisplayType::NONE)
+      : Object(parent, type, name), n(0), numType(numType), displayType(displayType)
     { }
+
+    uint32_t	getNumType() const
+    { return numType; }
 
     bool	readValue(IBuffer& buf)
     { return buf.readBytes((uint8_t*)&this->n, sizeof(this->n)); }
+
+    bool	writeValue(IBuffer& buf) const
+    { return buf.writeBytes((uint8_t*)&this->n, sizeof(this->n)); }
 
     void	print(std::ostream& os) const
     {
@@ -111,6 +121,7 @@ namespace ActNut
 
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
   class	vector : public Object, public std::vector<Object*>
@@ -121,6 +132,7 @@ namespace ActNut
     ~vector();
 
     bool	readValue(IBuffer& buf);
+    bool	writeValue(IBuffer& buf) const;
     template<typename T>
     bool	add(T* (*readerFunc)(const Object* parent, IBuffer& buf, const std::string& name), IBuffer& buf)
     {

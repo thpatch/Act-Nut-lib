@@ -136,6 +136,11 @@ bool	Act::Entry::readValue(IBuffer& buf)
   return this->readArray(buf, this->array);
 }
 
+bool	Act::Entry::writeValue(IBuffer& buf) const
+{
+  return this->writeHash(buf) && this->writeArray(buf, this->array);
+}
+
 Act::Object*	Act::Entry::readObject(IBuffer& buf)
 {
   uint32_t	name_size = buf.readInt();
@@ -146,6 +151,15 @@ Act::Object*	Act::Entry::readObject(IBuffer& buf)
 
   uint32_t	type = buf.readInt();
   return this->createObjectFromType(type, name);
+}
+
+bool	Act::Entry::writeObject(IBuffer& buf, Object* obj) const
+{
+  const std::string& name = obj->getName();
+  buf.writeInt(name.length());
+  buf.writeBytes((const uint8_t*)name.c_str(), name.length());
+  buf.writeInt(obj->getNumType());
+  return true;
 }
 
 Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const std::string& name)
@@ -187,6 +201,24 @@ bool	Act::Entry::readArray(IBuffer& buf, vector& array)
     if (!it->readValue(buf))
       return false;
   return true;
+}
+
+bool	Act::Entry::writeArray(IBuffer& buf, const vector& array) const
+{
+  buf.writeByte(1);
+  buf.writeInt(array.size());
+  for (Act::Object* it : array)
+    if (this->writeObject(buf, it) == false)
+      return false;
+  for (Act::Object* it : array)
+    if (it->writeValue(buf) == false)
+      return false;
+  return true;
+}
+
+bool	Act::Entry::writeHash(IBuffer& buf) const
+{
+  return buf.writeInt(type_name_to_hash(this->type));
 }
 
 void	Act::Entry::print(std::ostream& os) const

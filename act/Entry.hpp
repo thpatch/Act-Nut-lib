@@ -27,8 +27,11 @@ namespace Act
     vector		array;
 
     Object*		readObject(IBuffer& buf);
+    bool		writeObject(IBuffer& buf, Object* obj) const;
     virtual Object*	createObjectFromType(uint32_t type, const std::string& name);
     bool		readArray(IBuffer& buf, vector& array);
+    bool		writeArray(IBuffer& buf, const vector& array) const;
+    virtual bool	writeHash(IBuffer& buf) const;
 
   public:
     static void		init_hashes();
@@ -38,6 +41,7 @@ namespace Act
 
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
 
     virtual Object*		operator[](const char* key);
     virtual const Object*	operator[](const char* key) const;

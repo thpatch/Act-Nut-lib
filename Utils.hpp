@@ -53,6 +53,8 @@ namespace ActNut
     MemoryBuffer(uint8_t* buf, size_t buf_size, bool steal_buffer, bool fixed_size = false);
     // If we don't steal the buffer, it can be const.
     MemoryBuffer(const uint8_t* buf, size_t buf_size, bool fixed_size = false);
+    // Use an empty buffer, growing over time.
+    MemoryBuffer();
     ~MemoryBuffer();
 
     bool		readBytes(uint8_t* out, size_t n);

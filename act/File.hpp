@@ -29,6 +29,7 @@ namespace Act
 
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
   };
 
 }

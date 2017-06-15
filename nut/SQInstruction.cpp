@@ -112,3 +112,13 @@ void	Nut::SQInstruction::print(std::ostream& os) const
   if (op.arg2 == ARG_LITERAL) func.getLiteral(arg2)->print(os) ; else os << (int)arg2 ; os << ", ";
   if (op.arg3 == ARG_LITERAL) func.getLiteral(arg3)->print(os) ; else os << (int)arg3 ; os << ")";
 }
+
+bool	Nut::SQInstruction::writeValue(IBuffer& buf) const
+{
+  this->arg1->writeValue(buf);
+  buf.writeByte(this->op);
+  buf.writeByte(this->arg0);
+  buf.writeByte(this->arg2);
+  buf.writeByte(this->arg3);
+  return true;
+}

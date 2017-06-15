@@ -29,12 +29,22 @@ Nut::SQObjectPtr*	Nut::loadObject(const Object* parent, IBuffer& buf, const std:
     }
 }
 
-Nut::SQInteger::SQInteger(                    const Object* parent, const std::string& name) : Number(parent,      "SQInteger",         name) {}
-Nut::SQUnsignedInteger::SQUnsignedInteger(    const Object* parent, const std::string& name) : Number(parent,      "SQUnsignedInteger", name) {}
-Nut::SQBoolean::SQBoolean(                    const Object* parent, const std::string& name) : Number(parent,      "SQBoolean",         name, Number::DisplayType::BOOLEAN) {}
-Nut::SQSingleByteBoolean::SQSingleByteBoolean(const Object* parent, const std::string& name) : Number(parent,      "bool",              name, Number::DisplayType::BOOLEAN) {}
-Nut::SQFloat::SQFloat(                        const Object* parent, const std::string& name) : Number(parent,      "SQFloat",           name, Number::DisplayType::FLOAT) {}
+bool	Nut::writeObject(IBuffer& buf, const Object* obj)
+{
+  buf.writeInt(obj->getNumType());
+  return obj->writeValue(buf);
+}
+
+Nut::SQInteger::SQInteger(                    const Object* parent, const std::string& name) : Number(parent,      "SQInteger",         name, OT_INTEGER) {}
+Nut::SQUnsignedInteger::SQUnsignedInteger(    const Object* parent, const std::string& name) : Number(parent,      "SQUnsignedInteger", name, 0xFFFFFFFF) {}
+Nut::SQBoolean::SQBoolean(                    const Object* parent, const std::string& name) : Number(parent,      "SQBoolean",         name, OT_BOOL,    Number::DisplayType::BOOLEAN) {}
+Nut::SQSingleByteBoolean::SQSingleByteBoolean(const Object* parent, const std::string& name) : Number(parent,      "bool",              name, 0xFFFFFFFF, Number::DisplayType::BOOLEAN) {}
+Nut::SQFloat::SQFloat(                        const Object* parent, const std::string& name) : Number(parent,      "SQFloat",           name, OT_FLOAT,   Number::DisplayType::FLOAT) {}
 Nut::SQString::SQString(                      const Object* parent, const std::string& name) : String(parent,      "SQString",          name) {}
 Nut::SQNull::SQNull(                          const Object* parent, const std::string& name) : SQObjectPtr(parent, "SQNull",            name) {}
-bool	Nut::SQNull::readValue(IBuffer&) { return true; }
-void	Nut::SQNull::print(std::ostream&) const {}
+
+uint32_t	Nut::SQString::getNumType() const { return OT_STRING; }
+uint32_t	Nut::SQNull::getNumType() const { return OT_NULL; }
+bool		Nut::SQNull::readValue(IBuffer&) { return true; }
+void		Nut::SQNull::print(std::ostream&) const {}
+bool		Nut::SQNull::writeValue(IBuffer&) const { return true; }

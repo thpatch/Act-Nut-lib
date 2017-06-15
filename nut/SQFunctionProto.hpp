@@ -49,12 +49,15 @@ namespace Nut
       for (int i = 0; i < *size; i++)
 	array.add(readerFunc, buf);
     }
+    bool	writeArray(IBuffer& buf, const vector& array) const;
+    bool	writeArrayOfObjects(IBuffer& buf, const vector& array) const;
 
   public:
     SQFunctionProto(const Object* parent, const std::string& name);
     ~SQFunctionProto();
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
+    bool	writeValue(IBuffer& buf) const;
 
     const Object*	getLiteral(int idx) const;
   };

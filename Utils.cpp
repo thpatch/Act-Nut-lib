@@ -70,6 +70,15 @@ ActNut::MemoryBuffer::MemoryBuffer(const uint8_t* buf, size_t buf_size, bool fix
   this->end_alloc = this->end;
 }
 
+ActNut::MemoryBuffer::MemoryBuffer()
+  : fixed_size(false)
+{
+  this->buf = new uint8_t[1024];
+  this->begin = this->buf;
+  this->end = this->buf;
+  this->end_alloc = this->end + 1024;
+}
+
 ActNut::MemoryBuffer::~MemoryBuffer()
 {
   delete[] this->begin;

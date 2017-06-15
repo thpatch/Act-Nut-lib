@@ -21,13 +21,24 @@ bool	Nut::Stream::readValue(IBuffer& buf)
 
   if (!this->SQFunctionProto::readValue(buf))
     return false;
-  /*
-  SQFunctionProto *func = ActNut::Object::read<SQFunctionProto>(parent, buf, name);
-  if (!func)
-    return nullptr;
-  */
 
   return buf.checkTag('TAIL');
+}
+
+bool	Nut::Stream::writeValue(IBuffer& buf) const
+{
+  buf.writeByte(0xFA);
+  buf.writeByte(0xFA);
+
+  buf.writeInt('SQIR');
+  buf.writeInt(1);
+  buf.writeInt(4);
+  buf.writeInt(4);
+
+  if (!this->SQFunctionProto::writeValue(buf))
+    return false;
+
+  return buf.writeInt('TAIL');
 }
 
 Nut::SQFunctionProto*	Nut::readStream(const std::string& filename)

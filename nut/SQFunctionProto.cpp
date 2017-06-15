@@ -105,3 +105,52 @@ const ActNut::Object*	Nut::SQFunctionProto::getLiteral(int idx) const
 {
   return this->literals[idx];
 }
+
+bool	Nut::SQFunctionProto::writeValue(IBuffer& buf) const
+{
+  buf.writeInt('PART');
+
+  writeObject(buf, this->sourcename);
+  writeObject(buf, this->name);
+
+  buf.writeInt('PART');
+  this->nliterals->writeValue(buf);
+  this->nparameters->writeValue(buf);
+  this->noutervals->writeValue(buf);
+  this->nlocalvarinfos->writeValue(buf);
+  this->nlineinfos->writeValue(buf);
+  this->ndefaultparams->writeValue(buf);
+  this->ninstructions->writeValue(buf);
+  this->nfunctions->writeValue(buf);
+
+  this->writeArrayOfObjects(buf, this->literals);
+  this->writeArrayOfObjects(buf, this->parameters);
+  this->writeArray(         buf, this->outerValues);
+  this->writeArray(         buf, this->localVarInfos);
+  this->writeArray(         buf, this->lineInfos);
+  this->writeArray(         buf, this->defaultParams);
+  this->writeArray(         buf, this->instructions);
+  this->writeArray(         buf, this->functions);
+
+  this->stacksize->writeValue(buf);
+  this->bgenerator->writeValue(buf);
+  this->varparams->writeValue(buf);
+
+  return true;
+}
+
+bool	Nut::SQFunctionProto::writeArray(IBuffer& buf, const vector& array) const
+{
+  buf.writeInt('PART');
+  for (const Object* it : array)
+    it->writeValue(buf);
+  return true;
+}
+
+bool	Nut::SQFunctionProto::writeArrayOfObjects(IBuffer& buf, const vector& array) const
+{
+  buf.writeInt('PART');
+  for (const Object* it : array)
+    writeObject(buf, it);
+  return true;
+}

@@ -16,6 +16,7 @@ namespace Nut
   public:
     Stream(const Object* parent, const std::string& name);
     bool	readValue(IBuffer& buf);
+    bool	writeValue(IBuffer& buf) const;
   };
 
   SQFunctionProto*	readStream(const std::string& filename);

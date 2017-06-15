@@ -22,6 +22,7 @@ namespace Nut
 
   typedef ActNut::Object SQObjectPtr;
   SQObjectPtr*	loadObject(const Object* parent, IBuffer& buf, const std::string& name);
+  bool		writeObject(IBuffer& buf, const Object* obj);
 
   class	SQInteger           : public ActNut::Number<int>      { public: SQInteger(          const Object* parent, const std::string& name); };
   class	SQUnsignedInteger   : public ActNut::Number<uint32_t> { public: SQUnsignedInteger(  const Object* parent, const std::string& name); };
@@ -29,10 +30,14 @@ namespace Nut
   // SQBoolean is stored on 4 bytes, we need a custom one to handle single-byte booleans.
   class	SQSingleByteBoolean : public ActNut::Number<char>     { public: SQSingleByteBoolean(const Object* parent, const std::string& name); };
   class	SQFloat             : public ActNut::Number<float>    { public: SQFloat(            const Object* parent, const std::string& name); };
-  class	SQString            : public ActNut::String           { public: SQString(           const Object* parent, const std::string& name); };
+  class	SQString            : public ActNut::String           { public: SQString(           const Object* parent, const std::string& name);
+    uint32_t	getNumType() const;
+  };
   class	SQNull              : public SQObjectPtr              { public: SQNull(             const Object* parent, const std::string& name);
+    uint32_t	getNumType() const;
     bool	readValue(IBuffer&);
     void	print(std::ostream&) const;
+    bool	writeValue(IBuffer&) const;
   };
 
 }
