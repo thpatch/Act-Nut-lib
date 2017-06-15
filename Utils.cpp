@@ -113,6 +113,41 @@ bool	ActNut::MemoryBuffer::writeBytes(const uint8_t* in, size_t n)
   return true;
 }
 
+const uint8_t*	ActNut::MemoryBuffer::getBuffer() const
+{
+  return this->begin;
+}
+
+size_t	ActNut::MemoryBuffer::getSize() const
+{
+  return this->end - this->begin;
+}
+
+
+
+ActNut::FileBuffer::FileBuffer(std::fstream&& fs)
+  : fs(std::move(fs))
+{}
+
+ActNut::FileBuffer::FileBuffer(const std::string& filename, std::ios_base::openmode mode)
+  : fs(filename.c_str(), mode)
+{}
+
+ActNut::FileBuffer::~FileBuffer()
+{}
+
+bool	ActNut::FileBuffer::readBytes(uint8_t* out, size_t n)
+{
+  this->fs.read((char*)out, n);
+  return (bool)fs;
+}
+
+bool	ActNut::FileBuffer::writeBytes(const uint8_t* in, size_t n)
+{
+  this->fs.write((const char*)in, n);
+  return (bool)fs;
+}
+
 
 
 ActNut::Error::ErrorMode	ActNut::Error::errorMode = ActNut::Error::SILENT;

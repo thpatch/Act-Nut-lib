@@ -23,7 +23,6 @@ namespace Act
 
   public:
     static File*	read(const std::string& filename);
-    // That function could also be put in ActNut::Object, by copy-pasting its implementation.
 
     File(const Act::Object* parent, const std::string& name);
     ~File();

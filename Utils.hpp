@@ -1,6 +1,7 @@
 #ifndef BUFFER_HPP_
 # define BUFFER_HPP_
 
+# include	<fstream>
 # include	<stddef.h>
 # include	<stdint.h>
 
@@ -58,6 +59,19 @@ namespace ActNut
     bool		writeBytes(const uint8_t* in, size_t n);
     const uint8_t*	getBuffer() const;
     size_t		getSize() const;
+  };
+
+  class	FileBuffer : public ABuffer
+  {
+    std::fstream	fs;
+
+  public:
+    FileBuffer(std::fstream&& fs);
+    FileBuffer(const std::string& filename, std::ios_base::openmode mode);
+    ~FileBuffer();
+
+    bool		readBytes(uint8_t* out, size_t n);
+    bool		writeBytes(const uint8_t* in, size_t n);
   };
 
 

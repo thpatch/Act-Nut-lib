@@ -38,6 +38,13 @@ namespace ActNut
       return obj;
     }
 
+    template<typename T>
+    static T*		read(const std::string& filename)
+    {
+      FileBuffer	buf(filename, std::ios_base::in);
+      return read<T>(nullptr, buf, filename);
+    }
+
     const Object*		getParent() const;
     const std::string&		getName() const;
     std::string			getFullName() const;

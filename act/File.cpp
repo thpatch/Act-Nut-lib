@@ -15,20 +15,7 @@ Act::File::~File()
 
 Act::File*	Act::File::read(const std::string& filename)
 {
-  std::ifstream	f(filename);
-  size_t	len;
-  uint8_t*	byteBuf;
-
-  f.seekg(0, std::ios::end);
-  len = f.tellg();
-  f.seekg(0, std::ios::beg);
-
-  byteBuf = new uint8_t[len];
-  f.read((char*)byteBuf, len);
-  f.close();
-
-  ActNut::MemoryBuffer	buf(byteBuf, len, true);
-  return ActNut::Object::read<Act::File>(nullptr, buf, filename);
+  return ActNut::Object::read<Act::File>(filename);
 }
 
 
