@@ -11,7 +11,7 @@ namespace Act
 
   using ActNut::Object;
   using ActNut::vector;
-  using ActNut::Buffer;
+  using ActNut::IBuffer;
 
 
   class	NutStream : public Entry
@@ -21,7 +21,7 @@ namespace Act
   public:
     NutStream(const Object* parent, const std::string& name);
     ~NutStream();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -34,7 +34,7 @@ namespace Act
   public:
     Root(const Object* parent, const std::string& name);
     ~Root();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -46,7 +46,7 @@ namespace Act
   public:
     Layer(const Object* parent, const std::string& name);
     ~Layer();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -57,7 +57,7 @@ namespace Act
   public:
     KeyFrame(const Object* parent, const std::string& name);
     ~KeyFrame();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -71,7 +71,7 @@ namespace Act
   {
   public:
     StringLayout(const Object* parent, const std::string& name);
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     Object*	createObjectFromType(uint32_t type, const std::string& name);
   };
 
@@ -92,7 +92,7 @@ namespace Act
   public:
     BitmapFontResource(const Object* parent, const std::string& name);
     ~BitmapFontResource();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     Object*	createObjectFromType(uint32_t type, const std::string& name);
     void	print(std::ostream& os) const;
   };

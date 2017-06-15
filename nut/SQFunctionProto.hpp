@@ -9,7 +9,7 @@
 namespace Nut
 {
 
-  using ActNut::Buffer;
+  using ActNut::IBuffer;
   using ActNut::vector;
 
   class	SQFunctionProto : public SQObjectPtr
@@ -43,7 +43,7 @@ namespace Nut
     SQInteger*			varparams;
 
     template<typename T>
-    void	readArray(T* (*readerFunc)(const Object* parent, Buffer& buf, const std::string& name), Buffer& buf, vector& array, const SQInteger* size)
+    void	readArray(T* (*readerFunc)(const Object* parent, IBuffer& buf, const std::string& name), IBuffer& buf, vector& array, const SQInteger* size)
     {
       buf.checkTag('PART');
       for (int i = 0; i < *size; i++)
@@ -53,7 +53,7 @@ namespace Nut
   public:
     SQFunctionProto(const Object* parent, const std::string& name);
     ~SQFunctionProto();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
 
     const Object*	getLiteral(int idx) const;

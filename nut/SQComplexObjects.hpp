@@ -6,7 +6,7 @@
 namespace Nut
 {
 
-  using ActNut::Buffer;
+  using ActNut::IBuffer;
 
   class	SQOuterType : public ActNut::Number<int>
   {
@@ -25,7 +25,7 @@ namespace Nut
   public:
     SQOuterVal(const Object* parent, const std::string& name);
     ~SQOuterVal();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -40,7 +40,7 @@ namespace Nut
   public:
     SQLocalVarInfo(const Object* parent, const std::string& name);
     ~SQLocalVarInfo();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -53,7 +53,7 @@ namespace Nut
   public:
     SQLineInfo(const Object* parent, const std::string& name);
     ~SQLineInfo();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 

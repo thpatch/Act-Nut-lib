@@ -86,7 +86,7 @@ Nut::SQInstruction::SQInstruction(const Object* parent, const std::string& name)
   : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent->getParent()))
 {}
 
-bool	Nut::SQInstruction::readValue(Buffer& buf)
+bool	Nut::SQInstruction::readValue(IBuffer& buf)
 {
   this->arg1 = ActNut::Object::read<SQInteger>(this, buf, "arg1");
   this->op   = buf.readByte();

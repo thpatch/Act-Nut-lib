@@ -6,13 +6,13 @@ Act::Boolean::Boolean(  const Object* parent, const std::string& name) : Number(
 Act::Integer5::Integer5(const Object* parent, const std::string& name) : Number(        parent, "int",    name) {}
 Act::String::String(    const Object* parent, const std::string& name) : ActNut::String(parent, "string", name) {}
 
-bool	Act::Array::readValue(Buffer& buf)
+bool	Act::Array::readValue(IBuffer& buf)
 {
   this->nbEntries = buf.readInt();
   return true;
 }
 
-bool	Act::Array::readContent(Buffer& buf)
+bool	Act::Array::readContent(IBuffer& buf)
 {
   for (uint32_t i = 0; i < this->nbEntries; i++)
     this->entries.push_back(buf.readInt());

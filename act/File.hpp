@@ -11,7 +11,7 @@ namespace Act
 
   using ActNut::Object;
   using ActNut::vector;
-  using ActNut::Buffer;
+  using ActNut::IBuffer;
   using ActNut::Error;
 
   class	File : public Object
@@ -28,7 +28,7 @@ namespace Act
     File(const Act::Object* parent, const std::string& name);
     ~File();
 
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 

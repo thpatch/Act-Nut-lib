@@ -7,7 +7,28 @@
 namespace ActNut
 {
 
-  class	Buffer
+  class	IBuffer
+  {
+  public:
+    ~IBuffer() {}
+
+    virtual bool		readBytes(uint8_t* out, size_t n) = 0;
+    virtual uint8_t		readByte() = 0;
+    virtual uint32_t		readInt() = 0;
+    virtual bool		checkTag(uint32_t iTag) = 0;
+  };
+
+  class	ABuffer : public IBuffer
+  {
+  public:
+    ~ABuffer() {}
+
+    uint8_t		readByte();
+    uint32_t		readInt();
+    bool		checkTag(uint32_t iTag);
+  };
+
+  class	MemoryBuffer : public ABuffer
   {
     uint8_t*	begin;
     uint8_t*	buf;
@@ -17,17 +38,15 @@ namespace ActNut
     // If steal_buffer is true, buf will be used directly instead of being copied.
     // It must be allocated with the new operator, and must not be freed by the caller.
     // This class will take care of freeing it.
-    Buffer(uint8_t* buf, size_t buf_size, bool steal_buffer);
+    MemoryBuffer(uint8_t* buf, size_t buf_size, bool steal_buffer);
     // If we don't steal the buffer, it can be const.
-    Buffer(const uint8_t* buf, size_t buf_size);
-    ~Buffer();
+    MemoryBuffer(const uint8_t* buf, size_t buf_size);
+    ~MemoryBuffer();
 
-    const uint8_t*	returnBytes(size_t n);
     bool		readBytes(uint8_t* out, size_t n);
-    uint8_t		readByte();
-    uint32_t		readInt();
-    bool		checkTag(uint32_t iTag);
   };
+
+
 
   class	Error
   {

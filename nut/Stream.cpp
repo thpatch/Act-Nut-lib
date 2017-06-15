@@ -1,7 +1,7 @@
 #include	<fstream>
 #include	<nut/Stream.hpp>
 
-Nut::SQFunctionProto*	Nut::readStream(Buffer& buf, const ActNut::Object* parent, const std::string& name)
+Nut::SQFunctionProto*	Nut::readStream(IBuffer& buf, const ActNut::Object* parent, const std::string& name)
 {
   if (buf.readByte() != 0xFA || buf.readByte() != 0xFA)
     {
@@ -38,6 +38,6 @@ Nut::SQFunctionProto*	Nut::readStream(const std::string& filename)
   f.read((char*)byteBuf, len);
   f.close();
 
-  Buffer	buf(byteBuf, len, true);
+  ActNut::MemoryBuffer	buf(byteBuf, len, true);
   return readStream(buf);
 }

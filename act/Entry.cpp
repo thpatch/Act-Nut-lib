@@ -86,7 +86,7 @@ const char*	Act::Entry::type_hash_to_name(uint32_t hash)
     return "Unknown";
 }
 
-Act::Entry*	Act::Entry::read(const Object* parent, Buffer& buf, const std::string& name)
+Act::Entry*	Act::Entry::read(const Object* parent, IBuffer& buf, const std::string& name)
 {
   uint32_t	type_hash = buf.readInt();
   const char*	type = Entry::type_hash_to_name(type_hash);
@@ -131,18 +131,18 @@ Act::Entry*	Act::Entry::read(const Object* parent, Buffer& buf, const std::strin
   return entry;
 }
 
-bool	Act::Entry::readValue(Buffer& buf)
+bool	Act::Entry::readValue(IBuffer& buf)
 {
   return this->readArray(buf, this->array);
 }
 
-Act::Object*	Act::Entry::readObject(Buffer& buf)
+Act::Object*	Act::Entry::readObject(IBuffer& buf)
 {
   uint32_t	name_size = buf.readInt();
-  const char*	name_str = (const char*)buf.returnBytes(name_size);
-  if (!name_str)
-    return nullptr;
+  char*		name_str = new char[name_size];
+  buf.readBytes((uint8_t*)name_str, name_size);
   std::string	name(name_str, name_size);
+  delete[] name_str;
 
   uint32_t	type = buf.readInt();
   return this->createObjectFromType(type, name);
@@ -166,7 +166,7 @@ Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const std::string& 
     }
 }
 
-bool	Act::Entry::readArray(Buffer& buf, vector& array)
+bool	Act::Entry::readArray(IBuffer& buf, vector& array)
 {
   uint8_t isArray = buf.readByte();
   if (isArray != 1)

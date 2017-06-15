@@ -10,19 +10,20 @@ Act::NutStream::~NutStream()
     delete this->stream;
 }
 
-bool	Act::NutStream::readValue(Buffer& buf)
+bool	Act::NutStream::readValue(IBuffer& buf)
 {
   if (!this->Entry::readValue(buf))
     return false;
 
   uint32_t		nutSize = buf.readInt();
-  const uint8_t*	nutBytes = buf.returnBytes(nutSize);
-  Buffer		nutBuf(nutBytes, nutSize);
+  uint8_t*		nutBytes = new uint8_t[nutSize];
+  buf.readBytes(nutBytes, nutSize);
+  ActNut::MemoryBuffer	nutBuf(nutBytes, nutSize, true);
   this->stream = Nut::readStream(nutBuf, this, "stream");
   if (!this->stream)
     return false; 
   addMember(stream);
- return true;
+  return true;
 }
 
 void	Act::NutStream::print(std::ostream& os) const
@@ -44,7 +45,7 @@ Act::Root::~Root()
     delete this->nutstream;
 }
 
-bool	Act::Root::readValue(Buffer& buf)
+bool	Act::Root::readValue(IBuffer& buf)
 {
   if (!this->Entry::readValue(buf))
     return false;
@@ -77,7 +78,7 @@ Act::Layer::~Layer()
     delete this->nutstream;
 }
 
-bool	Act::Layer::readValue(Buffer& buf)
+bool	Act::Layer::readValue(IBuffer& buf)
 {
   if (!this->Entry::readValue(buf))
     return false;
@@ -134,7 +135,7 @@ Act::KeyFrame::~KeyFrame()
     delete this->layout;
 }
 
-bool	Act::KeyFrame::readValue(Buffer& buf)
+bool	Act::KeyFrame::readValue(IBuffer& buf)
 {
   if (!this->Entry::readValue(buf))
     return false;
@@ -173,7 +174,7 @@ Act::StringLayout::StringLayout(const Object* parent, const std::string& name)
   : Entry(parent, "StringLayout", name)
 {}
 
-bool	Act::StringLayout::readValue(Buffer& buf)
+bool	Act::StringLayout::readValue(IBuffer& buf)
 {
   if (!this->Entry::readValue(buf))
     return false;
@@ -221,7 +222,7 @@ Act::BitmapFontResource::~BitmapFontResource()
     }
 }
 
-bool	Act::BitmapFontResource::readValue(Buffer& buf)
+bool	Act::BitmapFontResource::readValue(IBuffer& buf)
 {
   if (!this->Entry::readValue(buf) || !this->readArray(buf, this->bitmapInfo))
     return false;

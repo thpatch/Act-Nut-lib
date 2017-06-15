@@ -8,7 +8,7 @@
 namespace Act
 {
 
-  using ActNut::Buffer;
+  using ActNut::IBuffer;
   using ActNut::Object;
 
   class	Integer	: public ActNut::Number<int32_t> { public: Integer( const Object* parent, const std::string& name); };
@@ -27,8 +27,8 @@ namespace Act
     Array(const Object* parent, const std::string& name)
       : Object(parent, "array", name) {}
 
-    bool	readValue(Buffer& buf);
-    bool	readContent(Buffer& buf);
+    bool	readValue(IBuffer& buf);
+    bool	readContent(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 }

@@ -20,7 +20,7 @@ Nut::SQOuterVal::~SQOuterVal()
   delete this->name;
 }
 
-bool	Nut::SQOuterVal::readValue(Buffer& buf)
+bool	Nut::SQOuterVal::readValue(IBuffer& buf)
 {
   this->type   = ActNut::Object::read<SQOuterType>(this, buf, "type");
   this->object = loadObject(this, buf, "object");
@@ -53,7 +53,7 @@ Nut::SQLocalVarInfo::~SQLocalVarInfo()
   delete this->end_op;
 }
 
-bool	Nut::SQLocalVarInfo::readValue(Buffer& buf)
+bool	Nut::SQLocalVarInfo::readValue(IBuffer& buf)
 {
   this->name	= loadObject(this, buf, "name");
   this->pos	= ActNut::Object::read<SQUnsignedInteger>(this, buf, "pos");
@@ -85,7 +85,7 @@ Nut::SQLineInfo::~SQLineInfo()
   delete this->op;
 }
 
-bool	Nut::SQLineInfo::readValue(Buffer& buf)
+bool	Nut::SQLineInfo::readValue(IBuffer& buf)
 {
   this->line	= ActNut::Object::read<SQInteger>(this, buf, "line");
   this->op	= ActNut::Object::read<SQInteger>(this, buf, "op");

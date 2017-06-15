@@ -27,7 +27,7 @@ namespace ActNut
     virtual ~Object() {}
 
     template<typename T>
-    static T*	read(const Object* parent, Buffer& buf, const std::string& name)
+    static T*	read(const Object* parent, IBuffer& buf, const std::string& name)
     {
       T*	obj = new T(parent, name);
       if (!obj->readValue(buf))
@@ -44,7 +44,7 @@ namespace ActNut
     int				getIndentLevel() const;
     std::string			printIndent(int indentLevel = -1) const;
 
-    virtual bool		readValue(Buffer& buf) = 0;
+    virtual bool		readValue(IBuffer& buf) = 0;
     virtual void		print(std::ostream& os) const = 0;
 
     virtual Object*		operator[](const char* key);
@@ -74,7 +74,7 @@ namespace ActNut
       : Object(parent, type, name), n(0), displayType(displayType)
     { }
 
-    bool	readValue(Buffer& buf)
+    bool	readValue(IBuffer& buf)
     { return buf.readBytes((uint8_t*)&this->n, sizeof(this->n)); }
 
     void	print(std::ostream& os) const
@@ -102,7 +102,7 @@ namespace ActNut
   public:
     String(const Object* parent, const char* type, const std::string& name);
 
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
   };
 
@@ -113,9 +113,9 @@ namespace ActNut
       : Object(parent, "std::vector", name) {}
     ~vector();
 
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     template<typename T>
-    bool	add(T* (*readerFunc)(const Object* parent, Buffer& buf, const std::string& name), Buffer& buf)
+    bool	add(T* (*readerFunc)(const Object* parent, IBuffer& buf, const std::string& name), IBuffer& buf)
     {
       Object*	obj = readerFunc(this, buf, std::to_string(this->size()));
       if (!obj)

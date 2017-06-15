@@ -6,7 +6,7 @@
 namespace Nut
 {
 
-  using ActNut::Buffer;
+  using ActNut::IBuffer;
 
   class	SQFunctionProto;
 
@@ -23,7 +23,7 @@ namespace Nut
   public:
     SQInstruction(const Object* parent, const std::string& name);
     ~SQInstruction();
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     // TODO: ensure the display is nice
     void	print(std::ostream& os) const;
   };

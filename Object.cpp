@@ -140,13 +140,13 @@ ActNut::String::String(const Object* parent, const char* type, const std::string
   : Object(parent, type, name)
 {}
 
-bool	ActNut::String::readValue(Buffer& buf)
+bool	ActNut::String::readValue(IBuffer& buf)
 {
   uint32_t	length = buf.readInt();
-  const char*	str = (const char*)buf.returnBytes(length);
-  if (!str)
-    return false;
+  char*		str = new char[length];
+  buf.readBytes((uint8_t*)str, length);
   this->value = std::string(str, length);
+  delete[] str;
   return true;
 }
 
@@ -163,7 +163,7 @@ ActNut::vector::~vector()
     delete it;
 }
 
-bool	ActNut::vector::readValue(Buffer&)
+bool	ActNut::vector::readValue(IBuffer&)
 {
   throw std::logic_error("Calling readValue doesn't make sense on an Act::vector");
 }

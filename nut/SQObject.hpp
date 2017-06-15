@@ -16,12 +16,12 @@
 namespace Nut
 {
 
-  using ActNut::Buffer;
+  using ActNut::IBuffer;
   using ActNut::Error;
   using ActNut::Object;
 
   typedef ActNut::Object SQObjectPtr;
-  SQObjectPtr*	loadObject(const Object* parent, Buffer& buf, const std::string& name);
+  SQObjectPtr*	loadObject(const Object* parent, IBuffer& buf, const std::string& name);
 
   class	SQInteger           : public ActNut::Number<int>      { public: SQInteger(          const Object* parent, const std::string& name); };
   class	SQUnsignedInteger   : public ActNut::Number<uint32_t> { public: SQUnsignedInteger(  const Object* parent, const std::string& name); };
@@ -31,7 +31,7 @@ namespace Nut
   class	SQFloat             : public ActNut::Number<float>    { public: SQFloat(            const Object* parent, const std::string& name); };
   class	SQString            : public ActNut::String           { public: SQString(           const Object* parent, const std::string& name); };
   class	SQNull              : public SQObjectPtr              { public: SQNull(             const Object* parent, const std::string& name);
-    bool	readValue(Buffer&);
+    bool	readValue(IBuffer&);
     void	print(std::ostream&) const;
   };
 

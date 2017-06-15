@@ -5,7 +5,37 @@
 #include	<string.h>
 #include	"Utils.hpp"
 
-ActNut::Buffer::Buffer(uint8_t* buf, size_t buf_size, bool steal_buffer)
+
+uint32_t	ActNut::ABuffer::readInt()
+{
+  uint32_t	n;
+  if (!this->readBytes((uint8_t*)&n, 4))
+    return 0;
+  return n;
+}
+
+uint8_t	ActNut::ABuffer::readByte()
+{
+  uint8_t	n;
+  if (!this->readBytes(&n, 1))
+    return 0;
+  return n;
+}
+
+bool	ActNut::ABuffer::checkTag(uint32_t iTag)
+{
+  if (this->readInt() != iTag)
+    {
+      std::ostringstream ss;
+      ss << "Wrong tag - should be 0x" << std::setfill('0') << std::setw(8) << std::hex << iTag;
+      return Error::error(ss.str());
+    }
+  return true;
+}
+
+
+
+ActNut::MemoryBuffer::MemoryBuffer(uint8_t* buf, size_t buf_size, bool steal_buffer)
 {
   if (steal_buffer == false)
     {
@@ -18,7 +48,7 @@ ActNut::Buffer::Buffer(uint8_t* buf, size_t buf_size, bool steal_buffer)
   this->end = this->buf + buf_size;
 }
 
-ActNut::Buffer::Buffer(const uint8_t* buf, size_t buf_size)
+ActNut::MemoryBuffer::MemoryBuffer(const uint8_t* buf, size_t buf_size)
 {
   this->buf = new uint8_t[buf_size];
   memcpy(this->buf, buf, buf_size);
@@ -26,56 +56,20 @@ ActNut::Buffer::Buffer(const uint8_t* buf, size_t buf_size)
   this->end = this->buf + buf_size;
 }
 
-ActNut::Buffer::~Buffer()
+ActNut::MemoryBuffer::~MemoryBuffer()
 {
   delete[] this->begin;
 }
 
-const uint8_t*	ActNut::Buffer::returnBytes(size_t n)
+bool	ActNut::MemoryBuffer::readBytes(uint8_t* out, size_t n)
 {
   if (this->buf + n > this->end)
     {
       Error::error("Not enough bytes.");
-      return nullptr;
+      return false;
     }
-  const uint8_t*	ret = this->buf;
+  memcpy(out, this->buf, n);
   this->buf += n;
-  return ret;
-}
-
-bool	ActNut::Buffer::readBytes(uint8_t* out, size_t n)
-{
-  const uint8_t*	in = this->returnBytes(n);
-  if (!in)
-    return false;
-  memcpy(out, in, n);
-  return true;
-}
-
-uint32_t	ActNut::Buffer::readInt()
-{
-  uint32_t	n;
-  if (!this->readBytes((uint8_t*)&n, 4))
-    return 0;
-  return n;
-}
-
-uint8_t	ActNut::Buffer::readByte()
-{
-  uint8_t	n;
-  if (!this->readBytes(&n, 1))
-    return 0;
-  return n;
-}
-
-bool	ActNut::Buffer::checkTag(uint32_t iTag)
-{
-  if (this->readInt() != iTag)
-    {
-      std::ostringstream ss;
-      ss << "Wrong tag - should be 0x" << std::setfill('0') << std::setw(8) << std::hex << iTag;
-      return Error::error(ss.str());
-    }
   return true;
 }
 

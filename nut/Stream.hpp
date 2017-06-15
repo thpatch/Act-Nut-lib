@@ -8,10 +8,10 @@
 namespace Nut
 {
 
-  using ActNut::Buffer;
+  using ActNut::IBuffer;
   using ActNut::Error;
 
-  SQFunctionProto*	readStream(Buffer& buf, const ActNut::Object* parent = nullptr, const std::string& name = "");
+  SQFunctionProto*	readStream(IBuffer& buf, const ActNut::Object* parent = nullptr, const std::string& name = "");
   SQFunctionProto*	readStream(const std::string& filename);
 
 }

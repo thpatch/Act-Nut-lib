@@ -34,7 +34,7 @@ Nut::SQFunctionProto::~SQFunctionProto()
   delete this->varparams;
 }
 
-bool	Nut::SQFunctionProto::readValue(Buffer& buf)
+bool	Nut::SQFunctionProto::readValue(IBuffer& buf)
 {
   buf.checkTag('PART');
 

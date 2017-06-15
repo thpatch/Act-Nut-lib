@@ -27,12 +27,12 @@ Act::File*	Act::File::read(const std::string& filename)
   f.read((char*)byteBuf, len);
   f.close();
 
-  Buffer	buf(byteBuf, len, true);
+  ActNut::MemoryBuffer	buf(byteBuf, len, true);
   return ActNut::Object::read<Act::File>(nullptr, buf, filename);
 }
 
 
-bool	Act::File::readValue(Buffer& buf)
+bool	Act::File::readValue(IBuffer& buf)
 {
   if (!buf.checkTag('1TCA') || // ACT1
       !buf.checkTag(1))

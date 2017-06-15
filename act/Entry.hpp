@@ -12,7 +12,7 @@ namespace Act
 
   using ActNut::Object;
   using ActNut::vector;
-  using ActNut::Buffer;
+  using ActNut::IBuffer;
   using ActNut::Error;
 
   class	Entry : public Object
@@ -26,17 +26,17 @@ namespace Act
   protected:
     vector		array;
 
-    Object*		readObject(Buffer& buf);
+    Object*		readObject(IBuffer& buf);
     virtual Object*	createObjectFromType(uint32_t type, const std::string& name);
-    bool		readArray(Buffer& buf, vector& array);
+    bool		readArray(IBuffer& buf, vector& array);
 
   public:
     static void		init_hashes();
-    static Entry*	read(const Object* parent, Buffer& buf, const std::string& name);
+    static Entry*	read(const Object* parent, IBuffer& buf, const std::string& name);
 
     Entry(const Object* parent, const char* type, const std::string& name);
 
-    bool	readValue(Buffer& buf);
+    bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
 
     virtual Object*		operator[](const char* key);
