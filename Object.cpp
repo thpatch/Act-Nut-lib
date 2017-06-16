@@ -172,7 +172,7 @@ bool	ActNut::String::readValue(IBuffer& buf)
 
 void	ActNut::String::print(std::ostream& os) const
 {
-  os << this->value;
+  os << '"' << this->value << '"';
 }
 
 bool	ActNut::String::writeValue(IBuffer& buf) const

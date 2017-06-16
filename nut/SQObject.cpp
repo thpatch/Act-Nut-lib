@@ -46,5 +46,5 @@ Nut::SQNull::SQNull(                          const Object* parent, const std::s
 uint32_t	Nut::SQString::getNumType() const { return OT_STRING; }
 uint32_t	Nut::SQNull::getNumType() const { return OT_NULL; }
 bool		Nut::SQNull::readValue(IBuffer&) { return true; }
-void		Nut::SQNull::print(std::ostream&) const {}
+void		Nut::SQNull::print(std::ostream& os) const { os << "null"; }
 bool		Nut::SQNull::writeValue(IBuffer&) const { return true; }
