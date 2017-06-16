@@ -105,6 +105,8 @@ ActNut::Object*	ActNut::Object::getChild(const char* _path)
   obj = this;
   while (path_cur)
     {
+      while (*path_cur == '/')
+	path_cur++;
       path_next = strchr(path_cur, '/');
       if (path_next)
 	{
@@ -130,6 +132,8 @@ const ActNut::Object*	ActNut::Object::getChild(const char* _path) const
   obj = this;
   while (path_cur)
     {
+      while (*path_cur == '/')
+	path_cur++;
       path_next = strchr(path_cur, '/');
       if (path_next)
 	{
@@ -145,6 +149,11 @@ const ActNut::Object*	ActNut::Object::getChild(const char* _path) const
   return obj;
 }
 
+const ActNut::Object&	ActNut::String::operator=(const std::string& new_value)
+{
+  this->value = new_value;
+  return *this;
+}
 
 
 ActNut::String::String(const Object* parent, const char* type, const std::string& name)
@@ -170,6 +179,12 @@ bool	ActNut::String::writeValue(IBuffer& buf) const
 {
   buf.writeInt(this->value.length());
   return buf.writeBytes((const uint8_t*)this->value.c_str(), this->value.length());
+}
+
+const ActNut::Object&	ActNut::Object::operator=(const std::string&)
+{
+  Error::error(std::string(this->type) + " doesn't support operator=");
+  return *this;
 }
 
 

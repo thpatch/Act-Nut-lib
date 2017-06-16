@@ -61,6 +61,7 @@ namespace ActNut
     virtual const Object*	operator[](const char* key) const;
     Object*			getChild(const char* path);
     const Object*		getChild(const char* path) const;
+    virtual const Object&	operator=(const std::string& new_value);
   };
   std::ostream& operator<<(std::ostream& os, const Object& o);
 
@@ -119,9 +120,10 @@ namespace ActNut
   public:
     String(const Object* parent, const char* type, const std::string& name);
 
-    bool	readValue(IBuffer& buf);
-    void	print(std::ostream& os) const;
-    bool	writeValue(IBuffer& buf) const;
+    bool		readValue(IBuffer& buf);
+    void		print(std::ostream& os) const;
+    bool		writeValue(IBuffer& buf) const;
+    const Object&	operator=(const std::string& new_value);
   };
 
   class	vector : public Object, public std::vector<Object*>
