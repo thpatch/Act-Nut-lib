@@ -5,6 +5,7 @@ CXXFLAGS=	-Wall -Wextra -Wno-multichar -g -I. -fPIC
 
 SRCS	=	Object.cpp \
 		Utils.cpp \
+		exports.cpp \
 		act/Object.cpp \
 		act/File.cpp \
 		act/Entry.cpp \
