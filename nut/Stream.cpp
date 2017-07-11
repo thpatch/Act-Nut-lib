@@ -1,5 +1,5 @@
 #include	<fstream>
-#include	<nut/Stream.hpp>
+#include	"nut/Stream.hpp"
 
 Nut::Stream::Stream(const Object* parent, const std::string& name)
   : SQFunctionProto(parent, name)

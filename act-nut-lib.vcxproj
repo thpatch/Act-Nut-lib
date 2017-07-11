@@ -39,7 +39,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)\ac\;$(SolutionDir)\nut;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <PreprocessorDefinitions>_CRT_NONSTDC_NO_WARNINGS</PreprocessorDefinitions>
     </ClCompile>

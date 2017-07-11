@@ -1,7 +1,7 @@
 #include	<iostream>
 #include	<string.h>
-#include	<act/File.hpp>
-#include	<nut/Stream.hpp>
+#include	"act/File.hpp"
+#include	"nut/Stream.hpp"
 
 int	printUsage(const char* bin_name)
 {

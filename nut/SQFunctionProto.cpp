@@ -1,4 +1,4 @@
-#include	<nut/SQFunctionProto.hpp>
+#include	"nut/SQFunctionProto.hpp"
 
 Nut::SQFunctionProto::SQFunctionProto(const Object* parent, const std::string& name)
   : SQObjectPtr(parent, "SQFunctionProto", name), literals(this, "Literals"), parameters(this, "Parameters"),

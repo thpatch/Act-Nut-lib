@@ -2,9 +2,9 @@
 # define ACT_FILE_HPP_
 
 # include	<string>
-# include	<Object.hpp>
-# include	<Utils.hpp>
-# include	<act/Entry.hpp>
+# include	"../Object.hpp"
+# include	"../Utils.hpp"
+# include	"act/Entry.hpp"
 
 namespace Act
 {

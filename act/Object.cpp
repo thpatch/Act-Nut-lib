@@ -1,4 +1,4 @@
-#include	<act/Object.hpp>
+#include	"act/Object.hpp"
 
 Act::Integer::Integer(  const Object* parent, const std::string& name) : Number(        parent, "int",    name, 0) {}
 Act::Float::Float(      const Object* parent, const std::string& name) : Number(        parent, "float",  name, 1, DisplayType::FLOAT) {}

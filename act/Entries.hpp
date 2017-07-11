@@ -1,10 +1,10 @@
 #ifndef ACT_ENTRIES_HPP_
 # define ACT_ENTRIES_HPP_
 
-# include	<Object.hpp>
-# include	<act/Object.hpp>
-# include	<act/Entry.hpp>
-# include	<nut/Stream.hpp>
+# include	"../Object.hpp"
+# include	"act/Object.hpp"
+# include	"act/Entry.hpp"
+# include	"nut/Stream.hpp"
 
 namespace Act
 {

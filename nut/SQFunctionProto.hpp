@@ -2,9 +2,9 @@
 # define NUT_SQFUNCTIONPROTO_HPP_
 
 # include	<vector>
-# include	<nut/SQObject.hpp>
-# include	<nut/SQComplexObjects.hpp>
-# include	<nut/SQInstruction.hpp>
+# include	"nut/SQObject.hpp"
+# include	"nut/SQComplexObjects.hpp"
+# include	"nut/SQInstruction.hpp"
 
 namespace Nut
 {

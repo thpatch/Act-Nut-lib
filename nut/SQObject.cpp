@@ -1,7 +1,7 @@
 #include	<sstream>
 #include	<iomanip>
 #include	<string.h>
-#include	<nut/SQObject.hpp>
+#include	"nut/SQObject.hpp"
 
 Nut::SQObjectPtr*	Nut::loadObject(const Object* parent, IBuffer& buf, const std::string& name)
 {

@@ -2,8 +2,8 @@
 # define NUT_STREAM_HPP_
 
 # include	<string>
-# include	<nut/SQFunctionProto.hpp>
-# include	<Utils.hpp>
+# include	"nut/SQFunctionProto.hpp"
+# include	"../Utils.hpp"
 
 namespace Nut
 {

@@ -1,4 +1,4 @@
-#include	<nut/SQComplexObjects.hpp>
+#include	"nut/SQComplexObjects.hpp"
 
 Nut::SQOuterType::SQOuterType(const Object* parent, const std::string& name)
   : Number(parent, "SQOuterType", name, 0xFFFFFFFF)

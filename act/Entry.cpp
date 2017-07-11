@@ -1,7 +1,7 @@
 #include	<string.h>
-#include	<act/Entry.hpp>
-#include	<act/Entries.hpp>
-#include	<act/Object.hpp>
+#include	"act/Entry.hpp"
+#include	"act/Entries.hpp"
+#include	"act/Object.hpp"
 
 Act::Entry::Entry(const Object* parent, const char* type, const std::string& name)
   : Object(parent, type, name), array(this, "array")

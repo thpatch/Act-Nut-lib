@@ -1,4 +1,4 @@
-#include	<act/Entries.hpp>
+#include	"act/Entries.hpp"
 
 Act::NutStream::NutStream(const Object* parent, const std::string& name)
   : Entry(parent, "NutStream", name), stream(nullptr)
