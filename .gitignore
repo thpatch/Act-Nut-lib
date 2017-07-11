@@ -6,3 +6,8 @@ print-act-nut
 *.so
 *.exe
 *.dll
+*.sdf
+*.suo
+*.vcxproj.user
+bin/
+obj/

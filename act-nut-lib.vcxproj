@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="UserMacros">
+    <ProjectTitle>Act/Nut lib</ProjectTitle>
+    <ProjectURL>https://github.com/thpatch/Act-Nut-lib</ProjectURL>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)'=='Debug'">
+    <Import Project="Debug.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)'=='Release'">
+    <Import Project="Release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{21DF27A2-2AC5-4C09-9687-1D391237C01D}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>act_nut_lib</RootNamespace>
+    <ProjectName>act_nut_lib</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <OutDir>$(SolutionDir)bin\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName) $(Configuration) $(PlatformShortName)\</IntDir>
+    <TargetName>$(ProjectName)$(TargetSuffix)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)\ac\;$(SolutionDir)\nut;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
+      <PreprocessorDefinitions>_CRT_NONSTDC_NO_WARNINGS</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>act_nut_lib.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemGroup>
+    <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="act\Object.cpp" />
+    <ClCompile Include="act\File.cpp" />
+    <ClCompile Include="act\Entry.cpp" />
+    <ClCompile Include="act\Entries.cpp" />
+    <ClCompile Include="nut\SQObject.cpp" />
+    <ClCompile Include="nut\SQComplexObjects.cpp" />
+    <ClCompile Include="nut\SQInstruction.cpp" />
+    <ClCompile Include="nut\SQFunctionProto.cpp" />
+    <ClCompile Include="nut\Stream.cpp" />
+    <ClInclude Include="Object.hpp" />
+    <ClInclude Include="Utils.hpp" />
+    <ClInclude Include="act\Object.hpp" />
+    <ClInclude Include="act\File.hpp" />
+    <ClInclude Include="act\Entry.hpp" />
+    <ClInclude Include="act\Entries.hpp" />
+    <ClInclude Include="nut\SQObject.hpp" />
+    <ClInclude Include="nut\SQComplexObjects.hpp" />
+    <ClInclude Include="nut\SQInstruction.hpp" />
+    <ClInclude Include="nut\SQFunctionProto.hpp" />
+    <ClInclude Include="nut\Stream.hpp" />
+    <None Include="act_nut_lib.def" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
