@@ -9,5 +9,6 @@ print-act-nut
 *.sdf
 *.suo
 *.vcxproj.user
+*.opensdf
 bin/
 obj/

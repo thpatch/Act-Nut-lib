@@ -57,6 +57,7 @@
   <ItemGroup>
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="exports.cpp" />
     <ClCompile Include="act\Object.cpp" />
     <ClCompile Include="act\File.cpp" />
     <ClCompile Include="act\Entry.cpp" />
@@ -68,6 +69,7 @@
     <ClCompile Include="nut\Stream.cpp" />
     <ClInclude Include="Object.hpp" />
     <ClInclude Include="Utils.hpp" />
+    <ClInclude Include="exports.hpp" />
     <ClInclude Include="act\Object.hpp" />
     <ClInclude Include="act\File.hpp" />
     <ClInclude Include="act\Entry.hpp" />
