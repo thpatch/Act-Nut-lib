@@ -11,7 +11,7 @@ namespace ActNut
   class	IBuffer
   {
   public:
-    ~IBuffer() {}
+    virtual ~IBuffer() {}
 
     virtual bool	readBytes(uint8_t* out, size_t n) = 0;
     virtual uint8_t	readByte() = 0;
@@ -36,24 +36,48 @@ namespace ActNut
 
   class	MemoryBuffer : public ABuffer
   {
-    uint8_t*	begin;
-    uint8_t*	buf;
-    uint8_t*	end;
+  public:
+    /*
+    ** This enum is a parameter of the MemoryBuffer constructor.
+    ** It tells to the MemoryBuffer how the input buffer should be used.
+    ** - CREATE: The MemoryBuffer create its own buffer and ignore the buf parameter.
+    **           buf_size is the size of the created buffer. It will be filled with 0.
+    ** - COPY:   The MemoryBuffer create a copy of the input buffer. The input buffer
+    **           will not be used by this class after the constructor is called.
+    ** - STEAL:  The MemoryBuffer steals the input buffer.
+    **           The input buffer must be allocated with the new[] operator.
+    **           After the constructor is called, the input buffer belongs to the
+    **           MemoryBuffer and must not be used or freed by the caller.
+    ** - SHARE:  The MemoryBuffer writes directly to the input buffer, but doesn't
+    **           take ownership of it.
+    **           The caller should ensure the input buffer is valid while the
+    **           MemoryBuffer object is alive, and it is the caller responsability
+    **           to free the buffer.
+    */
+    enum	BufferOwnership
+    {
+      CREATE,
+      COPY,
+      STEAL,
+      SHARE
+    };
+
+  private:
+    BufferOwnership	ownership;
+    uint8_t*		begin;
+    uint8_t*		buf;
+    uint8_t*		end;
     // Variables for writing
-    uint8_t*	end_alloc;
-    bool	fixed_size;
+    uint8_t*		end_alloc;
+    bool		fixed_size;
 
   public:
-    // If steal_buffer is true, buf will be used directly instead of being copied.
-    // It must be allocated with the new operator, and must not be freed by the caller.
-    // This class will take care of freeing it.
-
-    // If fixed_size is false, when writing bytes after the end of the buffer, the buffer will be dynamically
-    // allocated to fit the new bytes. Else, an error will be returned.
-    MemoryBuffer(uint8_t* buf, size_t buf_size, bool steal_buffer, bool fixed_size = false);
-    // If we don't steal the buffer, it can be const.
-    MemoryBuffer(const uint8_t* buf, size_t buf_size, bool fixed_size = false);
-    // Use an empty buffer, growing over time.
+    // If fixed_size is false and ownership it not SHARE, when writing bytes after the end of the buffer,
+    // the buffer will be dynamically allocated to fit the new bytes. Else, an error will be returned.
+    MemoryBuffer(BufferOwnership ownership, uint8_t* buf, size_t buf_size, bool fixed_size);
+    // With a COPY ownership, the input buffer can be const.
+    MemoryBuffer(const uint8_t* buf, size_t buf_size, bool fixed_size);
+    // Create an empty buffer, growing over time.
     MemoryBuffer();
     ~MemoryBuffer();
 

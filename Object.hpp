@@ -55,12 +55,12 @@ namespace ActNut
     virtual bool		readValue(IBuffer& buf) = 0;
     virtual void		print(std::ostream& os) const = 0;
     virtual bool		writeValue(IBuffer& buf) const = 0;
-    bool			writeToFile(const std::string& filename) const;
+    virtual bool		writeToFile(const std::string& filename) const;
 
     virtual Object*		operator[](const char* key);
     virtual const Object*	operator[](const char* key) const;
-    Object*			getChild(const char* path);
-    const Object*		getChild(const char* path) const;
+    virtual Object*		getChild(const char* path);
+    virtual const Object*	getChild(const char* path) const;
     virtual const Object&	operator=(const std::string& new_value);
   };
   std::ostream& operator<<(std::ostream& os, const Object& o);

@@ -1,3 +1,6 @@
 EXPORTS
 	read_act_from_bytes
 	read_nut_from_bytes
+	delete_object
+	new_MemoryBuffer
+	delete_buffer

@@ -45,23 +45,39 @@ bool	ActNut::ABuffer::writeByte(uint8_t n)
 
 
 
-ActNut::MemoryBuffer::MemoryBuffer(uint8_t* buf, size_t buf_size, bool steal_buffer, bool fixed_size)
-  : fixed_size(fixed_size)
+ActNut::MemoryBuffer::MemoryBuffer(BufferOwnership ownership, uint8_t* buf, size_t buf_size, bool fixed_size)
+  : ownership(ownership), fixed_size(fixed_size)
 {
-  if (steal_buffer == false)
+  switch (ownership)
     {
+    case CREATE:
+      if (buf_size == 0)
+	buf_size = 1024;
+      this->buf = new uint8_t[buf_size];
+      memset(this->buf, 0, buf_size);
+      this->begin = this->buf;
+      this->end = this->buf;
+      this->end_alloc = this->end + buf_size;
+      return ;
+
+    case COPY:
       this->buf = new uint8_t[buf_size];
       memcpy(this->buf, buf, buf_size);
+      break ;
+
+    case STEAL:
+    case SHARE:
+      this->buf = buf;
+      break ;
     }
-  else
-    this->buf = buf;
+
   this->begin = this->buf;
   this->end = this->buf + buf_size;
   this->end_alloc = this->end;
 }
 
 ActNut::MemoryBuffer::MemoryBuffer(const uint8_t* buf, size_t buf_size, bool fixed_size)
-  : fixed_size(fixed_size)
+  : ownership(COPY), fixed_size(fixed_size)
 {
   this->buf = new uint8_t[buf_size];
   memcpy(this->buf, buf, buf_size);
@@ -71,17 +87,13 @@ ActNut::MemoryBuffer::MemoryBuffer(const uint8_t* buf, size_t buf_size, bool fix
 }
 
 ActNut::MemoryBuffer::MemoryBuffer()
-  : fixed_size(false)
-{
-  this->buf = new uint8_t[1024];
-  this->begin = this->buf;
-  this->end = this->buf;
-  this->end_alloc = this->end + 1024;
-}
+  : MemoryBuffer(CREATE, nullptr, 0, false)
+{}
 
 ActNut::MemoryBuffer::~MemoryBuffer()
 {
-  delete[] this->begin;
+  if (this->ownership != SHARE)
+    delete[] this->begin;
 }
 
 bool	ActNut::MemoryBuffer::readBytes(uint8_t* out, size_t n)
