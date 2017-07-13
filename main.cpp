@@ -19,7 +19,6 @@ int	main(int argc, char** argv)
 
   ActNut::Error::setErrorMode(ActNut::Error::STDERR);
   ActNut::Object::printFullNames(false);
-  Act::Entry::init_hashes();
   bool	print_file = true;
 
   // Parsing the command line

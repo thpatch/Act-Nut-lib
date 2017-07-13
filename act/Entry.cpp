@@ -79,6 +79,8 @@ const char*	Act::Entry::type_hash_to_name(uint32_t hash)
   if (hash == 0)
     return "Root";
 
+  if (type_hashes.size() == 0)
+    init_hashes();
   const auto&	it = type_hashes.find(hash);
   if (it != type_hashes.end())
     return it->second;
