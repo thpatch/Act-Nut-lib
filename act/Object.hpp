@@ -35,6 +35,7 @@ namespace Act
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
     bool	writeContent(IBuffer& buf) const;
+    const Object&	operator=(const std::string& new_value);
   };
 }
 

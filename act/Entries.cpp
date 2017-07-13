@@ -287,8 +287,8 @@ Act::BitmapFontResource::~BitmapFontResource()
   if (this->bitmapFontData)
     {
       for (uint32_t i = 0; i < this->height; i++)
-	delete this->bitmapFontData[i];
-      delete this->bitmapFontData;
+	delete[] this->bitmapFontData[i];
+      delete[] this->bitmapFontData;
     }
 }
 

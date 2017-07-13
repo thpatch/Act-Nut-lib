@@ -53,3 +53,19 @@ bool	Act::Array::writeContent(IBuffer& buf) const
       return false;
   return true;
 }
+
+const Act::Object&	Act::Array::operator=(const std::string& new_value)
+{
+  const char* str = new_value.c_str();
+  const char* end = new_value.c_str() + new_value.length();
+  this->entries.clear();
+  while (str < end)
+    {
+      if (*str > '0' && *str < '9')
+	this->entries.push_back(strtol(str, (char**)&str, 10));
+      else
+	str++;
+    }
+  this->nbEntries = this->entries.size();
+  return *this;
+}
