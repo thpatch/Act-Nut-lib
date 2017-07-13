@@ -111,12 +111,15 @@ namespace ActNut
 	STDERR,
 	EXCEPTION
       };
+    typedef void (*Callback)(const char*);
 
   private:
     static ErrorMode	errorMode;
+    static Callback	callback;
 
   public:
     static void	setErrorMode(ErrorMode newMode);
+    static void	setErrorCallback(Callback callback);
     static bool	error(std::string msg);
   };
 }

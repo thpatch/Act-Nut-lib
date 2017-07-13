@@ -172,9 +172,12 @@ bool	ActNut::FileBuffer::writeBytes(const uint8_t* in, size_t n)
 
 
 ActNut::Error::ErrorMode	ActNut::Error::errorMode = ActNut::Error::SILENT;
+ActNut::Error::Callback		ActNut::Error::callback = nullptr;
 
 bool	ActNut::Error::error(std::string msg)
 {
+  if (callback)
+    callback(msg.c_str());
   if (errorMode == Error::EXCEPTION)
     throw std::runtime_error(msg);
   if (errorMode == Error::STDERR)
@@ -185,4 +188,9 @@ bool	ActNut::Error::error(std::string msg)
 void	ActNut::Error::setErrorMode(ErrorMode newMode)
 {
   errorMode = newMode;
+}
+
+void	ActNut::Error::setErrorCallback(Callback callback)
+{
+  Error::callback = callback;
 }

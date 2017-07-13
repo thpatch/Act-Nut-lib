@@ -4,3 +4,5 @@ EXPORTS
 	delete_object
 	new_MemoryBuffer
 	delete_buffer
+	setErrorMode
+	setErrorCallback

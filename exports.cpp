@@ -15,6 +15,16 @@ void	ActNut::delete_object(Object *obj)
   delete obj;
 }
 
+void	ActNut::setErrorMode(ActNut::Error::ErrorMode newMode)
+{
+  Error::setErrorMode(newMode);
+}
+
+void	ActNut::setErrorCallback(ActNut::Error::Callback callback)
+{
+  Error::setErrorCallback(callback);
+}
+
 Act::File*	Act::read_act_from_bytes(const uint8_t* buf, size_t buf_size)
 {
   ActNut::MemoryBuffer	mbuf(buf, buf_size, true);

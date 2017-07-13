@@ -10,6 +10,8 @@ extern "C" {
     MemoryBuffer*	new_MemoryBuffer(MemoryBuffer::BufferOwnership ownership, uint8_t* buf, size_t buf_size, bool fixed_size);
     void		delete_buffer(IBuffer *obj);
     void		delete_object(Object *obj);
+    void		setErrorMode(ActNut::Error::ErrorMode newMode);
+    void		setErrorCallback(ActNut::Error::Callback callback);
   }
   namespace Act {
     Act::File*	read_act_from_bytes(const uint8_t* buf, size_t buf_size);
