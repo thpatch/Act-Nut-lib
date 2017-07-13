@@ -1,9 +1,9 @@
 #include	"act/Object.hpp"
 
-Act::Integer::Integer(  const Object* parent, const std::string& name) : Number(        parent, "int",    name, 0) {}
-Act::Float::Float(      const Object* parent, const std::string& name) : Number(        parent, "float",  name, 1, DisplayType::FLOAT) {}
-Act::Boolean::Boolean(  const Object* parent, const std::string& name) : Number(        parent, "bool",   name, 2, DisplayType::BOOLEAN) {}
-Act::Integer5::Integer5(const Object* parent, const std::string& name) : Number(        parent, "int",    name, 5) {}
+Act::Integer::Integer(  const Object* parent, const std::string& name) : Number(        parent, "int",    name, 0, Type::INTEGER) {}
+Act::Float::Float(      const Object* parent, const std::string& name) : Number(        parent, "float",  name, 1, Type::FLOAT) {}
+Act::Boolean::Boolean(  const Object* parent, const std::string& name) : Number(        parent, "bool",   name, 2, Type::BOOLEAN) {}
+Act::Integer5::Integer5(const Object* parent, const std::string& name) : Number(        parent, "int",    name, 5, Type::INTEGER) {}
 Act::String::String(    const Object* parent, const std::string& name) : ActNut::String(parent, "string", name) {}
 
 uint32_t	Act::String::getNumType() const

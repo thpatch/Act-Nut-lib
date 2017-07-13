@@ -35,11 +35,11 @@ bool	Nut::writeObject(IBuffer& buf, const Object* obj)
   return obj->writeValue(buf);
 }
 
-Nut::SQInteger::SQInteger(                    const Object* parent, const std::string& name) : Number(parent,      "SQInteger",         name, OT_INTEGER) {}
-Nut::SQUnsignedInteger::SQUnsignedInteger(    const Object* parent, const std::string& name) : Number(parent,      "SQUnsignedInteger", name, 0xFFFFFFFF) {}
-Nut::SQBoolean::SQBoolean(                    const Object* parent, const std::string& name) : Number(parent,      "SQBoolean",         name, OT_BOOL,    Number::DisplayType::BOOLEAN) {}
-Nut::SQSingleByteBoolean::SQSingleByteBoolean(const Object* parent, const std::string& name) : Number(parent,      "bool",              name, 0xFFFFFFFF, Number::DisplayType::BOOLEAN) {}
-Nut::SQFloat::SQFloat(                        const Object* parent, const std::string& name) : Number(parent,      "SQFloat",           name, OT_FLOAT,   Number::DisplayType::FLOAT) {}
+Nut::SQInteger::SQInteger(                    const Object* parent, const std::string& name) : Number(parent,      "SQInteger",         name, OT_INTEGER, Number::Type::INTEGER) {}
+Nut::SQUnsignedInteger::SQUnsignedInteger(    const Object* parent, const std::string& name) : Number(parent,      "SQUnsignedInteger", name, 0xFFFFFFFF, Number::Type::INTEGER) {}
+Nut::SQBoolean::SQBoolean(                    const Object* parent, const std::string& name) : Number(parent,      "SQBoolean",         name, OT_BOOL,    Number::Type::BOOLEAN) {}
+Nut::SQSingleByteBoolean::SQSingleByteBoolean(const Object* parent, const std::string& name) : Number(parent,      "bool",              name, 0xFFFFFFFF, Number::Type::BOOLEAN) {}
+Nut::SQFloat::SQFloat(                        const Object* parent, const std::string& name) : Number(parent,      "SQFloat",           name, OT_FLOAT,   Number::Type::FLOAT) {}
 Nut::SQString::SQString(                      const Object* parent, const std::string& name) : String(parent,      "SQString",          name) {}
 Nut::SQNull::SQNull(                          const Object* parent, const std::string& name) : SQObjectPtr(parent, "SQNull",            name) {}
 

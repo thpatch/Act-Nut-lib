@@ -4,6 +4,7 @@
 # include	<iostream>
 # include	<iomanip>
 # include	<vector>
+# include	<string.h>
 # include	"Utils.hpp"
 
 namespace ActNut
@@ -70,20 +71,20 @@ namespace ActNut
   class	Number : public Object
   {
   protected:
-    enum class	DisplayType
+    enum class  Type
     {
-      NONE,
       BOOLEAN,
+      INTEGER,
       FLOAT
     };
 
     T			n;
     const uint32_t	numType;
-    const DisplayType	displayType;
+    const Type		nType;
 
   public:
-    Number(const Object* parent, const char* type, const std::string& name, uint32_t numType, DisplayType displayType = DisplayType::NONE)
-      : Object(parent, type, name), n(0), numType(numType), displayType(displayType)
+    Number(const Object* parent, const char* type, const std::string& name, uint32_t numType, Type nType = Type::INTEGER)
+      : Object(parent, type, name), n(0), numType(numType), nType(nType)
     { }
 
     uint32_t	getNumType() const
@@ -97,15 +98,41 @@ namespace ActNut
 
     void	print(std::ostream& os) const
     {
-      if (displayType == DisplayType::FLOAT)
+      if (nType == Type::FLOAT)
 	os << std::setprecision(2) << std::fixed;
-      if (displayType == DisplayType::BOOLEAN)
+      if (nType == Type::BOOLEAN)
 	os << std::boolalpha;
       os << +this->n;
-      if (displayType == DisplayType::FLOAT)
+      if (nType == Type::FLOAT)
 	os << std::defaultfloat;
-      if (displayType == DisplayType::BOOLEAN)
+      if (nType == Type::BOOLEAN)
 	os << std::noboolalpha;
+    }
+
+    virtual const Object&	operator=(const std::string& new_value)
+    {
+      switch (nType)
+	{
+	case Type::INTEGER:
+	  this->n = stol(new_value, nullptr, 0);
+	  break ;
+
+	case Type::FLOAT:
+	  this->n = stod(new_value, nullptr);
+	  break ;
+
+	case Type::BOOLEAN:
+	  if (!strcmp(new_value.c_str(), "true") || !strcmp(new_value.c_str(), "True") || !strcmp(new_value.c_str(), "TRUE"))
+	    this->n = true;
+	  else if (!strcmp(new_value.c_str(), "false") || !strcmp(new_value.c_str(), "False") || !strcmp(new_value.c_str(), "FALSE"))
+	    this->n = false;
+	  else if (stol(new_value, nullptr, 0) != 0)
+	    this->n = true;
+	  else
+	    this->n = false;
+	  break ;
+	}
+      return *this;
     }
 
     operator T() const { return this->n; }
