@@ -1,5 +1,10 @@
+ifneq ($(OS), Windows_NT)
 NAME	=	libactnut.so
 BIN_NAME=	print-act-nut
+else
+NAME	=	libactnut.dll
+BIN_NAME=	print-act-nut.exe
+endif
 
 CXXFLAGS=	-Wall -Wextra -Wno-multichar -g -I. -fPIC
 
