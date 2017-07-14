@@ -114,11 +114,11 @@ namespace ActNut
       switch (nType)
 	{
 	case Type::INTEGER:
-	  this->n = stol(new_value, nullptr, 0);
+	  this->n = (T)stol(new_value, nullptr, 0);
 	  break ;
 
 	case Type::FLOAT:
-	  this->n = stod(new_value, nullptr);
+	  this->n = (T)stod(new_value, nullptr);
 	  break ;
 
 	case Type::BOOLEAN:
