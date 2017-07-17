@@ -151,7 +151,7 @@ ActNut::FileBuffer::FileBuffer(std::fstream&& fs)
 {}
 
 ActNut::FileBuffer::FileBuffer(const std::string& filename, std::ios_base::openmode mode)
-  : fs(filename.c_str(), mode)
+  : fs(filename.c_str(), mode | std::fstream::binary)
 {}
 
 ActNut::FileBuffer::~FileBuffer()
