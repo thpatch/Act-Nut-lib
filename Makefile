@@ -6,7 +6,17 @@ NAME	=	libactnut.dll
 BIN_NAME=	print-act-nut.exe
 endif
 
-CXXFLAGS=	-Wall -Wextra -Wno-multichar -g -I. -fPIC
+SHARED = 1
+ifeq ($(SHARED), 1)
+LDFLAGS	=	-shared
+BIN_LDFLAGS=	-Wl,-rpath=.
+else
+NAME	=	libactnut.a
+BIN_LDFLAGS=	-static
+endif
+
+CXXFLAGS+=	-Wall -Wextra -Wno-multichar -g -I. -fPIC
+BIN_LDFLAGS+=	-L. -lactnut
 
 SRCS	=	Object.cpp \
 		Utils.cpp \
@@ -29,10 +39,14 @@ BIN_OBJS=	$(BIN_SRCS:.cpp=.o)
 all: $(NAME) $(BIN_NAME)
 
 $(NAME): $(OBJS)
-	$(CXX) $(OBJS) -o $(NAME) $(LDFLAGS) -shared
+ifeq ($(SHARED), 1)
+	$(CXX) $(OBJS) -o $(NAME) $(LDFLAGS)
+else
+	ar rc $(NAME) $(OBJS)
+endif
 
 $(BIN_NAME): $(NAME) $(BIN_OBJS)
-	$(CXX) $(BIN_OBJS) -o $(BIN_NAME) $(LDFLAGS) -L. -lactnut -Wl,-rpath=.
+	$(CXX) $(BIN_OBJS) -o $(BIN_NAME) $(BIN_LDFLAGS)
 
 clean:
 	rm -f $(OBJS) $(BIN_OBJS) $(NAME) $(BIN_NAME)
