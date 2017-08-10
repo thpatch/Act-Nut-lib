@@ -83,7 +83,11 @@ static std::vector<OpcodeDescriptor>	opcodes = {
 };
 
 Nut::SQInstruction::SQInstruction(const Object* parent, const std::string& name)
-  : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent->getParent()))
+  : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent->getParent())),
+    opWrapper(  this, "NativeWrapper<uint8_t>", "op",   this->op),
+    arg0Wrapper(this, "NativeWrapper<uint8_t>", "arg0", this->arg0),
+    arg2Wrapper(this, "NativeWrapper<uint8_t>", "arg2", this->arg2),
+    arg3Wrapper(this, "NativeWrapper<uint8_t>", "arg3", this->arg3)
 {}
 
 bool	Nut::SQInstruction::readValue(IBuffer& buf)
@@ -121,4 +125,42 @@ bool	Nut::SQInstruction::writeValue(IBuffer& buf) const
   buf.writeByte(this->arg2);
   buf.writeByte(this->arg3);
   return true;
+}
+
+ActNut::Object*	Nut::SQInstruction::operator[](const char* key)
+{
+  switch (key[0])
+    {
+    case '0':
+      return &this->opWrapper;
+    case '1':
+      return &this->arg0Wrapper;
+    case '2':
+      return this->arg1;
+    case '3':
+      return &this->arg2Wrapper;
+    case '4':
+      return &this->arg3Wrapper;
+    default:
+      return nullptr;
+    }
+}
+
+const ActNut::Object*	Nut::SQInstruction::operator[](const char* key) const
+{
+  switch (key[0])
+    {
+    case '1':
+      return &this->opWrapper;
+    case '2':
+      return &this->arg0Wrapper;
+    case '3':
+      return this->arg1;
+    case '4':
+      return &this->arg2Wrapper;
+    case '5':
+      return &this->arg3Wrapper;
+    default:
+      return nullptr;
+    }
 }

@@ -78,13 +78,20 @@ namespace ActNut
       FLOAT
     };
 
-    T			n;
+    T			storage;
+    T&			n;
     const uint32_t	numType;
     const Type		nType;
 
   public:
-    Number(const Object* parent, const char* type, const std::string& name, uint32_t numType, Type nType = Type::INTEGER)
-      : Object(parent, type, name), n(0), numType(numType), nType(nType)
+    // By default, the Number class will contain a number in storage.
+    Number(const Object* parent, const char* type, const std::string& name, uint32_t numType = 0, Type nType = Type::INTEGER)
+      : Object(parent, type, name), storage(0), n(storage), numType(numType), nType(nType)
+    { }
+
+    // We can also use the Number class to wrap a variable. In that case, storage is not used (because it is external to the class).
+    Number(const Object* parent, const char* type, const std::string& name, T& ref, uint32_t numType = 0, Type nType = Type::INTEGER)
+      : Object(parent, type, name), n(ref), numType(numType), nType(nType)
     { }
 
     uint32_t	getNumType() const
