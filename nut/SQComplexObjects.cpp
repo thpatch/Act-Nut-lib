@@ -10,7 +10,7 @@ void	Nut::SQOuterType::print(std::ostream& os) const
 }
 
 Nut::SQOuterVal::SQOuterVal(const Object* parent, const std::string& name)
-  : SQObjectPtr(parent, "SQOuterVal", name)
+  : SQObjectPtr(parent, "SQOuterVal", name), type(nullptr), object(nullptr), name(nullptr)
 {}
 
 Nut::SQOuterVal::~SQOuterVal()
@@ -49,7 +49,7 @@ bool	Nut::SQOuterVal::writeValue(IBuffer& buf) const
 
 
 Nut::SQLocalVarInfo::SQLocalVarInfo(const Object* parent, const std::string& name)
-  : SQObjectPtr(parent, "SQLocalVarInfo", name)
+  : SQObjectPtr(parent, "SQLocalVarInfo", name), name(nullptr), pos(nullptr), start_op(nullptr), end_op(nullptr)
 {
 }
 
@@ -92,7 +92,7 @@ bool	Nut::SQLocalVarInfo::writeValue(IBuffer& buf) const
 
 
 Nut::SQLineInfo::SQLineInfo(const Object* parent, const std::string& name)
-  : SQObjectPtr(parent, "SQLineInfo", name)
+  : SQObjectPtr(parent, "SQLineInfo", name), line(nullptr), op(nullptr)
 {}
 
 Nut::SQLineInfo::~SQLineInfo()

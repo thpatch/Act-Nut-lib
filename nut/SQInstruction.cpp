@@ -83,7 +83,7 @@ static std::vector<OpcodeDescriptor>	opcodes = {
 };
 
 Nut::SQInstruction::SQInstruction(const Object* parent, const std::string& name)
-  : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent->getParent())),
+  : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent->getParent())), arg1(nullptr),
     opWrapper(  this, "NativeWrapper<uint8_t>", "op",   this->op),
     arg0Wrapper(this, "NativeWrapper<uint8_t>", "arg0", this->arg0),
     arg2Wrapper(this, "NativeWrapper<uint8_t>", "arg2", this->arg2),

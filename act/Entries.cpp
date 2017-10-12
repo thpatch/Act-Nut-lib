@@ -6,8 +6,7 @@ Act::NutStream::NutStream(const Object* parent, const std::string& name)
 
 Act::NutStream::~NutStream()
 {
-  if (this->stream)
-    delete this->stream;
+  delete this->stream;
 }
 
 bool	Act::NutStream::readValue(IBuffer& buf)
@@ -58,8 +57,7 @@ Act::Root::Root(const Object* parent, const std::string& name)
 
 Act::Root::~Root()
 {
-  if (this->nutstream)
-    delete this->nutstream;
+  delete this->nutstream;
 }
 
 bool	Act::Root::readValue(IBuffer& buf)
@@ -101,10 +99,8 @@ Act::Layer::Layer(const Object* parent, const std::string& name)
 
 Act::Layer::~Layer()
 {
-  if (this->keyframe)
-    delete this->keyframe;
-  if (this->nutstream)
-    delete this->nutstream;
+  delete this->keyframe;
+  delete this->nutstream;
 }
 
 bool	Act::Layer::readValue(IBuffer& buf)
@@ -178,8 +174,7 @@ Act::KeyFrame::KeyFrame(const Object* parent, const std::string& name)
 
 Act::KeyFrame::~KeyFrame()
 {
-  if (this->layout)
-    delete this->layout;
+  delete this->layout;
 }
 
 bool	Act::KeyFrame::readValue(IBuffer& buf)

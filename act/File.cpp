@@ -2,7 +2,7 @@
 #include	"act/File.hpp"
 
 Act::File::File(const Act::Object* parent, const std::string& name)
-  : Object(parent, "File", name), sprites(this, "sprites"), resources(this, "resources")
+  : Object(parent, "File", name), mainEntry(nullptr), sprites(this, "sprites"), resources(this, "resources")
 {
   addMember(&sprites);
   addMember(&resources);

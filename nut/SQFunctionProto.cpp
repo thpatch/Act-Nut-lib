@@ -1,9 +1,13 @@
 #include	"nut/SQFunctionProto.hpp"
 
 Nut::SQFunctionProto::SQFunctionProto(const Object* parent, const std::string& name)
-  : SQObjectPtr(parent, "SQFunctionProto", name), literals(this, "Literals"), parameters(this, "Parameters"),
+  : SQObjectPtr(parent, "SQFunctionProto", name),
+    sourcename(nullptr), name(nullptr), nliterals(nullptr), nparameters(nullptr), noutervals(nullptr),
+    nlocalvarinfos(nullptr), nlineinfos(nullptr), ndefaultparams(nullptr), ninstructions(nullptr), nfunctions(nullptr),
+    literals(this, "Literals"), parameters(this, "Parameters"),
     outerValues(this, "Outer Values"), localVarInfos(this, "Local variables informations"), lineInfos(this, "Line Informations"),
-    defaultParams(this, "Default Parameters"), instructions(this, "Instructions"), functions(this, "Functions")
+    defaultParams(this, "Default Parameters"), instructions(this, "Instructions"), functions(this, "Functions"),
+    stacksize(nullptr), bgenerator(nullptr), varparams(nullptr)
 {
   addMember(&literals);
   addMember(&parameters);
