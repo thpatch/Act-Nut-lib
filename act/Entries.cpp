@@ -1,11 +1,12 @@
 #include	"act/Entries.hpp"
 
 Act::NutStream::NutStream(const Object* parent, const std::string& name)
-  : Entry(parent, "NutStream", name), stream(nullptr)
+  : Entry(parent, "NutStream", name), nutSize(0), nutBytes(nullptr), stream(nullptr)
 {}
 
 Act::NutStream::~NutStream()
 {
+  delete this->nutBytes;
   delete this->stream;
 }
 
@@ -14,21 +15,35 @@ bool	Act::NutStream::readValue(IBuffer& buf)
   if (!this->Entry::readValue(buf))
     return false;
 
-  uint32_t		nutSize = buf.readInt();
-  uint8_t*		nutBytes = new uint8_t[nutSize];
+  this->nutSize = buf.readInt();
+  this->nutBytes = new uint8_t[nutSize];
   buf.readBytes(nutBytes, nutSize);
-  ActNut::MemoryBuffer	nutBuf(nutBytes, nutSize, true);
-  this->stream = Object::read<Nut::Stream>(this, nutBuf, "stream");
-  if (!this->stream)
-    return false; 
-  addMember(stream);
+
+  Act::Boolean* compiled = dynamic_cast<Act::Boolean*>(this->array["compiled"]);
+  if (compiled && *compiled != 0)
+    {
+      ActNut::MemoryBuffer	nutBuf(nutBytes, nutSize, true);
+      ActNut::IBuffer* oldBuffer = ActNut::Error::setErrorBuffer(&nutBuf);
+      this->stream = Object::read<Nut::Stream>(this, nutBuf, "stream");
+      ActNut::Error::setErrorBuffer(oldBuffer);
+      if (!this->stream)
+	{
+	  ActNut::Error::error(std::string("Parsing of embeeded NUT stream failed (stream size ") + std::to_string(nutSize) + ")");
+	  return false;
+	}
+      addMember(stream);
+    }
+
   return true;
 }
 
 void	Act::NutStream::print(std::ostream& os) const
 {
   this->Entry::print(os);
-  os << printIndent() << *stream;
+  if (stream)
+    os << printIndent() << *stream;
+  else if (nutBytes)
+    os.write((const char*)this->nutBytes, this->nutSize);
 }
 
 bool	Act::NutStream::writeValue(IBuffer& buf) const

@@ -17,6 +17,8 @@ namespace Act
   class	NutStream : public Entry
   {
   private:
+    uint32_t			nutSize;
+    uint8_t*			nutBytes;
     Nut::SQFunctionProto*	stream;
   protected:
     bool	writeHash(IBuffer& buf) const;

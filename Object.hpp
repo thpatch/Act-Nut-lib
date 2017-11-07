@@ -43,7 +43,10 @@ namespace ActNut
     static T*		read(const std::string& filename)
     {
       FileBuffer	buf(filename, std::ios_base::in);
-      return read<T>(nullptr, buf, filename);
+      IBuffer*		oldBuffer = Error::setErrorBuffer(&buf);
+      T* ret = read<T>(nullptr, buf, filename);
+      Error::setErrorBuffer(oldBuffer);
+      return ret;
     }
 
     const Object*		getParent() const;

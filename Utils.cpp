@@ -144,6 +144,11 @@ size_t	ActNut::MemoryBuffer::getSize() const
   return this->end - this->begin;
 }
 
+size_t	ActNut::MemoryBuffer::getPos()
+{
+  return this->buf - this->begin;
+}
+
 
 
 ActNut::FileBuffer::FileBuffer(std::fstream&& fs)
@@ -163,6 +168,11 @@ bool	ActNut::FileBuffer::readBytes(uint8_t* out, size_t n)
   return (bool)fs;
 }
 
+size_t	ActNut::FileBuffer::getPos()
+{
+  return this->fs.tellg();
+}
+
 bool	ActNut::FileBuffer::writeBytes(const uint8_t* in, size_t n)
 {
   this->fs.write((const char*)in, n);
@@ -173,9 +183,12 @@ bool	ActNut::FileBuffer::writeBytes(const uint8_t* in, size_t n)
 
 ActNut::Error::ErrorMode	ActNut::Error::errorMode = ActNut::Error::SILENT;
 ActNut::Error::Callback		ActNut::Error::callback = nullptr;
+ActNut::IBuffer*		ActNut::Error::buffer = nullptr;
 
 bool	ActNut::Error::error(std::string msg)
 {
+  if (buffer)
+    msg += std::string(" (pos after parsing: ") + std::to_string(buffer->getPos()) + ")";
   if (callback)
     callback(msg.c_str());
   if (errorMode == Error::EXCEPTION)
@@ -193,4 +206,11 @@ void	ActNut::Error::setErrorMode(ErrorMode newMode)
 void	ActNut::Error::setErrorCallback(Callback callback)
 {
   Error::callback = callback;
+}
+
+ActNut::IBuffer*	ActNut::Error::setErrorBuffer(IBuffer* buffer)
+{
+  ActNut::IBuffer* oldBuffer = Error::buffer;
+  Error::buffer = buffer;
+  return oldBuffer;
 }

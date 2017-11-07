@@ -16,6 +16,7 @@ namespace ActNut
     virtual bool	readBytes(uint8_t* out, size_t n) = 0;
     virtual uint8_t	readByte() = 0;
     virtual uint32_t	readInt() = 0;
+    virtual size_t	getPos() = 0;
     virtual bool	checkTag(uint32_t iTag) = 0;
     virtual bool	writeBytes(const uint8_t* in, size_t n) = 0;
     virtual bool	writeByte(uint8_t n) = 0;
@@ -85,6 +86,7 @@ namespace ActNut
     bool		writeBytes(const uint8_t* in, size_t n);
     const uint8_t*	getBuffer() const;
     size_t		getSize() const;
+    size_t		getPos();
   };
 
   class	FileBuffer : public ABuffer
@@ -97,6 +99,7 @@ namespace ActNut
     ~FileBuffer();
 
     bool		readBytes(uint8_t* out, size_t n);
+    size_t		getPos();
     bool		writeBytes(const uint8_t* in, size_t n);
   };
 
@@ -116,10 +119,12 @@ namespace ActNut
   private:
     static ErrorMode	errorMode;
     static Callback	callback;
+    static IBuffer*	buffer;
 
   public:
     static void	setErrorMode(ErrorMode newMode);
     static void	setErrorCallback(Callback callback);
+    static ActNut::IBuffer*	setErrorBuffer(IBuffer* buffer); // Used to display where is the error in the file
     static bool	error(std::string msg);
   };
 }
