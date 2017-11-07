@@ -105,6 +105,8 @@ Act::Entry*	Act::Entry::read(const Object* parent, IBuffer& buf, const std::stri
     entry = new Act::KeyFrame(parent, name);
   else if (strcmp(type, "SpriteLayout") == 0)
     entry = new Act::SpriteLayout(parent, name);
+  else if (strcmp(type, "IFSMeshLayout") == 0)
+    entry = new Act::IFSMeshLayout(parent, name);
   else if (strcmp(type, "StringLayout") == 0)
     entry = new Act::StringLayout(parent, name);
   else if (strcmp(type, "ReservedLayout") == 0)

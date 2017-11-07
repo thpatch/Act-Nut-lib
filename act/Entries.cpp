@@ -109,12 +109,13 @@ bool	Act::Root::writeHash(IBuffer& buf) const
 
 
 Act::Layer::Layer(const Object* parent, const std::string& name)
-  : Entry(parent, "Layer", name), keyframe(nullptr), nutstream(nullptr)
-{}
+  : Entry(parent, "Layer", name), keyframes(this, "keyframes"), nutstream(nullptr)
+{
+  addMember(&this->keyframes);
+}
 
 Act::Layer::~Layer()
 {
-  delete this->keyframe;
   delete this->nutstream;
 }
 
@@ -124,18 +125,9 @@ bool	Act::Layer::readValue(IBuffer& buf)
     return false;
 
   uint32_t	nbOfKeyframes = buf.readInt();
-  if (nbOfKeyframes > 1)
-    {
-      std::cout << "[Layer] Only 0 and 1 keyframes are supported (got " << nbOfKeyframes << ")." << std::endl;
+  for (unsigned int i = 0; i < nbOfKeyframes; i++)
+    if (!this->keyframes.add(Act::Entry::read, buf))
       return false;
-    }
-
-  if (nbOfKeyframes == 1)
-    {
-      this->keyframe = Act::Entry::read(this, buf, "keyframe");
-      if (!this->keyframe)
-	return false;
-    }
 
   uint32_t nbOfSomething = buf.readInt();
   if (nbOfSomething != 0)
@@ -149,7 +141,6 @@ bool	Act::Layer::readValue(IBuffer& buf)
   if (!this->nutstream)
     return false;
 
-  addMember(keyframe);
   addMember(nutstream);
   return true;
 }
@@ -157,8 +148,7 @@ bool	Act::Layer::readValue(IBuffer& buf)
 void	Act::Layer::print(std::ostream& os) const
 {
   this->Entry::print(os);
-  if (this->keyframe)
-    os << printIndent() << "  " << *this->keyframe;
+  os << printIndent() << "  " << this->keyframes;
   os << printIndent() << "  " << *this->nutstream;
 }
 
@@ -167,17 +157,28 @@ bool	Act::Layer::writeValue(IBuffer& buf) const
   if (!this->Entry::writeValue(buf))
     return false;
 
-  if (this->keyframe)
-    {
-      buf.writeInt(1);
-      if (this->keyframe->writeValue(buf) == false)
-	return false;
-    }
-  else
-    buf.writeInt(0);
+  buf.writeInt(this->keyframes.size());
+  for (Object* it : this->keyframes)
+    if (!it->writeValue(buf))
+      return false;
 
   buf.writeInt(0);
   return this->nutstream->writeValue(buf);
+}
+
+// Compatibility: elem->keyframe used to return the 1st keyframe.
+ActNut::Object*	Act::Layer::operator[](const char* key)
+{
+  if (strcmp(key, "keyframe") == 0 && this->keyframes.size() == 1)
+    return this->keyframes["0"];
+  return this->Entry::operator[](key);
+}
+
+const ActNut::Object*	Act::Layer::operator[](const char* key) const
+{
+  if (strcmp(key, "keyframe") == 0 && this->keyframes.size() == 1)
+    return this->keyframes["0"];
+  return this->Entry::operator[](key);
 }
 
 
@@ -230,6 +231,13 @@ bool	Act::KeyFrame::writeValue(IBuffer& buf) const
 
 Act::SpriteLayout::SpriteLayout(const Object* parent, const std::string& name)
   : Entry(parent, "SpriteLayout", name)
+{}
+
+
+
+
+Act::IFSMeshLayout::IFSMeshLayout(const Object* parent, const std::string& name)
+  : Entry(parent, "IFSMeshLayout", name)
 {}
 
 

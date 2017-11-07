@@ -49,7 +49,7 @@ namespace Act
   class	Layer : public Entry
   {
   private:
-    Entry*	keyframe;
+    vector	keyframes;
     NutStream*	nutstream;
   public:
     Layer(const Object* parent, const std::string& name);
@@ -57,6 +57,8 @@ namespace Act
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
+    Object*		operator[](const char* key);
+    const Object*	operator[](const char* key) const;
   };
 
   class	KeyFrame : public Entry
@@ -75,6 +77,12 @@ namespace Act
   {
   public:
     SpriteLayout(const Object* parent, const std::string& name);
+  };
+
+  class	IFSMeshLayout : public Entry
+  {
+  public:
+    IFSMeshLayout(const Object* parent, const std::string& name);
   };
 
   class	StringLayout : public Entry
