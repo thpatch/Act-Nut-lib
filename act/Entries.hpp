@@ -90,7 +90,7 @@ namespace Act
   public:
     StringLayout(const Object* parent, const std::string& name);
     bool	readValue(IBuffer& buf);
-    Object*	createObjectFromType(uint32_t type, const std::string& name);
+    Object*	createObjectFromType(uint32_t type, const Object* parent, const std::string& name);
     bool	writeValue(IBuffer& buf) const;
   };
 
@@ -112,7 +112,7 @@ namespace Act
     BitmapFontResource(const Object* parent, const std::string& name);
     ~BitmapFontResource();
     bool	readValue(IBuffer& buf);
-    Object*	createObjectFromType(uint32_t type, const std::string& name);
+    Object*	createObjectFromType(uint32_t type, const Object* parent, const std::string& name);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
   };

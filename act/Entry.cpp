@@ -4,8 +4,10 @@
 #include	"act/Object.hpp"
 
 Act::Entry::Entry(const Object* parent, const char* type, const std::string& name)
-  : Object(parent, type, name), array(this, "array")
-{}
+  : Object(parent, type, name), array(this, "members")
+{
+  addMember(&array);
+}
 
 const char* Act::Entry::type_names[] = {
   ".?AVActFileResourceInfo@@",
@@ -145,7 +147,7 @@ bool	Act::Entry::writeValue(IBuffer& buf) const
   return this->writeHash(buf) && this->writeArray(buf, this->array);
 }
 
-Act::Object*	Act::Entry::readObject(IBuffer& buf)
+Act::Object*	Act::Entry::readObject(const Object* parent, IBuffer& buf)
 {
   uint32_t	name_size = buf.readInt();
   char*		name_str = new char[name_size];
@@ -154,7 +156,7 @@ Act::Object*	Act::Entry::readObject(IBuffer& buf)
   delete[] name_str;
 
   uint32_t	type = buf.readInt();
-  return this->createObjectFromType(type, name);
+  return this->createObjectFromType(type, parent, name);
 }
 
 bool	Act::Entry::writeObject(IBuffer& buf, Object* obj) const
@@ -166,18 +168,18 @@ bool	Act::Entry::writeObject(IBuffer& buf, Object* obj) const
   return true;
 }
 
-Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const std::string& name)
+Act::Object*	Act::Entry::createObjectFromType(uint32_t type, const Object* parent, const std::string& name)
 {
   switch (type)
     {
     case 0:
-      return new Act::Integer(this, name);
+      return new Act::Integer(parent, name);
     case 1:
-      return new Act::Float(this, name);
+      return new Act::Float(parent, name);
     case 2:
-      return new Act::Boolean(this, name);
+      return new Act::Boolean(parent, name);
     case 3:
-      return new Act::String(this, name);
+      return new Act::String(parent, name);
     default:
       Error::error(std::string("Unknown type ") + std::to_string(type));
       return nullptr;
@@ -196,7 +198,7 @@ bool	Act::Entry::readArray(IBuffer& buf, vector& array)
   uint32_t	nb_elems = buf.readInt();
   for (unsigned int i = 0; i < nb_elems; i++)
     {
-      Act::Object*	obj = this->readObject(buf);
+      Act::Object*	obj = this->readObject(&array, buf);
       if (!obj)
 	return false;
       array.push_back(obj);

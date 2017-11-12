@@ -26,9 +26,9 @@ namespace Act
   protected:
     vector		array;
 
-    Object*		readObject(IBuffer& buf);
+    Object*		readObject(const Object* parent, IBuffer& buf);
     bool		writeObject(IBuffer& buf, Object* obj) const;
-    virtual Object*	createObjectFromType(uint32_t type, const std::string& name);
+    virtual Object*	createObjectFromType(uint32_t type, const Object* parent, const std::string& name);
     bool		readArray(IBuffer& buf, vector& array);
     bool		writeArray(IBuffer& buf, const vector& array) const;
     virtual bool	writeHash(IBuffer& buf) const;

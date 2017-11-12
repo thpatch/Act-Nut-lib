@@ -261,12 +261,12 @@ bool	Act::StringLayout::readValue(IBuffer& buf)
   return true;
 }
 
-Act::Object*	Act::StringLayout::createObjectFromType(uint32_t type, const std::string& name)
+Act::Object*	Act::StringLayout::createObjectFromType(uint32_t type, const Object* parent, const std::string& name)
 {
   if (type == 5)
-    return new Act::Array(this, name);
+    return new Act::Array(parent, name);
   else
-    return this->Act::Entry::createObjectFromType(type, name);
+    return this->Act::Entry::createObjectFromType(type, parent, name);
 }
 
 bool	Act::StringLayout::writeValue(IBuffer& buf) const
@@ -327,12 +327,12 @@ bool	Act::BitmapFontResource::readValue(IBuffer& buf)
   return true;
 }
 
-Act::Object*	Act::BitmapFontResource::createObjectFromType(uint32_t type, const std::string& name)
+Act::Object*	Act::BitmapFontResource::createObjectFromType(uint32_t type, const Object* parent, const std::string& name)
 {
   if (type == 5)
-    return new Act::Integer5(this, name);
+    return new Act::Integer5(parent, name);
   else
-    return this->Act::Entry::createObjectFromType(type, name);
+    return this->Act::Entry::createObjectFromType(type, parent, name);
 }
 
 void	Act::BitmapFontResource::print(std::ostream& os) const
