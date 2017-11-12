@@ -170,7 +170,7 @@ bool	ActNut::FileBuffer::readBytes(uint8_t* out, size_t n)
 
 size_t	ActNut::FileBuffer::getPos()
 {
-  return this->fs.tellg();
+  return static_cast<size_t>(this->fs.tellg());
 }
 
 bool	ActNut::FileBuffer::writeBytes(const uint8_t* in, size_t n)
