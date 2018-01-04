@@ -157,7 +157,7 @@ static std::vector<OpcodeDescriptor>	opcodes = {
 
 Nut::SQInstruction::SQInstruction(const Object* parent, const std::string& name)
   : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent->getParent())), arg1(nullptr),
-    opWrapper(  this, "NativeWrapper<uint8_t>", "op",   this->op),
+    opWrapper(  this,                           "op",   this->op),
     arg0Wrapper(this, "NativeWrapper<uint8_t>", "arg0", this->arg0),
     arg2Wrapper(this, "NativeWrapper<uint8_t>", "arg2", this->arg2),
     arg3Wrapper(this, "NativeWrapper<uint8_t>", "arg3", this->arg3)
@@ -314,4 +314,66 @@ const ActNut::Object*	Nut::SQInstruction::operator[](const char* key) const
     default:
       return nullptr;
     }
+}
+
+Nut::SQInstruction::OpWrapper::OpWrapper(const Object* parent, const std::string& name, uint8_t& ref)
+  : Number(parent, "OpWrapper", name, ref)
+{}
+
+const ActNut::Object&	Nut::SQInstruction::OpWrapper::operator=(const std::string& new_value)
+{
+  // Try instructions list
+  for (size_t i = 0; i < opcodes.size(); i++)
+    if (new_value == opcodes[i].name)
+      {
+	this->n = i;
+	return *this;
+      }
+  return this->Number::operator=(new_value);
+}
+
+const ActNut::Object&	Nut::SQInstruction::operator=(const std::string& new_value)
+{
+  std::vector<std::string>      values;
+  std::string			arguments;
+  size_t pos;
+
+  pos = new_value.find('(');
+  if (pos == std::string::npos)
+    {
+      Error::error("Invalid value for SQInstruction::operator= : missing '('");
+      return *this;
+    }
+  values.push_back(new_value.substr(0, pos));
+  arguments = new_value.substr(pos + 1);
+  pos = arguments.find(')');
+  if (pos == std::string::npos)
+    {
+      Error::error("Invalid value for SQInstruction::operator= : missing ')'");
+      return *this;
+    }
+  arguments = arguments.substr(0, pos);
+
+  if (arguments.length() > 0)
+    {
+      while ((pos = arguments.find(',')) != std::string::npos)
+	{
+	  values.push_back(arguments.substr(0, pos));
+	  arguments = arguments.substr(pos + 1);
+	}
+      values.push_back(arguments);
+    }
+  if (values.size() > 5)
+    {
+      Error::error("Invalid value for SQInstruction::operator= : too many arguments (4 maximum)");
+      return *this;
+    }
+
+  this->opWrapper = values[0];
+  if (values.size() >= 2) this->arg0Wrapper                         = values[1];
+  if (values.size() >= 3) *static_cast<ActNut::Object*>(this->arg1) = values[2];
+  if (values.size() >= 4) this->arg2Wrapper                         = values[3];
+  if (values.size() >= 5) this->arg3Wrapper                         = values[4];
+
+  return *this;
 }
