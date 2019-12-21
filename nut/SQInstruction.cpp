@@ -323,7 +323,7 @@ Nut::SQInstruction::OpWrapper::OpWrapper(const Object* parent, const std::string
 const ActNut::Object&	Nut::SQInstruction::OpWrapper::operator=(const std::string& new_value)
 {
   // Try instructions list
-  for (size_t i = 0; i < opcodes.size(); i++)
+  for (uint8_t i = 0; i < opcodes.size(); i++)
     if (new_value == opcodes[i].name)
       {
 	this->n = i;
