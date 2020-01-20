@@ -156,16 +156,17 @@ static std::vector<OpcodeDescriptor>	opcodes = {
 */
 
 Nut::SQInstruction::SQInstruction(const Object* parent, const std::string& name)
-  : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent->getParent())), arg1(nullptr),
+  : SQObjectPtr(parent, "SQInstruction", name), func(dynamic_cast<const SQFunctionProto&>(*parent->getParent())),
     opWrapper(  this,                           "op",   this->op),
     arg0Wrapper(this, "NativeWrapper<uint8_t>", "arg0", this->arg0),
+    arg1Wrapper(this, "NativeWrapper<int32_t>", "arg1", this->arg1),
     arg2Wrapper(this, "NativeWrapper<uint8_t>", "arg2", this->arg2),
     arg3Wrapper(this, "NativeWrapper<uint8_t>", "arg3", this->arg3)
 {}
 
 bool	Nut::SQInstruction::readValue(IBuffer& buf)
 {
-  this->arg1 = ActNut::Object::read<SQInteger>(this, buf, "arg1");
+  buf.readBytes((uint8_t*)&this->arg1, sizeof(this->arg1));
   this->op   = buf.readByte();
   this->arg0 = buf.readByte();
   this->arg2 = buf.readByte();
@@ -174,9 +175,7 @@ bool	Nut::SQInstruction::readValue(IBuffer& buf)
 }
 
 Nut::SQInstruction::~SQInstruction()
-{
-  delete this->arg1;
-}
+{}
 
 static void	printArgument(const Nut::SQFunctionProto& func, std::ostream& os, ArgType type, int arg)
 {
@@ -249,28 +248,28 @@ void	Nut::SQInstruction::print(std::ostream& os) const
 
   os << " " << op.name << "(";
   if (nb_args >= 1)
-      printArgument(this->func, os, op.arg0,  arg0);
+      printArgument(this->func, os, op.arg0, arg0);
   if (nb_args >= 2)
     {
       std::cout << ", ";
-      printArgument(this->func, os, op.arg1, *arg1);
+      printArgument(this->func, os, op.arg1, arg1);
     }
   if (nb_args >= 3)
     {
       std::cout << ", ";
-      printArgument(this->func, os, op.arg2,  arg2);
+      printArgument(this->func, os, op.arg2, arg2);
     }
   if (nb_args >= 4)
     {
       std::cout << ", ";
-      printArgument(this->func, os, op.arg3,  arg3);
+      printArgument(this->func, os, op.arg3, arg3);
     }
   os << ")";
 }
 
 bool	Nut::SQInstruction::writeValue(IBuffer& buf) const
 {
-  this->arg1->writeValue(buf);
+  buf.writeBytes((uint8_t*)&this->arg1, sizeof(this->arg1));
   buf.writeByte(this->op);
   buf.writeByte(this->arg0);
   buf.writeByte(this->arg2);
@@ -287,7 +286,7 @@ ActNut::Object*	Nut::SQInstruction::operator[](const char* key)
     case '1':
       return &this->arg0Wrapper;
     case '2':
-      return this->arg1;
+      return &this->arg1Wrapper;
     case '3':
       return &this->arg2Wrapper;
     case '4':
@@ -306,7 +305,7 @@ const ActNut::Object*	Nut::SQInstruction::operator[](const char* key) const
     case '1':
       return &this->arg0Wrapper;
     case '2':
-      return this->arg1;
+      return &this->arg1Wrapper;
     case '3':
       return &this->arg2Wrapper;
     case '4':
@@ -370,10 +369,10 @@ const ActNut::Object&	Nut::SQInstruction::operator=(const std::string& new_value
     }
 
   this->opWrapper = values[0];
-  if (values.size() >= 2) this->arg0Wrapper                         = values[1];
-  if (values.size() >= 3) *static_cast<ActNut::Object*>(this->arg1) = values[2];
-  if (values.size() >= 4) this->arg2Wrapper                         = values[3];
-  if (values.size() >= 5) this->arg3Wrapper                         = values[4];
+  if (values.size() >= 2) this->arg0Wrapper = values[1];
+  if (values.size() >= 3) this->arg1Wrapper = values[2];
+  if (values.size() >= 4) this->arg2Wrapper = values[3];
+  if (values.size() >= 5) this->arg3Wrapper = values[4];
 
   return *this;
 }

@@ -21,7 +21,7 @@ namespace Nut
 
   private:
     const SQFunctionProto&	func;
-    SQInteger*	arg1;
+    int32_t	arg1;
     uint8_t	op;
     uint8_t	arg0;
     uint8_t	arg2;
@@ -30,6 +30,7 @@ namespace Nut
     // For operator= support
     OpWrapper			opWrapper;
     ActNut::Number<uint8_t>	arg0Wrapper;
+    ActNut::Number<int32_t>	arg1Wrapper;
     ActNut::Number<uint8_t>	arg2Wrapper;
     ActNut::Number<uint8_t>	arg3Wrapper;
 
