@@ -21,8 +21,8 @@ Act::File*	Act::File::read(const std::string& filename)
 
 bool	Act::File::readValue(IBuffer& buf)
 {
-  if (!buf.checkTag('1TCA') || // ACT1
-      !buf.checkTag(1))
+  if (!buf.checkTag('1TCA', "ACT1 tag") || // ACT1
+      !buf.checkTag(1, "version"))
     return false;
 
   // Main entry

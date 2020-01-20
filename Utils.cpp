@@ -22,12 +22,16 @@ uint8_t	ActNut::ABuffer::readByte()
   return n;
 }
 
-bool	ActNut::ABuffer::checkTag(uint32_t iTag)
+bool	ActNut::ABuffer::checkTag(uint32_t iTag, const std::string& name)
 {
-  if (this->readInt() != iTag)
+  uint32_t readTag = this->readInt();
+  if (readTag != iTag)
     {
       std::ostringstream ss;
-      ss << "Wrong tag - should be 0x" << std::setfill('0') << std::setw(8) << std::hex << iTag;
+      ss << "Wrong " << name << " - should be "
+	<< "0x" << std::setfill('0') << std::setw(8) << std::hex << iTag
+	<< ", but is "
+	<< "0x" << std::setfill('0') << std::setw(8) << std::hex << readTag;
       return Error::error(ss.str());
     }
   return true;

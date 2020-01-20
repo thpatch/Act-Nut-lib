@@ -1,5 +1,8 @@
 #include	<fstream>
 #include	"nut/Stream.hpp"
+#include	"nut/SQObject.hpp"
+
+static_assert(sizeof(SQint_t) == sizeof(SQuint_t), "Size of SQint_t and SQuint_t must be identical");
 
 Nut::Stream::Stream(const Object* parent, const std::string& name)
   : SQFunctionProto(parent, name)
@@ -13,16 +16,16 @@ bool	Nut::Stream::readValue(IBuffer& buf)
       return false;
     }
 
-  if (!buf.checkTag('SQIR') ||
-      !buf.checkTag(1) ||
-      !buf.checkTag(4) ||
-      !buf.checkTag(4))
+  if (!buf.checkTag('SQIR', "SQIR tag") ||
+      !buf.checkTag(sizeof(char),      "SQChar size") ||
+      !buf.checkTag(sizeof(SQint_t),   "SQInt size") ||
+      !buf.checkTag(sizeof(SQfloat_t), "SQFloat size"))
     return false;
 
   if (!this->SQFunctionProto::readValue(buf))
     return false;
 
-  return buf.checkTag('TAIL');
+  return buf.checkTag('TAIL', "TAIL tag");
 }
 
 bool	Nut::Stream::writeValue(IBuffer& buf) const
@@ -31,9 +34,9 @@ bool	Nut::Stream::writeValue(IBuffer& buf) const
   buf.writeByte(0xFA);
 
   buf.writeInt('SQIR');
-  buf.writeInt(1);
-  buf.writeInt(4);
-  buf.writeInt(4);
+  buf.writeInt(sizeof(char));
+  buf.writeInt(sizeof(SQint_t));
+  buf.writeInt(sizeof(SQfloat_t));
 
   if (!this->SQFunctionProto::writeValue(buf))
     return false;

@@ -17,7 +17,7 @@ int	main(int argc, char** argv)
   if (argc < 2)
     return printUsage(argv[0]);
 
-  ActNut::Error::setErrorMode(ActNut::Error::STDERR);
+  ActNut::Error::setErrorMode(ActNut::Error::EXCEPTION);
   ActNut::Object::printFullNames(false);
   bool	print_file = true;
 

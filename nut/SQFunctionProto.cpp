@@ -40,14 +40,14 @@ Nut::SQFunctionProto::~SQFunctionProto()
 
 bool	Nut::SQFunctionProto::readValue(IBuffer& buf)
 {
-  buf.checkTag('PART');
+  buf.checkTag('PART', "PART tag");
 
   this->sourcename = loadObject(this, buf, "sourcename");
   this->name       = loadObject(this, buf, "name");
   addMember(sourcename);
   addMember(name);
 
-  buf.checkTag('PART');
+  buf.checkTag('PART', "PART tag");
   this->nliterals	= ActNut::Object::read<SQInteger>(this, buf, "nliterals");
   this->nparameters	= ActNut::Object::read<SQInteger>(this, buf, "nparameters");
   this->noutervals	= ActNut::Object::read<SQInteger>(this, buf, "noutervals");

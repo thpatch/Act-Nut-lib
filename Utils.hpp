@@ -17,7 +17,7 @@ namespace ActNut
     virtual uint8_t	readByte() = 0;
     virtual uint32_t	readInt() = 0;
     virtual size_t	getPos() = 0;
-    virtual bool	checkTag(uint32_t iTag) = 0;
+    virtual bool	checkTag(uint32_t iTag, const std::string& name) = 0;
     virtual bool	writeBytes(const uint8_t* in, size_t n) = 0;
     virtual bool	writeByte(uint8_t n) = 0;
     virtual bool	writeInt(uint32_t n) = 0;
@@ -30,7 +30,7 @@ namespace ActNut
 
     uint8_t		readByte();
     uint32_t		readInt();
-    bool		checkTag(uint32_t iTag);
+    bool		checkTag(uint32_t iTag, const std::string& name);
     bool		writeByte(uint8_t n);
     bool		writeInt(uint32_t n);
   };

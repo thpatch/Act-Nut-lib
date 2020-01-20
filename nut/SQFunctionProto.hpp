@@ -45,7 +45,7 @@ namespace Nut
     template<typename T>
     void	readArray(T* (*readerFunc)(const Object* parent, IBuffer& buf, const std::string& name), IBuffer& buf, vector& array, const SQInteger* size)
     {
-      buf.checkTag('PART');
+      buf.checkTag('PART', "PART tag");
       for (int i = 0; i < *size; i++)
 	array.add(readerFunc, buf);
     }
