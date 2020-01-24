@@ -3,6 +3,7 @@ a.out
 *.act
 *.nut
 print-act-nut
+print-act-nut-64
 *.so
 *.exe
 *.dll
