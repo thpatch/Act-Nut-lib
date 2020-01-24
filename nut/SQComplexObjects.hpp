@@ -8,7 +8,9 @@ namespace Nut
 
   using ActNut::IBuffer;
 
-  class	SQOuterType : public ActNut::Number<int>
+  // The SQOuterType size isn't actually defined, it's just whichever size the compiler
+  // decided to use for this enum.
+  class	SQOuterType : public ActNut::Number<SQint_t>
   {
   public:
     SQOuterType(const Object* parent, const std::string& name);
