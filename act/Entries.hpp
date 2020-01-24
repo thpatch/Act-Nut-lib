@@ -50,6 +50,7 @@ namespace Act
   {
   private:
     vector	keyframes;
+    vector	weirdarray;
     NutStream*	nutstream;
   public:
     Layer(const Object* parent, const std::string& name);

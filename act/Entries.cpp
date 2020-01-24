@@ -109,7 +109,7 @@ bool	Act::Root::writeHash(IBuffer& buf) const
 
 
 Act::Layer::Layer(const Object* parent, const std::string& name)
-  : Entry(parent, "Layer", name), keyframes(this, "keyframes"), nutstream(nullptr)
+  : Entry(parent, "Layer", name), keyframes(this, "keyframes"), weirdarray(this, "weirdarray"), nutstream(nullptr)
 {
   addMember(&this->keyframes);
 }
@@ -129,13 +129,16 @@ bool	Act::Layer::readValue(IBuffer& buf)
     if (!this->keyframes.add(Act::Entry::read, buf))
       return false;
 
-  uint32_t nbOfSomething = buf.readInt();
-  if (nbOfSomething != 0)
+  // Zero-terminated array
+  while (true)
     {
-      std::cout << "[Layer] nbOfSomething must be 0 (because I don't know what this 'something' is)." << std::endl;
-      return false;
+      uint32_t value = buf.readInt();
+      if (value == 0)
+        break;
+      auto number = new ActNut::Number<uint32_t>(&weirdarray, "number", "");
+      *number = value;
+      weirdarray.push_back(number);
     }
-
 
   this->nutstream = Object::read<NutStream>(this, buf, "nutstream");
   if (!this->nutstream)
@@ -149,6 +152,7 @@ void	Act::Layer::print(std::ostream& os) const
 {
   this->Entry::print(os);
   os << printIndent() << "  " << this->keyframes;
+  os << printIndent() << "  " << this->weirdarray;
   os << printIndent() << "  " << *this->nutstream;
 }
 
@@ -162,7 +166,11 @@ bool	Act::Layer::writeValue(IBuffer& buf) const
     if (!it->writeValue(buf))
       return false;
 
+  // Zero-terminated array
+  for (ActNut::Object *it : this->weirdarray)
+    buf.writeInt(*dynamic_cast<ActNut::Number<uint32_t>* >(it));
   buf.writeInt(0);
+
   return this->nutstream->writeValue(buf);
 }
 

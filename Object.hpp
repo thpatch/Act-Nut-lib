@@ -119,6 +119,12 @@ namespace ActNut
 	os << std::noboolalpha;
     }
 
+    const Object&	operator=(const T& new_value)
+    {
+      this->n = new_value;
+      return *this;
+    }
+
     virtual const Object&	operator=(const std::string& new_value)
     {
       switch (nType)
