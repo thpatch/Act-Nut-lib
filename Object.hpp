@@ -151,7 +151,7 @@ namespace ActNut
 
   class	String : public Object
   {
-  private:
+  protected:
     std::string	value;
 
   public:

@@ -44,6 +44,26 @@ Nut::SQString::SQString(                      const Object* parent, const std::s
 Nut::SQNull::SQNull(                          const Object* parent, const std::string& name) : SQObjectPtr(parent, "SQNull",            name) {}
 
 uint32_t	Nut::SQString::getNumType() const { return OT_STRING; }
+
+bool	Nut::SQString::readValue(IBuffer& buf)
+{
+  SQuint_t	length;
+  buf.readBytes((uint8_t*)&length, sizeof(length));
+
+  char*		str = new char[length];
+  buf.readBytes((uint8_t*)str, length);
+  this->value = std::string(str, length);
+  delete[] str;
+  return true;
+}
+
+bool	Nut::SQString::writeValue(IBuffer& buf) const
+{
+  SQuint_t	length = this->value.length();
+  buf.writeBytes((const uint8_t*)&length, sizeof(length));
+  return buf.writeBytes((const uint8_t*)this->value.c_str(), this->value.length());
+}
+
 uint32_t	Nut::SQNull::getNumType() const { return OT_NULL; }
 bool		Nut::SQNull::readValue(IBuffer&) { return true; }
 void		Nut::SQNull::print(std::ostream& os) const { os << "null"; }

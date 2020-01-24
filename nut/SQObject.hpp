@@ -46,6 +46,8 @@ namespace Nut
   class	SQFloat             : public ActNut::Number<SQfloat_t> { public: SQFloat(            const Object* parent, const std::string& name); };
   class	SQString            : public ActNut::String            { public: SQString(           const Object* parent, const std::string& name);
     uint32_t	getNumType() const;
+    bool		readValue(IBuffer& buf);
+    bool		writeValue(IBuffer& buf) const;
   };
   class	SQNull              : public SQObjectPtr               { public: SQNull(             const Object* parent, const std::string& name);
     uint32_t	getNumType() const;
