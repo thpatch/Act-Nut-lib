@@ -51,11 +51,21 @@ bool	Act::NutStream::writeValue(IBuffer& buf) const
   if (!this->Entry::writeValue(buf))
     return false;
 
-  ActNut::MemoryBuffer	nutBuf;
-  if (!this->stream->writeValue(nutBuf))
-    return false;
-  buf.writeInt(nutBuf.getSize());
-  return buf.writeBytes(nutBuf.getBuffer(), nutBuf.getSize());
+  if (this->stream)
+    {
+      // Compiled script
+      ActNut::MemoryBuffer	nutBuf;
+      if (!this->stream->writeValue(nutBuf))
+	return false;
+      buf.writeInt(nutBuf.getSize());
+      return buf.writeBytes(nutBuf.getBuffer(), nutBuf.getSize());
+    }
+  else
+    {
+      // Plaintext script
+      buf.writeInt(this->nutSize);
+      return buf.writeBytes(this->nutBytes, this->nutSize);
+    }
 }
 
 bool	Act::NutStream::writeHash(IBuffer&) const
