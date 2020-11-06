@@ -1,13 +1,13 @@
 ifneq ($(OS), Windows_NT)
 NAME		=	libactnut.so
 NAME_64		=	libactnut64.so
-BIN_NAME	=	print-act-nut
-BIN_NAME_64	=	print-act-nut-64
+BIN_NAME	=	act-nut-tool
+BIN_NAME_64	=	act-nut-tool-64
 else
 NAME		=	libactnut.dll
 NAME_64		=	libactnut64.dll
-BIN_NAME	=	print-act-nut.exe
-BIN_NAME_64	=	print-act-nut-64.exe
+BIN_NAME	=	act-nut-tool.exe
+BIN_NAME_64	=	act-nut-tool-64.exe
 endif
 
 SHARED		=	1
