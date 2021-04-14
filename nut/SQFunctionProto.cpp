@@ -159,6 +159,14 @@ bool	Nut::SQFunctionProto::writeArrayOfObjects(IBuffer& buf, const vector& array
   return true;
 }
 
+void    Nut::SQFunctionProto::addLiteral(const std::string& literal)
+{
+  auto newObj = new SQString(&this->literals, std::to_string(this->literals.size()));
+  *newObj = literal;
+  this->literals.push_back(newObj);
+  *this->nliterals = *this->nliterals + 1;
+}
+
 void    Nut::SQFunctionProto::insertInstruction(size_t position, const std::string& instruction)
 {
   if (position > this->instructions.size())
@@ -170,7 +178,7 @@ void    Nut::SQFunctionProto::insertInstruction(size_t position, const std::stri
   auto instructionObj = new SQInstruction(&this->instructions, std::to_string(position));
   *instructionObj = instruction;
   this->instructions.insert(this->instructions.begin() + position, instructionObj);
-  *this->ninstructions = static_cast<SQint_t>(*this->ninstructions + 1);
+  *this->ninstructions = *this->ninstructions + 1;
 
   // Fix instruction names
   for (size_t n = position + 1; n < this->instructions.size(); n++)
