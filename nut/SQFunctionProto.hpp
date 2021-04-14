@@ -60,9 +60,10 @@ namespace Nut
     bool	writeValue(IBuffer& buf) const;
 
     const Object*	getLiteral(int idx) const;
+    int			getLiteralIdx(const std::string& value) const;
 
-    void        addLiteral(const std::string& literal);
-    void        insertInstruction(size_t position, const std::string& instruction);
+    void	addLiteral(const std::string& literal);
+    void	insertInstruction(size_t position, const std::string& instruction);
   };
 
 }

@@ -34,6 +34,8 @@ namespace Nut
     ActNut::Number<uint8_t>	arg2Wrapper;
     ActNut::Number<uint8_t>	arg3Wrapper;
 
+    int32_t	parseArgument(const std::string& argument);
+
   public:
     SQInstruction(const Object* parent, const std::string& name);
     ~SQInstruction();

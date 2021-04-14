@@ -154,9 +154,9 @@ const ActNut::Object*	ActNut::Object::getChild(const char* _path) const
   return obj;
 }
 
-const ActNut::Object&	ActNut::String::operator=(const std::string& new_value)
+const ActNut::Object&	ActNut::Object::operator=(const std::string&)
 {
-  this->value = new_value;
+  Error::error(std::string(this->type) + " doesn't support operator=");
   return *this;
 }
 
@@ -186,10 +186,15 @@ bool	ActNut::String::writeValue(IBuffer& buf) const
   return buf.writeBytes((const uint8_t*)this->value.c_str(), this->value.length());
 }
 
-const ActNut::Object&	ActNut::Object::operator=(const std::string&)
+const ActNut::Object&	ActNut::String::operator=(const std::string& new_value)
 {
-  Error::error(std::string(this->type) + " doesn't support operator=");
+  this->value = new_value;
   return *this;
+}
+
+bool	ActNut::String::operator==(const std::string& other) const
+{
+  return this->value == other;
 }
 
 

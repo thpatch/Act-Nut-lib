@@ -169,6 +169,7 @@ namespace ActNut
     void		print(std::ostream& os) const;
     bool		writeValue(IBuffer& buf) const;
     const Object&	operator=(const std::string& new_value);
+    bool		operator==(const std::string& other) const;
   };
 
   class	vector : public Object, public std::vector<Object*>

@@ -49,6 +49,7 @@ namespace Nut
     bool		readValue(IBuffer& buf);
     bool		writeValue(IBuffer& buf) const;
     using       String::operator=;
+    using       String::operator==;
   };
   class	SQNull              : public SQObjectPtr               { public: SQNull(             const Object* parent, const std::string& name);
     uint32_t	getNumType() const;

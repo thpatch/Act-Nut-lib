@@ -331,6 +331,43 @@ const ActNut::Object&	Nut::SQInstruction::OpWrapper::operator=(const std::string
   return this->Number::operator=(new_value);
 }
 
+int32_t	Nut::SQInstruction::parseArgument(const std::string& argument)
+{
+  size_t pos;
+
+  // Try as a string literal
+  pos = argument.find('"');
+  if (pos != std::string::npos)
+    {
+      size_t end = argument.find('"', pos + 1);
+      if (end != std::string::npos)
+	{
+	  std::string argContent = argument.substr(pos + 1, end - pos - 1);
+	  int idx = this->func.getLiteralIdx(argContent);
+	  if (idx != -1)
+	    return idx;
+	}
+    }
+
+  // Try as a stack index
+  pos = argument.find('s');
+  if (pos != std::string::npos)
+    return atoi(argument.c_str() + pos + 1);
+
+
+  // Try as a float
+  pos = argument.find('.');
+  if (pos != std::string::npos)
+    {
+      float f = atof(argument.c_str());
+      float *fp = &f;
+      return *(int32_t*)fp;
+    }
+
+  // Try as an int (with hex support)
+  return strtol(argument.c_str(), nullptr, 0);
+}
+
 const ActNut::Object&	Nut::SQInstruction::operator=(const std::string& new_value)
 {
   std::vector<std::string>      values;
@@ -369,10 +406,10 @@ const ActNut::Object&	Nut::SQInstruction::operator=(const std::string& new_value
     }
 
   this->opWrapper = values[0];
-  if (values.size() >= 2) this->arg0Wrapper = values[1];
-  if (values.size() >= 3) this->arg1Wrapper = values[2];
-  if (values.size() >= 4) this->arg2Wrapper = values[3];
-  if (values.size() >= 5) this->arg3Wrapper = values[4];
+  if (values.size() >= 2) this->arg0Wrapper = parseArgument(values[1]);
+  if (values.size() >= 3) this->arg1Wrapper = parseArgument(values[2]);
+  if (values.size() >= 4) this->arg2Wrapper = parseArgument(values[3]);
+  if (values.size() >= 5) this->arg3Wrapper = parseArgument(values[4]);
 
   return *this;
 }

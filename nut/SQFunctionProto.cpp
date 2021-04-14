@@ -159,7 +159,22 @@ bool	Nut::SQFunctionProto::writeArrayOfObjects(IBuffer& buf, const vector& array
   return true;
 }
 
-void    Nut::SQFunctionProto::addLiteral(const std::string& literal)
+
+int	Nut::SQFunctionProto::getLiteralIdx(const std::string& value) const
+{
+  int i = 0;
+
+  for (auto it : this->literals)
+    {
+      auto literal = dynamic_cast<SQString*>(it);
+      if (literal && *literal == value)
+	return i;
+      i++;
+    }
+  return -1;
+}
+
+void	Nut::SQFunctionProto::addLiteral(const std::string& literal)
 {
   auto newObj = new SQString(&this->literals, std::to_string(this->literals.size()));
   *newObj = literal;
@@ -167,7 +182,7 @@ void    Nut::SQFunctionProto::addLiteral(const std::string& literal)
   *this->nliterals = *this->nliterals + 1;
 }
 
-void    Nut::SQFunctionProto::insertInstruction(size_t position, const std::string& instruction)
+void	Nut::SQFunctionProto::insertInstruction(size_t position, const std::string& instruction)
 {
   if (position > this->instructions.size())
     {
