@@ -60,6 +60,8 @@ namespace Nut
     bool	writeValue(IBuffer& buf) const;
 
     const Object*	getLiteral(int idx) const;
+
+    void insertInstruction(size_t position, const std::string& instruction);
   };
 
 }

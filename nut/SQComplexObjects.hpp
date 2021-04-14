@@ -46,6 +46,8 @@ namespace Nut
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
+
+    void        updateForNewInstruction(size_t newInstructionOffset);
   };
 
   class	SQLineInfo : public SQObjectPtr

@@ -28,6 +28,11 @@ const std::string&	ActNut::Object::getName() const
   return this->name;
 }
 
+void	ActNut::Object::setName(const std::string& name)
+{
+  this->name = name;
+}
+
 uint32_t	ActNut::Object::getNumType() const
 {
   return 0xFFFFFFFF;
@@ -202,7 +207,7 @@ bool	ActNut::vector::readValue(IBuffer&)
 
 bool	ActNut::vector::writeValue(IBuffer&) const
 {
-  throw std::logic_error("Calling writedValue doesn't make sense on an Act::vector");
+  throw std::logic_error("Calling writeValue doesn't make sense on an Act::vector");
 }
 
 void	ActNut::vector::print(std::ostream& os) const

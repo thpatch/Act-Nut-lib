@@ -158,3 +158,28 @@ bool	Nut::SQFunctionProto::writeArrayOfObjects(IBuffer& buf, const vector& array
     writeObject(buf, it);
   return true;
 }
+
+void    Nut::SQFunctionProto::insertInstruction(size_t position, const std::string& instruction)
+{
+  if (position > this->instructions.size())
+    {
+      Error::error("Invalid value for SQInstruction::insertInstruction: position out of range");
+      return ;
+    }
+
+  auto instructionObj = new SQInstruction(&this->instructions, std::to_string(position));
+  *instructionObj = instruction;
+  this->instructions.insert(this->instructions.begin() + position, instructionObj);
+  *this->ninstructions = static_cast<SQint_t>(*this->ninstructions + 1);
+
+  // Fix instruction names
+  for (size_t n = position + 1; n < this->instructions.size(); n++)
+    this->instructions[n]->setName(std::to_string(n));
+
+  // Fix local var infos
+  for (auto it : this->localVarInfos)
+    {
+      auto info = dynamic_cast<SQLocalVarInfo*>(it);
+      info->updateForNewInstruction(position);
+    }
+}

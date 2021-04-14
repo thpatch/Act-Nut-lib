@@ -38,12 +38,12 @@ namespace Nut
   SQObjectPtr*	loadObject(const Object* parent, IBuffer& buf, const std::string& name);
   bool		writeObject(IBuffer& buf, const Object* obj);
 
-  class	SQInteger           : public ActNut::Number<SQint_t>   { public: SQInteger(          const Object* parent, const std::string& name); };
-  class	SQUnsignedInteger   : public ActNut::Number<SQuint_t>  { public: SQUnsignedInteger(  const Object* parent, const std::string& name); };
-  class	SQBoolean           : public ActNut::Number<SQuint_t>  { public: SQBoolean(          const Object* parent, const std::string& name); };
+  class	SQInteger           : public ActNut::Number<SQint_t>   { public: SQInteger(          const Object* parent, const std::string& name); using Number::operator=; };
+  class	SQUnsignedInteger   : public ActNut::Number<SQuint_t>  { public: SQUnsignedInteger(  const Object* parent, const std::string& name); using Number::operator=; };
+  class	SQBoolean           : public ActNut::Number<SQuint_t>  { public: SQBoolean(          const Object* parent, const std::string& name); using Number::operator=; };
   // SQBoolean is stored on 4 or 8 bytes, we need a custom one to handle single-byte booleans.
-  class	SQSingleByteBoolean : public ActNut::Number<char>      { public: SQSingleByteBoolean(const Object* parent, const std::string& name); };
-  class	SQFloat             : public ActNut::Number<SQfloat_t> { public: SQFloat(            const Object* parent, const std::string& name); };
+  class	SQSingleByteBoolean : public ActNut::Number<char>      { public: SQSingleByteBoolean(const Object* parent, const std::string& name); using Number::operator=; };
+  class	SQFloat             : public ActNut::Number<SQfloat_t> { public: SQFloat(            const Object* parent, const std::string& name); using Number::operator=; };
   class	SQString            : public ActNut::String            { public: SQString(           const Object* parent, const std::string& name);
     uint32_t	getNumType() const;
     bool		readValue(IBuffer& buf);

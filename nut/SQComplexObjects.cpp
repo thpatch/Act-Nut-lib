@@ -88,6 +88,15 @@ bool	Nut::SQLocalVarInfo::writeValue(IBuffer& buf) const
   return true;
 }
 
+void Nut::SQLocalVarInfo::updateForNewInstruction(size_t newInstructionOffset)
+{
+  if (*this->start_op >= newInstructionOffset)
+    *this->start_op = *this->start_op + 1;
+  if (*this->end_op >= newInstructionOffset)
+    *this->end_op = *this->end_op + 1;
+}
+
+
 
 
 
