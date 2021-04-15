@@ -191,10 +191,10 @@ namespace ActNut
       return true;
     }
     void		print(std::ostream& os) const;
-    Object*		operator[](size_type n);
-    const Object*	operator[](size_type n) const;
-    Object*		operator[](const char* key);
-    const Object*	operator[](const char* key) const;
+    virtual Object*		operator[](size_type n);
+    virtual const Object*	operator[](size_type n) const;
+    virtual Object*		operator[](const char* key);
+    virtual const Object*	operator[](const char* key) const;
   };
 
 }

@@ -359,7 +359,7 @@ int32_t	Nut::SQInstruction::parseArgument(const std::string& argument)
   pos = argument.find('.');
   if (pos != std::string::npos)
     {
-      float f = atof(argument.c_str());
+      float f = static_cast<float>(atof(argument.c_str()));
       float *fp = &f;
       return *(int32_t*)fp;
     }

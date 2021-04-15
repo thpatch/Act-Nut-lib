@@ -62,8 +62,8 @@ namespace Nut
     const Object*	getLiteral(int idx) const;
     int			getLiteralIdx(const std::string& value) const;
 
-    void	addLiteral(const std::string& literal);
-    void	insertInstruction(size_t position, const std::string& instruction);
+    virtual void	addLiteral(const std::string& literal);
+    virtual void	insertInstruction(size_t position, const std::string& instruction);
   };
 
 }
