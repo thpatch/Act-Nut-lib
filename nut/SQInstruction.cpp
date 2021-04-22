@@ -79,8 +79,8 @@ static std::vector<OpcodeDescriptor>	opcodes = {
   { "closure",		ARG_STACK,	ARG_IMMEDIATE,	ARG_NONE,	ARG_NONE },
   { "yield",		ARG_UNKNOWN,	ARG_STACK,	ARG_UNKNOWN,	ARG_NONE },
   { "resume",		ARG_STACK,	ARG_STACK,	ARG_NONE,	ARG_NONE },
-  { "foreach",		ARG_STACK,	ARG_STACK,	ARG_STACK,	ARG_NONE },
-  { "postforeach",	ARG_STACK,	ARG_UNKNOWN,	ARG_NONE,	ARG_NONE },
+  { "foreach",		ARG_STACK,	ARG_IMMEDIATE,	ARG_STACK,	ARG_NONE },
+  { "postforeach",	ARG_STACK,	ARG_IMMEDIATE,	ARG_NONE,	ARG_NONE },
   { "clone",		ARG_STACK,	ARG_STACK,	ARG_NONE,	ARG_NONE },
   { "typeof",		ARG_STACK,	ARG_STACK,	ARG_NONE,	ARG_NONE },
   { "pushtrap",		ARG_UNKNOWN,	ARG_UNKNOWN,	ARG_NONE,	ARG_NONE },
@@ -251,17 +251,17 @@ void	Nut::SQInstruction::print(std::ostream& os) const
       printArgument(this->func, os, op.arg0, arg0);
   if (nb_args >= 2)
     {
-      std::cout << ", ";
+      os << ", ";
       printArgument(this->func, os, op.arg1, arg1);
     }
   if (nb_args >= 3)
     {
-      std::cout << ", ";
+      os << ", ";
       printArgument(this->func, os, op.arg2, arg2);
     }
   if (nb_args >= 4)
     {
-      std::cout << ", ";
+      os << ", ";
       printArgument(this->func, os, op.arg3, arg3);
     }
   os << ")";
