@@ -1,9 +1,8 @@
 *.o
-a.out
 *.act
 *.nut
-print-act-nut
-print-act-nut-64
+act-nut-tool
+act-nut-tool-64
 *.so
 *.exe
 *.dll
