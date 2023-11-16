@@ -25,6 +25,8 @@ namespace Act
   public:
     NutStream(const Object* parent, const std::string& name);
     ~NutStream();
+    NutStream&	operator=(const NutStream&) = delete;
+    using	Object::operator=;
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
@@ -41,6 +43,8 @@ namespace Act
   public:
     Root(const Object* parent, const std::string& name);
     ~Root();
+    Root&	operator=(const Root&) = delete;
+    using	Object::operator=;
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
@@ -55,6 +59,8 @@ namespace Act
   public:
     Layer(const Object* parent, const std::string& name);
     ~Layer();
+    Layer&	operator=(const Layer&) = delete;
+    using	Object::operator=;
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
@@ -69,6 +75,8 @@ namespace Act
   public:
     KeyFrame(const Object* parent, const std::string& name);
     ~KeyFrame();
+    KeyFrame&	operator=(const KeyFrame&) = delete;
+    using	Object::operator=;
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
@@ -78,18 +86,24 @@ namespace Act
   {
   public:
     SpriteLayout(const Object* parent, const std::string& name);
+    SpriteLayout&	operator=(const SpriteLayout&) = delete;
+    using		Object::operator=;
   };
 
   class	IFSMeshLayout : public Entry
   {
   public:
     IFSMeshLayout(const Object* parent, const std::string& name);
+    IFSMeshLayout&	operator=(const IFSMeshLayout&) = delete;
+    using		Object::operator=;
   };
 
   class	StringLayout : public Entry
   {
   public:
     StringLayout(const Object* parent, const std::string& name);
+    StringLayout&	operator=(const StringLayout&) = delete;
+    using	Object::operator=;
     bool	readValue(IBuffer& buf);
     Object*	createObjectFromType(uint32_t type, const Object* parent, const std::string& name);
     bool	writeValue(IBuffer& buf) const;
@@ -99,6 +113,8 @@ namespace Act
   {
   public:
     ReservedLayout(const Object* parent, const std::string& name);
+    ReservedLayout&	operator=(const ReservedLayout&) = delete;
+    using		Object::operator=;
   };
 
   class	BitmapFontResource : public Entry
@@ -112,6 +128,8 @@ namespace Act
   public:
     BitmapFontResource(const Object* parent, const std::string& name);
     ~BitmapFontResource();
+    BitmapFontResource&	operator=(const BitmapFontResource&) = delete;
+    using	Object::operator=;
     bool	readValue(IBuffer& buf);
     Object*	createObjectFromType(uint32_t type, const Object* parent, const std::string& name);
     void	print(std::ostream& os) const;
@@ -122,12 +140,16 @@ namespace Act
   {
   public:
     ImageResource(const Object* parent, const std::string& name);
+    ImageResource&	operator=(const ImageResource&) = delete;
+    using		Object::operator=;
   };
 
   class	RenderTarget : public Entry
   {
   public:
     RenderTarget(const Object* parent, const std::string& name);
+    RenderTarget&	operator=(const RenderTarget&) = delete;
+    using		Object::operator=;
   };
 
 }

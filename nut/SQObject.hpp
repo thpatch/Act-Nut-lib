@@ -44,14 +44,13 @@ namespace Nut
   // SQBoolean is stored on 4 or 8 bytes, we need a custom one to handle single-byte booleans.
   class	SQSingleByteBoolean : public ActNut::Number<char>      { public: SQSingleByteBoolean(const Object* parent, const std::string& name); using Number::operator=; };
   class	SQFloat             : public ActNut::Number<SQfloat_t> { public: SQFloat(            const Object* parent, const std::string& name); using Number::operator=; };
-  class	SQString            : public ActNut::String            { public: SQString(           const Object* parent, const std::string& name);
+  class	SQString            : public ActNut::String            { public: SQString(           const Object* parent, const std::string& name); using String::operator=;
     uint32_t	getNumType() const;
     bool		readValue(IBuffer& buf);
     bool		writeValue(IBuffer& buf) const;
-    using       String::operator=;
     using       String::operator==;
   };
-  class	SQNull              : public SQObjectPtr               { public: SQNull(             const Object* parent, const std::string& name);
+  class	SQNull              : public SQObjectPtr               { public: SQNull(             const Object* parent, const std::string& name); using ActNut::Object::operator=;
     uint32_t	getNumType() const;
     bool	readValue(IBuffer&);
     void	print(std::ostream&) const;

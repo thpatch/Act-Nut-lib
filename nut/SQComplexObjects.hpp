@@ -14,6 +14,8 @@ namespace Nut
   {
   public:
     SQOuterType(const Object* parent, const std::string& name);
+    SQOuterType&	operator=(const SQOuterType&) = delete;
+    using	ActNut::Object::operator=;
     void	print(std::ostream& os) const;
   };
 
@@ -27,6 +29,8 @@ namespace Nut
   public:
     SQOuterVal(const Object* parent, const std::string& name);
     ~SQOuterVal();
+    SQOuterVal&	operator=(const SQOuterVal&) = delete;
+    using	ActNut::Object::operator=;
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
@@ -43,6 +47,8 @@ namespace Nut
   public:
     SQLocalVarInfo(const Object* parent, const std::string& name);
     ~SQLocalVarInfo();
+    SQLocalVarInfo&	operator=(const SQLocalVarInfo&) = delete;
+    using		ActNut::Object::operator=;
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;
@@ -59,6 +65,8 @@ namespace Nut
   public:
     SQLineInfo(const Object* parent, const std::string& name);
     ~SQLineInfo();
+    SQLineInfo&	operator=(const SQLineInfo&) = delete;
+    using	ActNut::Object::operator=;
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;

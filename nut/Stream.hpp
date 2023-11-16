@@ -15,6 +15,8 @@ namespace Nut
   {
   public:
     Stream(const Object* parent, const std::string& name);
+    Stream&	operator=(const Stream&) = delete;
+    using	ActNut::Object::operator=;
     bool	readValue(IBuffer& buf);
     bool	writeValue(IBuffer& buf) const;
   };

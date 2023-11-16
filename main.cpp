@@ -1,4 +1,5 @@
 #include	<iostream>
+#include	<memory>
 #include	<string.h>
 #include	"act/File.hpp"
 #include	"nut/Stream.hpp"

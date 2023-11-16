@@ -55,6 +55,8 @@ namespace Nut
   public:
     SQFunctionProto(const Object* parent, const std::string& name);
     ~SQFunctionProto();
+	SQFunctionProto& operator=(const SQFunctionProto&);
+	using	ActNut::Object::operator=;
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;

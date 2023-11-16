@@ -39,6 +39,9 @@ namespace Act
 
     Entry(const Object* parent, const char* type, const std::string& name);
 
+    Entry&	operator=(const Entry&) = delete;
+    using	Object::operator=;
+
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;

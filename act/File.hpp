@@ -27,6 +27,9 @@ namespace Act
     File(const Act::Object* parent, const std::string& name);
     ~File();
 
+    File&	operator=(const File&) = delete;
+    using	Object::operator=;
+
     bool	readValue(IBuffer& buf);
     void	print(std::ostream& os) const;
     bool	writeValue(IBuffer& buf) const;

@@ -175,9 +175,12 @@ namespace ActNut
   class	vector : public Object, public std::vector<Object*>
   {
   public:
-   vector(const Object* parent, const std::string& name)
+    vector(const Object* parent, const std::string& name)
       : Object(parent, "std::vector", name) {}
     ~vector();
+
+	vector&	operator=(const vector&) = delete;
+    using	Object::operator=;
 
     bool	readValue(IBuffer& buf);
     bool	writeValue(IBuffer& buf) const;
